@@ -291,3 +291,20 @@ a { text-decoration: none; color: inherit; }
         gap: 12px;
     }
 }
+/* ==========================================================
+   CSS CHO FOOTER BẢN QUYỀN
+   ========================================================== */
+.site-footer {
+    text-align: center;
+    padding: 12px 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    background-color: var(--surface-color);
+    border-top: 1px solid var(--border-color);
+    width: 100%;
+}
+
+/* Cập nhật lại chiều cao của trang detail để nhường 45px cho footer (tránh lỗi thanh cuộn toàn trang) */
+.container.detail-layout {
+    height: calc(100vh - 115px); /* Đã trừ 70px Navbar + 45px Footer */
+}
