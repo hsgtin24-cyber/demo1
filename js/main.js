@@ -91,7 +91,7 @@ if (examListContainer) {
 }
 
 // --- LOGIC TRANG CHI TIẾT (DETAIL.HTML) ---
-const examDetailContainer = document.getElementById('exam-detail');
+const examDetailContainer = document.getElementById('detail-title'); 
 if (examDetailContainer) {
     // Lấy ID từ URL (VD: detail.html?id=bai1-olympic10)
     const urlParams = new URLSearchParams(window.location.search);
