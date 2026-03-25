@@ -64,6 +64,11 @@ a { text-decoration: none; color: inherit; }
 .solution-section h3 { margin-top: 1.5rem; font-size: 1.1rem; color: var(--text-color); }
 .solution-section p { line-height: 1.6; margin-bottom: 1rem; font-size: 0.95rem; }
 
+/* Ghi đè giới hạn chiều rộng của container chỉ riêng cho trang chi tiết */
+.container.detail-layout {
+    max-width: 100%; /* Phá bỏ giới hạn chiều rộng, cho phép tràn viền */
+    padding: 0 10px; /* Cách mép màn hình 10px để nội dung không chạm hẳn vào khung viền. Nếu bạn muốn sát rịt 100%, hãy sửa thành padding: 0; */
+}
 /* Responsive */
 @media (max-width: 768px) {
     .layout, .detail-layout { grid-template-columns: 1fr; }
