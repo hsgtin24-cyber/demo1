@@ -37,16 +37,13 @@
     </nav>
 
     <div class="container detail-layout" id="exam-detail">
-        <div class="pdf-container">
-            <h3><i class="fa-solid fa-file-pdf"></i> Đề bài</h3>
-            <iframe id="pdf-viewer" src="" width="100%" height="600px" style="border: none; border-radius: 8px;"></iframe>
-        </div>
-        <div class="solution-container">
-            <h3><i class="fa-solid fa-lightbulb"></i> Hướng dẫn giải</h3>
-            <div id="solution-content">
-                <div class="loader">Đang tải lời giải...</div>
+        <div class="pdf-container" id="left-column">
             </div>
-        </div>
+    
+        <div class="resizer" id="drag-bar"></div>
+    
+        <div class="solution-container" id="right-column">
+            </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
