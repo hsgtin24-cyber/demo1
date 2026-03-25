@@ -255,3 +255,39 @@ a { text-decoration: none; color: inherit; }
     background-color: #3b82f6;
     border-color: #3b82f6;
 }
+/* ==========================================================
+   CẬP NHẬT TABS LÊN CÙNG DÒNG VỚI TIÊU ĐỀ
+   ========================================================== */
+/* Đẩy chữ Hướng dẫn giải sang trái và khay Nút bấm sang phải */
+.solution-container h3.solution-header {
+    justify-content: space-between; 
+    padding-right: 10px; /* Cân đối khoảng cách lề phải */
+}
+
+/* Giữ icon và chữ Hướng dẫn giải đi liền với nhau */
+.solution-header .title-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Định dạng lại khay chứa nút khi nằm trên thanh tiêu đề */
+.solution-header .solution-tabs {
+    margin-bottom: 0; /* Xóa lề dưới vì đã nằm trong thanh tiêu đề */
+    gap: 8px;
+}
+
+/* Thu nhỏ nút lại một chút để thanh tiêu đề không bị phình to */
+.solution-header .tab-btn {
+    padding: 6px 14px; 
+    font-size: 0.85rem;
+}
+
+/* Xử lý Responsive: Trên điện thoại (màn hình hẹp), cho phép xếp dọc lại cho đỡ bị tràn */
+@media (max-width: 768px) {
+    .solution-container h3.solution-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
