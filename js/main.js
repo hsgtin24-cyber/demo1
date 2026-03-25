@@ -137,3 +137,81 @@ if (examDetailContainer) {
         document.getElementById('detail-title').innerText = "URL không hợp lệ!";
     }
 }
+/* ==========================================================
+   JavaScript cho logic kéo thả tăng giảm độ rộng
+   ========================================================== */
+document.addEventListener('DOMContentLoaded', function () {
+    const resizer = document.getElementById('drag-bar');
+    const leftPanel = document.getElementById('left-panel');
+    const container = document.getElementById('resizable-container');
+
+    // Kiểm tra nếu các element tồn tại trong trang hiện tại thì mới chạy
+    if (!resizer || !leftPanel || !container) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startWidth = 0;
+
+    // Khi nhấn chuột xuống thanh kéo
+    resizer.addEventListener('mousedown', function (e) {
+        isDragging = true;
+        startX = e.clientX;
+        // Lấy chiều rộng hiện tại của panel trái bằng pixel
+        startWidth = parseInt(document.defaultView.getComputedStyle(leftPanel).width, 10);
+
+        // Thêm một lớp CSS temporary để tránh việc bôi đen văn bản khi kéo
+        document.body.style.userSelect = 'none';
+        // Đổi con trỏ chuột toàn màn hình sang col-resize để không bị giật
+        document.body.style.cursor = 'col-resize';
+        
+        // Thêm class active cho thanh kéo (nếu muốn CSS thêm)
+        resizer.classList.add('gutter-active');
+        
+        // Cực kỳ quan trọng: Nếu bên phải là iframe, ta phải chặn pointer events của nó
+        // nếu không, sự kiện di chuyển chuột sẽ bị iframe 'bắt mất' và bị dừng.
+        const iframe = container.querySelector('#solution-content iframe');
+        if (iframe) {
+            iframe.style.pointerEvents = 'none';
+        }
+    });
+
+    // Khi di chuyển chuột (gắn sự kiện vào document để bắt chuột ngay cả khi chuột ra ngoài thanh kéo)
+    document.addEventListener('mousemove', function (e) {
+        if (!isDragging) return;
+
+        // Tính khoảng cách đã di chuyển
+        const dx = e.clientX - startX;
+        
+        // Tính độ rộng mới
+        let newWidth = startWidth + dx;
+
+        // Đặt giới hạn (để không bị kéo mất panel hoặc panel quá nhỏ)
+        const containerWidth = container.offsetWidth;
+        const minWidth = 200; // Pixel tối thiểu
+        const maxWidth = containerWidth - 200; // Pixel tối đa (chừa space cho panel phải)
+
+        if (newWidth < minWidth) newWidth = minWidth;
+        if (newWidth > maxWidth) newWidth = maxWidth;
+
+        // Cập nhật độ rộng cho panel trái bằng pixel
+        leftPanel.style.width = `${newWidth}px`;
+    });
+
+    // Khi buông chuột
+    document.addEventListener('mouseup', function () {
+        if (!isDragging) return;
+
+        isDragging = false;
+        
+        // Trả lại trạng thái bình thường cho body
+        document.body.style.userSelect = '';
+        document.body.style.cursor = '';
+        resizer.classList.remove('gutter-active');
+
+        // Khôi phục lại pointer events cho iframe (nếu có)
+        const iframe = container.querySelector('#solution-content iframe');
+        if (iframe) {
+            iframe.style.pointerEvents = '';
+        }
+    });
+});
