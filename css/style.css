@@ -59,65 +59,65 @@ a { text-decoration: none; color: inherit; }
 
 /* Detail Page Layout */
 /* ==========================================================
-   CSS cho thanh kéo Resizable Layout
+   CSS cho Layout kéo thả
    ========================================================== */
-
-/* 1. Sửa lại container, chuyển sang Flexbox */
 .container.detail-layout {
-    display: flex; /* Bắt buộc dùng Flex */
+    display: flex;
     width: 100%;
-    height: 100vh; /* Thiết lập chiều cao để các panel tự cuộn bên trong */
-    overflow: hidden; /* Ngăn container chính xuất hiện thanh cuộn */
-    
-    /* Giữ nguyên phần sát lề từ câu trước của bạn */
+    /* Trừ đi chiều cao xấp xỉ của Navbar (ví dụ 70px) để không bị tràn cuộn cả trang */
+    height: calc(100vh - 70px); 
+    overflow: hidden;
     max-width: 100%;
     padding: 0;
 }
 
-/* 2. Định dạng cột trái */
-.pdf-container {
-    width: 50%; /* Tỷ lệ mặc định 50/50 */
-    min-width: 200px; /* Chiều rộng tối thiểu để không bị bóp nghẹt */
+.pdf-container, .solution-container {
     height: 100%;
-    overflow-y: auto; /* Tự xuất hiện thanh cuộn khi nội dung dài */
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* 3. Định dạng cột phải */
-#solution-content {
-    flex: 1; /* Chiếm toàn bộ không gian còn lại */
+.pdf-container {
+    width: 50%; /* Cột trái chiếm 50% ban đầu */
     min-width: 200px;
-    height: 100%;
+}
+
+.solution-container {
+    flex: 1; /* Cột phải chiếm không gian còn lại */
+    min-width: 200px;
+}
+
+/* Ép iframe đề bài và khung chứa lời giải tự động giãn kín chiều cao còn lại */
+#pdf-viewer, #solution-content {
+    flex: 1;
+    width: 100%;
     overflow-y: auto;
 }
 
-/* 4. Định dạng thanh kéo */
+/* Định dạng thanh kéo */
 .gutter.gutter-horizontal {
-    width: 10px; /* Độ rộng của thanh kéo */
-    background-color: #f0f0f0; /* Màu nền */
-    cursor: col-resize; /* Đổi con trỏ chuột sang dạng kéo ngang */
-    flex-shrink: 0; /* Không cho thanh kéo bị bóp nhỏ */
-    transition: background-color 0.2s;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    width: 10px;
+    background-color: #f4f7f6;
+    cursor: col-resize;
+    flex-shrink: 0;
     position: relative;
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
 }
 
-/* Hiệu ứng khi hover vào thanh kéo */
 .gutter.gutter-horizontal:hover {
-    background-color: #007bff; /* Đổi sang màu xanh khi rê chuột */
+    background-color: #007bff;
 }
 
-/* Thêm 3 vạch nhỏ ở giữa thanh kéo cho trực quan */
 .gutter.gutter-horizontal::after {
     content: "";
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 2px;
-    height: 20px;
+    width: 2px; height: 20px;
     background-color: #ccc;
-    box-shadow: 4px 0 0 #ccc, -4px 0 0 #ccc; /* Tạo thêm 2 vạch bên cạnh */
+    box-shadow: 4px 0 0 #ccc, -4px 0 0 #ccc;
 }
 
 /* Responsive: Trên mobile thì không kéo được, xếp chồng lên nhau */
