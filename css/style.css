@@ -18,7 +18,11 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-body { background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s; }
+body { background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s; 
+      /* THÊM 3 DÒNG NÀY VÀO ĐỂ LÀM STICKY FOOTER */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;}
 a { text-decoration: none; color: inherit; }
 
 /* Navbar */
@@ -302,6 +306,7 @@ a { text-decoration: none; color: inherit; }
     background-color: var(--surface-color);
     border-top: 1px solid var(--border-color);
     width: 100%;
+    margin-top: auto;
 }
 
 /* Cập nhật lại chiều cao của trang detail để nhường 45px cho footer (tránh lỗi thanh cuộn toàn trang) */
