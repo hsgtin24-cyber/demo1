@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Học tập & Mô phỏng Thuật toán - LÁT GẠCH</title>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        code, .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .terminal-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .terminal-scroll::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .terminal-scroll::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        .terminal-scroll::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+<div class="max-w-7xl mx-auto px-4 py-8 space-y-12">
+
+    <!-- 📍 HEADER -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-white opacity-10 rounded-full blur-2xl"></div>
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+                <span class="inline-block px-3 py-1 bg-blue-500/30 text-blue-100 rounded-full text-sm font-semibold tracking-wider mb-3">OLYMPIC 10 HCM 2024-2025</span>
+                <h1 class="text-4xl font-extrabold tracking-tight">Bài 3: LÁT GẠCH</h1>
+            </div>
+            <div class="mt-4 md:mt-0 px-6 py-3 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 text-center">
+                <span class="block text-sm text-blue-200 uppercase tracking-widest">Điểm tối đa</span>
+                <span class="block text-3xl font-bold text-yellow-400">7.0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 📍 PHẦN 0: ĐỀ BÀI CHI TIẾT -->
+    <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+        <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-100 pb-3 mb-6 flex items-center">
+            <span class="text-indigo-600 mr-2">📌</span> Đề bài chi tiết
+        </h2>
+        
+        <div class="prose max-w-none text-slate-600 space-y-4">
+            <p>Quảng trường hình chữ nhật của thành phố ByteCity có kích thước $m \times n$. Quảng trường được lát bằng $m \times n$ viên gạch vuông kích thước $1 \times 1$. Sau một thời gian, những viên gạch cần được thay mới để đẹp hơn. Ban quản lý có $T$ viên gạch mới. Do không đủ số lượng gạch cần thiết nên họ quyết định chỉ thay mới những viên gạch nằm dọc theo đường biên của quảng trường, phần gạch còn lại ở trung tâm vẫn giữ nguyên như cũ. Lưu ý độ rộng của đường biên luôn bằng nhau ở các cạnh.</p>
+            
+            <p><strong>Yêu cầu:</strong> Hãy viết chương trình cho biết độ rộng tối đa của đường biên có thể thay mới được khi sử dụng không quá $T$ viên gạch.</p>
+            
+            <p><strong>Dữ liệu vào (LATGACH.INP):</strong> Một dòng ghi 3 số nguyên dương $m$, $n$ và $T$ ($3 \le m, n \le 10^9$; $1 \le T < m \times n$).</p>
+            
+            <p><strong>Kết quả ra (LATGACH.OUT):</strong> Một số nguyên là độ rộng tối đa cần tìm.</p>
+            
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm">
+                <strong>Ràng buộc:</strong>
+                <ul class="list-disc ml-5 mt-2">
+                    <li>70% số điểm của bài: $3 \le m, n \le 10^6$.</li>
+                    <li>30% số điểm của bài: không ràng buộc gì thêm.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3 class="text-lg font-bold text-slate-700 mt-8 mb-4">Ví dụ (Sample Test)</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-100 text-slate-600">
+                        <th class="p-3 border border-slate-200 font-semibold rounded-tl-lg">LATGACH.INP</th>
+                        <th class="p-3 border border-slate-200 font-semibold">LATGACH.OUT</th>
+                        <th class="p-3 border border-slate-200 font-semibold rounded-tr-lg">Giải thích</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm font-mono">
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-3 border border-slate-200 whitespace-nowrap text-blue-600">5 7 33</td>
+                        <td class="p-3 border border-slate-200 text-green-600 font-bold">2</td>
+                        <td class="p-3 border border-slate-200 font-sans text-slate-600">Với quảng trường $5 \times 7$, dùng 32 viên gạch lát được đường biên có độ rộng bằng 2. (Lõi còn lại $1 \times 3$).</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-3 border border-slate-200 whitespace-nowrap text-blue-600">6 6 32</td>
+                        <td class="p-3 border border-slate-200 text-green-600 font-bold">2</td>
+                        <td class="p-3 border border-slate-200 font-sans text-slate-600">Với quảng trường $6 \times 6$, dùng 32 viên gạch lát được đường biên có độ rộng bằng 2. (Lõi còn lại $2 \times 2$).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 🧠 PHẦN 1: PHÂN TÍCH TOÁN HỌC & LOGIC -->
+    <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+        <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-100 pb-3 mb-6 flex items-center">
+            <span class="text-indigo-600 mr-2">🧠</span> Phân tích Toán học & Logic
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 space-y-4 text-slate-700">
+                <p><strong>Dạng bài:</strong> Toán học kết hợp Tìm kiếm nhị phân (Binary Search).</p>
+                <p>Gọi $x$ là độ rộng của đường biên ($x \ge 0$).</p>
+                <ul class="list-disc ml-5 space-y-2">
+                    <li>Diện tích toàn bộ quảng trường ban đầu là: $S_{total} = m \times n$.</li>
+                    <li>Nếu lát biên có độ rộng $x$, phần trung tâm (lõi không lát) sẽ là một hình chữ nhật mới có:
+                        <ul class="list-circle ml-5 mt-1 text-slate-600">
+                            <li>Chiều dài lõi: $m' = m - 2x$</li>
+                            <li>Chiều rộng lõi: $n' = n - 2x$</li>
+                        </ul>
+                    </li>
+                    <li>Diện tích phần lõi không lát là: $S_{core} = (m - 2x) \times (n - 2x)$.</li>
+                    <li>Số lượng gạch cần dùng cho đường biên là: 
+                        <div class="bg-indigo-50 p-3 rounded-lg text-center my-3 text-indigo-700 font-semibold border border-indigo-100 overflow-x-auto">
+                            $$S(x) = (m \times n) - (m - 2x) \times (n - 2x)$$
+                        </div>
+                    </li>
+                    <li><strong>Điều kiện:</strong> Phần lõi không thể có kích thước âm, và ít nhất phải $\ge 0$ (nếu lõi biến mất tức là đã lát toàn bộ). Do đó: $2x \le \min(m, n) \Rightarrow x \le \lfloor \frac{\min(m, n)}{2} \rfloor$.</li>
+                </ul>
+                <p>Hàm $S(x)$ là một hàm <strong>đơn điệu tăng</strong> theo $x$. Khi độ rộng biên tăng, số gạch cần dùng chắc chắn tăng. Tính chất đơn điệu này là cơ sở tuyệt vời để áp dụng Tìm kiếm nhị phân.</p>
+            </div>
+
+            <div class="bg-yellow-50 rounded-xl p-5 border border-yellow-200 flex flex-col justify-center h-full">
+                <div class="flex items-center text-yellow-700 font-bold mb-3">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    CẢNH BÁO KIỂU DỮ LIỆU
+                </div>
+                <p class="text-sm text-yellow-800 space-y-2">
+                    Giới hạn $m, n \le 10^9 \Rightarrow m \times n \le 10^{18}$.<br><br>
+                    - Nếu code bằng <strong>C/C++</strong>: Bắt buộc phải sử dụng kiểu <code>long long</code> cho các biến $m, n, T, x$ và kết quả diện tích để tránh tràn số (Integer Overflow).<br>
+                    - Nếu code bằng <strong>Python</strong>: Python tự động xử lý số nguyên lớn (BigInt) nên không lo tràn số.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ⚙️ PHẦN 2: PHÂN TÍCH CÁCH GIẢI THEO SUBTASK -->
+    <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+        <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-100 pb-3 mb-6 flex items-center">
+            <span class="text-indigo-600 mr-2">⚙️</span> Phân tích cách giải (Subtask)
+        </h2>
+
+        <div class="space-y-10">
+            <!-- Cách 1 -->
+            <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800">Cách 1: Duyệt tuyến tính (Vét cạn) - 70% số điểm</h3>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700 mb-4"><strong>Ý tưởng:</strong> Thử lần lượt các độ rộng $x$ từ $1$ tăng dần lên. Với mỗi $x$, tính số gạch cần dùng. Nếu số gạch $\le T$, ta ghi nhận kết quả và thử $x$ lớn hơn. Dừng lại khi số gạch vượt quá $T$ hoặc $x$ vượt quá giới hạn.</p>
+                    
+                    <blockquote class="bg-slate-50 border-l-4 border-blue-400 p-4 rounded-r-lg text-sm font-mono text-slate-600 mb-6">
+                        ans = 0<br>
+                        max_x = min(m, n) / 2<br>
+                        for x = 1 to max_x:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;gach_can_dung = (m * n) - (m - 2*x) * (n - 2*x)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;if gach_can_dung <= T:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ans = x<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;else:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break<br>
+                        return ans
+                    </blockquote>
+                    
+                    <p class="text-sm text-red-600 italic">Nhược điểm: Độ phức tạp $O(\min(m, n))$. Khi $m, n = 10^9$, vòng lặp chạy đến $5 \times 10^8$ lần, gây quá thời gian (TLE) với subtask 30% cuối.</p>
+                </div>
+            </div>
+
+            <!-- Cách 2 -->
+            <div class="border border-slate-200 rounded-xl overflow-hidden">
+                <div class="bg-indigo-50 px-6 py-4 border-b border-indigo-100 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-indigo-900">Cách 2: Tìm kiếm nhị phân (Tối ưu) - 100% số điểm</h3>
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Recommended</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <p class="text-slate-700"><strong>Ý tưởng:</strong> Vì hàm số gạch là đơn điệu tăng theo $x$, ta áp dụng Tìm kiếm nhị phân trên không gian đáp án. Khoảng tìm kiếm ban đầu: <code>low = 0</code>, <code>high = min(m, n) // 2</code>. Thử <code>mid</code>, nếu thỏa mãn thì lưu đáp án và tìm ở nửa trên (tăng độ rộng), nếu không thì tìm ở nửa dưới.</p>
+                    
+                    <blockquote class="bg-slate-50 border-l-4 border-indigo-400 p-4 rounded-r-lg text-sm font-mono text-slate-600 mb-6">
+                        low = 0, high = min(m, n) / 2, ans = 0<br>
+                        while low <= high:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;mid = (low + high) / 2<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;gach_can = (m*n) - (m - 2*mid)*(n - 2*mid)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;if gach_can <= T:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ans = mid  // Lưu kỷ lục<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;low = mid + 1 // Thử mở rộng biên<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;else:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;high = mid - 1 // Thu hẹp biên
+                    </blockquote>
+
+                    <div class="mt-4 rounded-lg overflow-hidden shadow-md">
+<pre><code class="language-python text-sm" style="font-family: 'Fira Code', monospace;">import sys
+
+# Tên file theo yêu cầu đề bài
+INPUT_FILE = "LATGACH.INP"
+OUTPUT_FILE = "LATGACH.OUT"
+
+def check(x, m, n, T):
+    if x <= 0: return True
+    
+    # Tính kích thước phần lõi bên trong
+    core_m = m - 2 * x
+    core_n = n - 2 * x
+    
+    # Đã lát toàn bộ quảng trường
+    if core_m <= 0 or core_n <= 0:
+        return (m * n) <= T
+        
+    so_gach_can = (m * n) - (core_m * core_n)
+    return so_gach_can <= T
+
+def solve(m, n, T):
+    low = 0
+    high = min(m, n) // 2
+    ans = 0
+    
+    while low <= high:
+        mid = (low + high) // 2
+        if check(mid, m, n, T):
+            ans = mid
+            low = mid + 1
+        else:
+            high = mid - 1
+            
+    return ans
+
+if __name__ == "__main__":
+    # Đọc ghi file theo chuẩn thi HSG
+    try:
+        with open(INPUT_FILE, "r") as f:
+            m, n, T = map(int, f.readline().split())
+        res = solve(m, n, T)
+        with open(OUTPUT_FILE, "w") as f:
+            f.write(str(res))
+    except Exception as e:
+        pass
+</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📊 PHẦN 3: BẢNG SO SÁNH THUẬT TOÁN -->
+    <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+        <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-100 pb-3 mb-6 flex items-center">
+            <span class="text-indigo-600 mr-2">📊</span> So sánh thuật toán
+        </h2>
+        
+        <div class="overflow-hidden rounded-xl border border-slate-200">
+            <table class="w-full text-left bg-white">
+                <thead class="bg-slate-100 text-slate-700">
+                    <tr>
+                        <th class="p-4 border-b font-semibold">Thuật toán</th>
+                        <th class="p-4 border-b font-semibold">Thời gian (Time)</th>
+                        <th class="p-4 border-b font-semibold">Không gian (Space)</th>
+                        <th class="p-4 border-b font-semibold">Kết quả dự kiến</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="hover:bg-slate-50 border-b border-slate-100">
+                        <td class="p-4 font-medium text-slate-800">Vét cạn (Tuyến tính)</td>
+                        <td class="p-4 font-mono text-sm text-red-500">$O(\min(m, n))$</td>
+                        <td class="p-4 font-mono text-sm text-blue-500">$O(1)$</td>
+                        <td class="p-4"><span class="bg-yellow-100 text-yellow-800 py-1 px-3 rounded-full text-xs font-bold">TLE (70% test)</span></td>
+                    </tr>
+                    <tr class="bg-green-50/30 hover:bg-green-50 transition-colors">
+                        <td class="p-4 font-medium text-slate-800">Tìm kiếm nhị phân</td>
+                        <td class="p-4 font-mono text-sm text-green-600">$O(\log(\min(m, n)))$</td>
+                        <td class="p-4 font-mono text-sm text-blue-500">$O(1)$</td>
+                        <td class="p-4"><span class="bg-green-100 text-green-800 py-1 px-3 rounded-full text-xs font-bold">AC (100% test)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 💻 PHẦN 4: TRÌNH MÔ PHỎNG TƯƠNG TÁC -->
+    <section class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+        <h2 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-100 pb-3 mb-6 flex items-center">
+            <span class="text-indigo-600 mr-2">💻</span> Trình mô phỏng thuật toán (Visualizer)
+        </h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Cột trái: Điều khiển -->
+            <div class="lg:col-span-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                <h3 class="font-semibold text-slate-700 mb-4 uppercase text-sm tracking-wider">Cấu hình Test</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Chiều dài $m$</label>
+                        <input type="number" id="input-m" value="5" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Chiều rộng $n$</label>
+                        <input type="number" id="input-n" value="7" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Số gạch $T$</label>
+                        <input type="number" id="input-T" value="33" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                    </div>
+                    
+                    <div class="pt-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">Chọn thuật toán</label>
+                        <select id="algo-select" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                            <option value="binary">Tìm kiếm nhị phân (O(log N))</option>
+                            <option value="linear">Vét cạn (O(N))</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-4 grid grid-cols-2 gap-3">
+                        <button id="btn-load" class="col-span-2 bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            Nạp / Reset
+                        </button>
+                        <button id="btn-step" disabled class="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 opacity-50 cursor-not-allowed font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                            Bước tiếp
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                        </button>
+                        <button id="btn-auto" disabled class="bg-indigo-600 text-white hover:bg-indigo-700 opacity-50 cursor-not-allowed font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                            Tự động
+                            <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột phải: Terminal -->
+            <div class="lg:col-span-8 bg-[#0d1117] rounded-xl shadow-inner border border-slate-700 flex flex-col h-[500px]">
+                <div class="bg-slate-800 px-4 py-2 rounded-t-xl border-b border-slate-700 flex items-center">
+                    <div class="flex space-x-2 mr-4">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Terminal Trace Output</span>
+                </div>
+                <div id="terminal" class="p-4 font-mono text-sm terminal-scroll flex-1 overflow-y-auto break-all">
+                    <!-- Logs will appear here -->
+                    <div class="text-gray-400">Nhấn "Nạp / Reset" để bắt đầu mô phỏng...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Logic Javascript cho Visualizer -->
+<script>
+    // Khởi tạo Highlight.js
+    document.addEventListener('DOMContentLoaded', (event) => {
+        hljs.highlightAll();
+    });
+
+    // --- Biến State của Visualizer ---
+    let simState = {
+        m: 0, n: 0, T: 0,
+        algo: 'binary',
+        status: 'idle', // idle, running, finished
+        autoTimer: null,
+        
+        // Data riêng cho Linear
+        x: 0, max_x: 0,
+        
+        // Data riêng cho Binary
+        low: 0, high: 0, mid: 0, ans: 0
+    };
+
+    // --- UI Elements ---
+    const term = document.getElementById('terminal');
+    const btnLoad = document.getElementById('btn-load');
+    const btnStep = document.getElementById('btn-step');
+    const btnAuto = document.getElementById('btn-auto');
+
+    // --- Hàm in Log ---
+    function printLog(msg, type = 'system') {
+        const div = document.createElement('div');
+        div.className = 'mb-1 leading-relaxed';
+        
+        let prefix = '> ';
+        switch(type) {
+            case 'system':  div.classList.add('text-gray-300'); prefix = '⚙️ '; break;
+            case 'info':    div.classList.add('text-blue-300'); prefix = 'ℹ️ '; break;
+            case 'warn':    div.classList.add('text-yellow-400'); prefix = '⚠️ '; break;
+            case 'error':   div.classList.add('text-red-400'); prefix = '❌ '; break;
+            case 'success': div.classList.add('text-green-400', 'font-bold'); prefix = '✅ '; break;
+            case 'highlight': div.classList.add('text-purple-300'); prefix = '🔍 '; break;
+        }
+        
+        div.innerHTML = `<span class="opacity-50 select-none">${prefix}</span>${msg}`;
+        term.appendChild(div);
+        term.scrollTop = term.scrollHeight; // Auto cuộn xuống
+    }
+
+    // --- Cập nhật trạng thái Button ---
+    function updateButtons() {
+        if(simState.status === 'running') {
+            btnStep.disabled = false;
+            btnAuto.disabled = false;
+            btnStep.classList.remove('opacity-50', 'cursor-not-allowed');
+            btnAuto.classList.remove('opacity-50', 'cursor-not-allowed');
+            if(simState.autoTimer) {
+                btnAuto.innerHTML = `Dừng <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                btnAuto.classList.replace('bg-indigo-600', 'bg-red-500');
+                btnAuto.classList.replace('hover:bg-indigo-700', 'hover:bg-red-600');
+                btnStep.disabled = true;
+                btnStep.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                btnAuto.innerHTML = `Tự động <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>`;
+                btnAuto.classList.replace('bg-red-500', 'bg-indigo-600');
+                btnAuto.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
+            }
+        } else {
+            btnStep.disabled = true;
+            btnAuto.disabled = true;
+            btnStep.classList.add('opacity-50', 'cursor-not-allowed');
+            btnAuto.classList.add('opacity-50', 'cursor-not-allowed');
+            if(simState.autoTimer) clearInterval(simState.autoTimer);
+            btnAuto.innerHTML = `Tự động <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>`;
+            btnAuto.classList.replace('bg-red-500', 'bg-indigo-600');
+            btnAuto.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
+        }
+    }
+
+    // --- Logic Load Data ---
+    btnLoad.addEventListener('click', () => {
+        if(simState.autoTimer) {
+            clearInterval(simState.autoTimer);
+            simState.autoTimer = null;
+        }
+
+        term.innerHTML = '';
+        simState.m = parseInt(document.getElementById('input-m').value) || 0;
+        simState.n = parseInt(document.getElementById('input-n').value) || 0;
+        simState.T = parseInt(document.getElementById('input-T').value) || 0;
+        simState.algo = document.getElementById('algo-select').value;
+
+        if(simState.m <= 0 || simState.n <= 0 || simState.T <= 0) {
+            printLog('Lỗi: m, n, T phải là số nguyên dương!', 'error');
+            return;
+        }
+
+        simState.status = 'running';
+        
+        let area = simState.m * simState.n;
+        printLog(`Đã nạp Test: m=${simState.m}, n=${simState.n}, T=${simState.T}`, 'system');
+        printLog(`Diện tích tổng ban đầu: ${area}`, 'system');
+
+        if(simState.algo === 'linear') {
+            simState.max_x = Math.floor(Math.min(simState.m, simState.n) / 2);
+            simState.x = 1;
+            simState.ans = 0;
+            printLog(`Khởi chạy: <b>Vét Cạn</b>. max_x hợp lệ = ${simState.max_x}`, 'info');
+        } else {
+            simState.low = 0;
+            simState.high = Math.floor(Math.min(simState.m, simState.n) / 2);
+            simState.ans = 0;
+            printLog(`Khởi chạy: <b>Tìm kiếm nhị phân</b>. Search Space: [0, ${simState.high}]`, 'info');
+        }
+        updateButtons();
+    });
+
+    // --- Hàm tính số gạch (Sử dụng BigInt an toàn trong JS cho số lớn) ---
+    function calcTiles(x, m, n) {
+        if(x <= 0n) return 0n;
+        let core_m = m - 2n * x;
+        let core_n = n - 2n * x;
+        if(core_m <= 0n || core_n <= 0n) return m * n;
+        return (m * n) - (core_m * core_n);
+    }
+
+    // --- Logic Step ---
+    function doStep() {
+        if(simState.status !== 'running') return;
+
+        let bm = BigInt(simState.m);
+        let bn = BigInt(simState.n);
+        let bT = BigInt(simState.T);
+
+        if(simState.algo === 'linear') {
+            if(simState.x > simState.max_x) {
+                printLog(`Đã vượt quá giới hạn x. Kết thúc thuật toán!`, 'warn');
+                printLog(`KẾT QUẢ CUỐI CÙNG: Độ rộng tối đa = ${simState.ans}`, 'success');
+                simState.status = 'finished';
+                updateButtons();
+                return;
+            }
+
+            let bx = BigInt(simState.x);
+            let needed = calcTiles(bx, bm, bn);
+            
+            printLog(`Thử x = ${simState.x}:`);
+            printLog(`  Lõi còn lại: (${simState.m - 2*simState.x}) × (${simState.n - 2*simState.x})`, 'system');
+            
+            if(needed <= bT) {
+                simState.ans = simState.x;
+                printLog(`  Số gạch cần: ${needed} ≤ ${simState.T} ➔ Hợp lệ. Cập nhật ans = ${simState.ans}`, 'highlight');
+                simState.x++;
+            } else {
+                printLog(`  Số gạch cần: ${needed} > ${simState.T} ➔ Vượt quá T. Dừng vòng lặp.`, 'error');
+                printLog(`KẾT QUẢ CUỐI CÙNG: Độ rộng tối đa = ${simState.ans}`, 'success');
+                simState.status = 'finished';
+            }
+
+        } else if(simState.algo === 'binary') {
+            if(simState.low > simState.high) {
+                printLog(`low > high. Kết thúc Binary Search!`, 'warn');
+                printLog(`KẾT QUẢ CUỐI CÙNG: Độ rộng tối đa = ${simState.ans}`, 'success');
+                simState.status = 'finished';
+                updateButtons();
+                return;
+            }
+
+            simState.mid = Math.floor((simState.low + simState.high) / 2);
+            let bmid = BigInt(simState.mid);
+            let needed = calcTiles(bmid, bm, bn);
+
+            printLog(`Khoảng tìm kiếm [${simState.low}, ${simState.high}] ➔ Thử mid = ${simState.mid}:`);
+            printLog(`  Lõi còn lại: (${simState.m - 2*simState.mid}) × (${simState.n - 2*simState.mid})`, 'system');
+
+            if(needed <= bT) {
+                simState.ans = simState.mid;
+                printLog(`  Gạch cần: ${needed} ≤ ${simState.T} ➔ Hợp lệ! Lưu kỷ lục ans = ${simState.ans}`, 'highlight');
+                simState.low = simState.mid + 1;
+                printLog(`  Mở rộng tìm kiếm sang phải: low mới = ${simState.low}`, 'system');
+            } else {
+                printLog(`  Gạch cần: ${needed} > ${simState.T} ➔ Không đủ gạch!`, 'error');
+                simState.high = simState.mid - 1;
+                printLog(`  Thu hẹp tìm kiếm sang trái: high mới = ${simState.high}`, 'system');
+            }
+        }
+        
+        updateButtons();
+    }
+
+    btnStep.addEventListener('click', doStep);
+
+    btnAuto.addEventListener('click', () => {
+        if(simState.autoTimer) {
+            clearInterval(simState.autoTimer);
+            simState.autoTimer = null;
+        } else {
+            simState.autoTimer = setInterval(doStep, 1200);
+        }
+        updateButtons();
+    });
+
+</script>
+
+</body>
+</html>

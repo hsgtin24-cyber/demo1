@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BỘI BA - OLYMPIC 10 HCM</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for Math Formulas -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Highlight.js for Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        code { font-family: 'Fira Code', monospace; }
+        .terminal-scroll::-webkit-scrollbar { width: 8px; }
+        .terminal-scroll::-webkit-scrollbar-track { background: #1f2937; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 leading-relaxed">
+
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-10 shadow-lg mb-8">
+        <div class="max-w-6xl mx-auto px-6">
+            <h1 class="text-4xl font-bold mb-2 tracking-tight">Bài 2: BỘI BA (7 điểm)</h1>
+            <p class="text-blue-100 text-lg">Kỳ thi Olympic Tháng 4 TP.HCM Lớp 10 - Năm học 2024-2025</p>
+            <div class="mt-4 flex gap-3">
+                <span class="bg-blue-600/50 px-3 py-1 rounded-full text-sm font-medium border border-blue-400/30">Thuật toán: Tham lam (Greedy)</span>
+                <span class="bg-indigo-600/50 px-3 py-1 rounded-full text-sm font-medium border border-indigo-400/30">Độ khó: Trung bình</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-12 space-y-12">
+
+        <!-- PHẦN 0: ĐỀ BÀI CHI TIẾT -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-500 pb-2 inline-block mb-6">📍 Phần 0: Đề bài chi tiết</h2>
+            
+            <div class="prose max-w-none text-gray-700 space-y-4">
+                <p>Em Na học toán và rất thích các số bội ba (là các số chia hết cho 3). Để rèn luyện thêm, bạn An cho một dãy $n$ các số nguyên dương và yêu cầu Na biến đổi $n$ số đó thành các số bội ba nhưng phải theo nguyên tắc của An.</p>
+                <p>Na chỉ được biến đổi các số theo thứ tự từ trái qua phải. Đồng thời, tại mỗi vị trí, Na chỉ được cộng một giá trị nào đó vào số đang xét để biến nó thành số bội ba. Khi đó, <strong>tất cả các số phía sau đó cũng được cộng một giá trị tương ứng</strong>.</p>
+                <p><strong>Yêu cầu:</strong> Hãy viết chương trình tính tổng giá trị được cộng thêm ít nhất để biến tất cả các số trong dãy thành số bội ba.</p>
+                
+                <h3 class="text-lg font-bold text-gray-900 mt-6">Dữ liệu vào (BOIBA.INP):</h3>
+                <ul class="list-disc pl-5">
+                    <li>Dòng đầu tiên chứa số nguyên dương $n$ ($1 \le n \le 2 \cdot 10^5$).</li>
+                    <li>Dòng tiếp theo chứa $n$ số nguyên dương $a_i$ ($1 \le a_i \le 10^9$).</li>
+                </ul>
+
+                <h3 class="text-lg font-bold text-gray-900">Kết quả ra (BOIBA.OUT):</h3>
+                <p>Ghi ra một số nguyên là tổng giá trị cần tìm.</p>
+
+                <h3 class="text-lg font-bold text-gray-900">Ràng buộc:</h3>
+                <ul class="list-disc pl-5">
+                    <li>60% số điểm của bài: $n \le 10^3$</li>
+                    <li>40% số điểm của bài: $n \le 2 \cdot 10^5$</li>
+                </ul>
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Bảng Ví dụ (Sample Test)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700">
+                                <th class="p-3 border border-gray-200 font-semibold w-1/4">BOIBA.INP</th>
+                                <th class="p-3 border border-gray-200 font-semibold w-1/6">BOIBA.OUT</th>
+                                <th class="p-3 border border-gray-200 font-semibold">Giải thích</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr>
+                                <td class="p-3 border border-gray-200 align-top font-mono">4<br>1 4 3 2</td>
+                                <td class="p-3 border border-gray-200 align-top font-mono font-bold text-blue-600">11</td>
+                                <td class="p-3 border border-gray-200 align-top space-y-2">
+                                    <p>Thực hiện theo thứ tự từ trái qua phải, dãy ban đầu <code>1 4 3 2</code></p>
+                                    <p>- Số 1 cần cộng 2 và phải cộng cho 3 số còn lại, giá trị phải dùng <code>2 × 4 số = 8</code>, dãy mới: <code>3 6 5 4</code></p>
+                                    <p>- Số 6 là bội 3, bỏ qua không cần cộng, dãy vẫn là <code>3 6 5 4</code></p>
+                                    <p>- Số 5 cần cộng 1, giá trị phải dùng <code>1 × 2 số = 2</code>, dãy mới: <code>3 6 6 5</code></p>
+                                    <p>- Số 5 cần cộng 1, giá trị phải dùng <code>1 × 1 số = 1</code>, dãy mới: <code>3 6 6 6</code></p>
+                                    <p class="font-bold text-blue-700">Tổng giá trị đã cộng ở các vị trí: 8 + 2 + 1 = 11.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 1: PHÂN TÍCH TOÁN HỌC & LOGIC -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-500 pb-2 inline-block mb-6">🧠 Phần 1: Phân tích Toán học & Logic</h2>
+            
+            <div class="space-y-4">
+                <p class="text-lg"><strong>Dạng bài:</strong> <span class="text-blue-600 font-semibold">Thuật toán Tham lam (Greedy)</span></p>
+                <p><strong>Phân tích logic:</strong> Tại mỗi vị trí $i$ (từ $0$ đến $n-1$), để đạt được "tổng cộng thêm ít nhất", ta bắt buộc phải cộng vào số tại vị trí $i$ một lượng nhỏ nhất sao cho nó chia hết cho 3. Lượng cộng thêm vào một số nguyên $x$ để nó chia hết cho $3$ chính là: $need = (3 - (x \bmod 3)) \bmod 3$.</p>
+                <p>Hành động tại vị trí $i$ ảnh hưởng đến toàn bộ các số từ $i$ đến cuối mảng. Tổng lượng giá trị thêm vào "thế giới" ở bước này là: $need \times (n - i)$.</p>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-5 mt-6 rounded-r-lg shadow-sm">
+                    <div class="flex items-center mb-2">
+                        <svg class="w-6 h-6 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <h3 class="text-yellow-800 font-bold text-lg">Cảnh báo Kiểu dữ liệu & Tràn số (Overflow)</h3>
+                    </div>
+                    <p class="text-yellow-800">
+                        Với $n \le 2 \cdot 10^5$, ở trường hợp xấu nhất, tại mỗi phần tử ta đều phải cộng thêm $2$. Tổng giá trị cộng thêm có thể lên tới $2 \times \sum_{i=1}^{n} i \approx n^2 \approx (2 \cdot 10^5)^2 = 4 \cdot 10^{10}$.<br>
+                        Giá trị này vượt qua giới hạn của số nguyên 32-bit (khoảng $2 \cdot 10^9$). Nếu code bằng <strong>C++</strong>, bạn <strong>bắt buộc phải dùng kiểu dữ liệu <code>long long</code></strong> cho biến kết quả. Riêng trong <strong>Python</strong>, số nguyên tự động mở rộng (BigInt) nên không lo tràn số.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 2: PHÂN TÍCH CÁCH GIẢI THEO SUBTASK -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-500 pb-2 inline-block mb-6">⚙️ Phần 2: Phân tích Cách giải theo Subtask</h2>
+
+            <!-- CÁCH 1 -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-indigo-700 mb-3">Cách 1: Vét cạn - Cập nhật trực tiếp (Ăn 60% số điểm)</h3>
+                <p class="mb-3 text-gray-700"><strong>Ý tưởng:</strong> Duyệt qua từng số $a_i$. Tính toán số lượng cần cộng $need$. Sau đó dùng một vòng lặp con duyệt từ vị trí $i$ đến hết dãy để cộng trực tiếp $need$ vào từng phần tử. Phù hợp cho Subtask $N \le 10^3$.</p>
+                
+                <blockquote class="border-l-4 border-indigo-300 bg-indigo-50 p-4 text-gray-700 italic mb-4 rounded-r">
+                    <strong>Mã giả:</strong><br>
+                    ans = 0<br>
+                    Cho i chạy từ 0 đến N - 1:<br>
+                    &nbsp;&nbsp;need = (3 - (a[i] % 3)) % 3<br>
+                    &nbsp;&nbsp;Nếu need > 0:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;ans = ans + need * (N - i)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Cho j chạy từ i đến N - 1:  // Vòng lặp cập nhật mảng tốn kém<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a[j] = a[j] + need
+                </blockquote>
+
+<pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_subtask1(n, a):
+    ans = 0
+    for i in range(n):
+        need = (3 - (a[i] % 3)) % 3
+        if need > 0:
+            ans += need * (n - i)
+            # Cập nhật trực tiếp phần còn lại của mảng
+            for j in range(i, n):
+                a[j] += need
+    return ans
+</code></pre>
+            </div>
+
+            <!-- CÁCH 2 -->
+            <div>
+                <h3 class="text-xl font-bold text-green-700 mb-3">Cách 2: Tối ưu - Cộng dồn gián tiếp (Ăn 100% số điểm)</h3>
+                <p class="mb-3 text-gray-700"><strong>Ý tưởng:</strong> Thay vì tốn thời gian chạy vòng lặp cập nhật từng phần tử phía sau, ta dùng một biến <code>luong_tich_luy</code> để ghi nhớ tổng các lượng đã cộng từ trước. Tại vị trí $i$, giá trị thực sự của số này là <code>a[i] + luong_tich_luy</code>. Ta chỉ tính toán trên giá trị thực này, giúp thuật toán giảm từ $O(N^2)$ xuống $O(N)$.</p>
+
+                <blockquote class="border-l-4 border-green-300 bg-green-50 p-4 text-gray-700 italic mb-4 rounded-r">
+                    <strong>Mã giả:</strong><br>
+                    ans = 0, luong_tich_luy = 0<br>
+                    Cho i chạy từ 0 đến N - 1:<br>
+                    &nbsp;&nbsp;gia_tri_thuc = a[i] + luong_tich_luy<br>
+                    &nbsp;&nbsp;need = (3 - (gia_tri_thuc % 3)) % 3<br>
+                    &nbsp;&nbsp;Nếu need > 0:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;luong_tich_luy = luong_tich_luy + need  // Ghi nhớ cho các số sau<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;ans = ans + need * (N - i)
+                </blockquote>
+
+<pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">import sys
+
+def solve_subtask2():
+    # Khối lượng file IO chuẩn thi HSG
+    # sys.stdin = open('BOIBA.INP', 'r')
+    # sys.stdout = open('BOIBA.OUT', 'w')
+    
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+        
+    n = int(input_data[0])
+    a = [int(x) for x in input_data[1:n+1]]
+    
+    ans = 0
+    luong_tich_luy = 0
+    
+    for i in range(n):
+        gia_tri_thuc = a[i] + luong_tich_luy
+        need = (3 - (gia_tri_thuc % 3)) % 3
+        
+        if need > 0:
+            luong_tich_luy += need
+            ans += need * (n - i)
+            
+    print(ans)
+
+if __name__ == '__main__':
+    solve_subtask2()
+</code></pre>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: BẢNG SO SÁNH THUẬT TOÁN -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-500 pb-2 inline-block mb-6">📊 Phần 3: Bảng So sánh Thuật toán</h2>
+            
+            <div class="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">Cách giải</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Độ phức tạp Thời gian</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Độ phức tạp Không gian</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Kết quả dự kiến ($N = 2 \cdot 10^5$)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">Cách 1 (Vét cạn)</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono bg-red-50">$O(N^2)$</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">$O(N)$</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm font-bold text-red-600">TLE (Vượt quá thời gian) - 60 điểm</td>
+                        </tr>
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">Cách 2 (Cộng dồn)</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono bg-green-50">$O(N)$</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono">$O(N)$</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm font-bold text-green-600">AC (Chấp nhận) - 100 điểm</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PHẦN 4: TRÌNH MÔ PHỎNG TƯƠNG TÁC -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-500 pb-2 inline-block mb-6">💻 Phần 4: Trình mô phỏng Tương tác (Visualizer)</h2>
+            
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- CỘT TRÁI: ĐIỀU KHIỂN -->
+                <div class="w-full lg:w-1/3 space-y-5 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Dữ liệu Test (Input)</label>
+                        <textarea id="sim-input" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-3 font-mono text-sm border" placeholder="Nhập N ở dòng 1, mảng A ở dòng 2...">4
+1 4 3 2</textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Chọn Thuật toán</label>
+                        <select id="sim-algo" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
+                            <option value="optimal">Cách 2: Tối ưu (O(N))</option>
+                            <option value="bruteforce">Cách 1: Vét cạn (O(N²))</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="loadData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition shadow-sm">Nạp dữ liệu & Reset</button>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="step()" id="btn-step" class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-md font-medium transition shadow-sm disabled:opacity-50">Bước tiếp</button>
+                            <button onclick="toggleAuto()" id="btn-auto" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition shadow-sm disabled:opacity-50">Chạy tự động</button>
+                        </div>
+                    </div>
+
+                    <!-- Hiển thị Trạng thái biến -->
+                    <div class="mt-4 p-4 bg-white border border-gray-200 rounded-lg shadow-inner">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Trạng thái toàn cục</h4>
+                        <div class="grid grid-cols-2 gap-4 font-mono text-sm">
+                            <div>
+                                <span class="text-gray-500">i = </span>
+                                <span id="var-i" class="font-bold text-blue-600">-</span>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">ans = </span>
+                                <span id="var-ans" class="font-bold text-green-600">0</span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-500">luong_tich_luy = </span>
+                                <span id="var-s" class="font-bold text-purple-600">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CỘT PHẢI: TERMINAL -->
+                <div class="w-full lg:w-2/3">
+                    <div class="bg-gray-900 rounded-xl shadow-lg border border-gray-800 flex flex-col h-[500px]">
+                        <div class="px-4 py-2 bg-gray-800 rounded-t-xl border-b border-gray-700 flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="ml-2 text-xs font-mono text-gray-400">Terminal - Algorithm Execution Trace</span>
+                        </div>
+                        <div id="terminal" class="terminal-scroll p-4 flex-1 overflow-y-auto font-mono text-sm whitespace-pre-wrap tracking-wide leading-relaxed"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TRÌNH MÔ PHỎNG JAVASCRIPT LOGIC -->
+    <script>
+        // State variables
+        let n = 0;
+        let a = [];
+        let i = 0;
+        let j = 0; // for bruteforce sub-loop
+        let ans = 0;
+        let S = 0; // luong_tich_luy
+        let algo = 'optimal';
+        let isFinished = true;
+        let autoTimer = null;
+        let state = 'outer'; // 'outer', 'inner' (for bruteforce)
+        let need = 0;
+
+        const terminal = document.getElementById('terminal');
+
+        function printLog(msg, type = 'info') {
+            const colors = {
+                system: 'text-blue-400 font-bold',
+                info: 'text-gray-300',
+                warn: 'text-yellow-400',
+                error: 'text-red-400 font-bold',
+                success: 'text-green-400 font-bold'
+            };
+            const span = document.createElement('span');
+            span.className = colors[type] || colors.info;
+            span.textContent = msg + '\n';
+            terminal.appendChild(span);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function clearTerminal() {
+            terminal.innerHTML = '';
+        }
+
+        function updateVariablesUI() {
+            document.getElementById('var-i').textContent = isFinished && i >= n ? 'Xong' : i;
+            document.getElementById('var-ans').textContent = ans;
+            document.getElementById('var-s').textContent = (algo === 'optimal') ? S : 'N/A';
+            
+            document.getElementById('btn-step').disabled = isFinished;
+            if (isFinished && autoTimer) {
+                toggleAuto(); // stop auto if finished
+            }
+        }
+
+        function loadData() {
+            if (autoTimer) toggleAuto();
+            
+            clearTerminal();
+            const rawText = document.getElementById('sim-input').value.trim();
+            algo = document.getElementById('sim-algo').value;
+            
+            const tokens = rawText.split(/\s+/).map(Number);
+            if (tokens.length < 1 || isNaN(tokens[0])) {
+                printLog("[ERROR] Dữ liệu đầu vào không hợp lệ!", 'error');
+                isFinished = true;
+                return;
+            }
+
+            n = tokens[0];
+            if (tokens.length - 1 < n) {
+                printLog(`[WARN] Thiếu dữ liệu mảng. Mong đợi ${n} phần tử, nhưng chỉ có ${tokens.length - 1}.`, 'warn');
+                a = tokens.slice(1);
+                while(a.length < n) a.push(0); // pad with 0s for missing
+            } else {
+                a = tokens.slice(1, n + 1);
+            }
+
+            if (n > 1000) {
+                printLog(`[WARN] N = ${n} quá lớn để mô phỏng tương tác. Đã tự động cắt bớt xuống N = 1000.`, 'warn');
+                n = 1000;
+                a = a.slice(0, 1000);
+            }
+
+            // Reset state
+            i = 0;
+            ans = 0;
+            S = 0;
+            isFinished = false;
+            state = 'outer';
+            
+            printLog(`[SYSTEM] Đã nạp thành công dữ liệu: N = ${n}`, 'system');
+            printLog(`[SYSTEM] Thuật toán chọn: ${algo === 'optimal' ? 'Cộng dồn (O(N))' : 'Vét cạn (O(N²))'}`, 'system');
+            printLog(`Mảng ban đầu: [${a.join(', ')}]`, 'info');
+            printLog("--------------------------------------------------", 'info');
+            
+            updateVariablesUI();
+        }
+
+        function step() {
+            if (isFinished) return;
+
+            if (algo === 'optimal') {
+                stepOptimal();
+            } else {
+                stepBruteForce();
+            }
+            updateVariablesUI();
+        }
+
+        function stepOptimal() {
+            if (i >= n) {
+                printLog("--------------------------------------------------", 'info');
+                printLog(`[SUCCESS] HOÀN THÀNH! TỔNG CHI PHÍ ÍT NHẤT: ${ans}`, 'success');
+                isFinished = true;
+                return;
+            }
+
+            let real_val = a[i] + S;
+            printLog(`▶ Bước i = ${i}, a[${i}] gốc = ${a[i]}`, 'system');
+            printLog(`  - Lượng tích lũy hiện tại (S) = ${S}. Giá trị thực tế = ${a[i]} + ${S} = ${real_val}`, 'info');
+            
+            let rem = real_val % 3;
+            need = (3 - rem) % 3;
+            
+            if (need === 0) {
+                printLog(`  - ${real_val} đã là bội của 3. Không cần cộng thêm.`, 'success');
+            } else {
+                printLog(`  - ${real_val} chia 3 dư ${rem}. Cần cộng thêm ${need}.`, 'warn');
+                S += need;
+                let cost = need * (n - i);
+                ans += cost;
+                printLog(`  - Cập nhật S = S + ${need} = ${S}`, 'info');
+                printLog(`  - Tổng chi phí cộng thêm: ${need} × (${n} - ${i} số còn lại) = ${cost}. ans = ${ans}`, 'warn');
+            }
+            printLog(" ", 'info');
+            i++;
+        }
+
+        function stepBruteForce() {
+            if (state === 'outer') {
+                if (i >= n) {
+                    printLog("--------------------------------------------------", 'info');
+                    printLog(`[SUCCESS] HOÀN THÀNH! TỔNG CHI PHÍ ÍT NHẤT: ${ans}`, 'success');
+                    isFinished = true;
+                    return;
+                }
+                
+                printLog(`▶ Bước i = ${i}, a[${i}] = ${a[i]}`, 'system');
+                let rem = a[i] % 3;
+                need = (3 - rem) % 3;
+                
+                if (need === 0) {
+                    printLog(`  - ${a[i]} đã là bội của 3. Không cần cộng.`, 'success');
+                    i++;
+                } else {
+                    printLog(`  - Cần cộng ${need} để thành bội của 3.`, 'warn');
+                    let cost = need * (n - i);
+                    ans += cost;
+                    printLog(`  - Tổng chi phí: ${need} × (${n} - ${i} số) = ${cost}. ans = ${ans}`, 'warn');
+                    printLog(`  - Bắt đầu duyệt cập nhật các phần tử phía sau...`, 'info');
+                    j = i;
+                    state = 'inner';
+                }
+            } else if (state === 'inner') {
+                if (j >= n) {
+                    printLog(`  - Hoàn tất cập nhật mảng. Mảng hiện tại: [${a.join(', ')}]`, 'success');
+                    printLog(" ", 'info');
+                    i++;
+                    state = 'outer';
+                } else {
+                    a[j] += need;
+                    printLog(`    > Cập nhật a[${j}] = a[${j}] + ${need} = ${a[j]}`, 'info');
+                    j++;
+                }
+            }
+        }
+
+        function toggleAuto() {
+            const btnAuto = document.getElementById('btn-auto');
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+                btnAuto.textContent = "Chạy tự động";
+                btnAuto.classList.replace('bg-red-600', 'bg-green-600');
+                btnAuto.classList.replace('hover:bg-red-700', 'hover:bg-green-700');
+            } else {
+                if (isFinished) loadData(); // Auto restart if done
+                autoTimer = setInterval(step, algo === 'optimal' ? 600 : 200); // inner loops run faster visually
+                btnAuto.textContent = "Dừng tự động";
+                btnAuto.classList.replace('bg-green-600', 'bg-red-600');
+                btnAuto.classList.replace('hover:bg-green-700', 'hover:bg-red-700');
+            }
+        }
+
+        // Initialize syntax highlighting & default state
+        window.addEventListener('DOMContentLoaded', () => {
+            hljs.highlightAll();
+            loadData(); // Load default example
+        });
+    </script>
+</body>
+</html>
