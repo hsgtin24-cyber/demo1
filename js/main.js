@@ -111,23 +111,58 @@ if (examDetailContainer) {
                     pdfViewer.src = `${exam.file}#view=FitH`;
 
                     // Lấy nội dung lời giải HTML bằng Fetch API
-                    // THAY BẰNG ĐOẠN NÀY
-                    if (exam.loigiai) {
-                        // Xóa loader
-                        const solutionContainer = document.getElementById('solution-content');
-                        solutionContainer.innerHTML = ''; 
+                    // 2. Hiển thị Lời giải bằng iframe và tạo Tabs (Nút bấm)
+                    const solutionContainer = document.getElementById('solution-content');
+                    const solutionTabs = document.getElementById('solution-tabs'); 
                     
-                        // Tạo iframe để nhúng file lời giải (bai1.html)
-                        const solutionIframe = document.createElement('iframe');
-                        solutionIframe.src = exam.loigiai;
-                        solutionIframe.style.width = '100%';
-                        solutionIframe.style.height = '800px'; // Bạn có thể tăng/giảm chiều cao này cho phù hợp
-                        solutionIframe.style.border = 'none';
-                        solutionIframe.style.borderRadius = '8px';
+                    if (solutionContainer) {
+                        solutionContainer.innerHTML = ''; // Xóa chữ loader
+                        if (solutionTabs) solutionTabs.innerHTML = ''; // Xóa tabs cũ nếu có
+                        
+                        if (exam.loigiai) {
+                            // Chuyển đổi dữ liệu để luôn tương thích (dù JSON có 1 link hay là mảng nhiều bài)
+                            let loigiaiArray = [];
+                            if (typeof exam.loigiai === 'string') {
+                                loigiaiArray = [{ ten: 'Lời giải', file: exam.loigiai }];
+                            } else if (Array.isArray(exam.loigiai)) {
+                                loigiaiArray = exam.loigiai;
+                            }
                     
-                        solutionContainer.appendChild(solutionIframe);
-                    } else {
-                        document.getElementById('solution-content').innerHTML = '<p style="color:red">Chưa có file hướng dẫn giải.</p>';
+                            // Tạo 1 iframe duy nhất để nhúng HTML
+                            const solutionIframe = document.createElement('iframe');
+                            solutionIframe.style.width = '100%';
+                            solutionIframe.style.height = '100%'; // Dùng 100% thay vì 800px để nó tự động khít với màn hình
+                            solutionIframe.style.border = 'none';
+                            solutionIframe.style.borderRadius = '8px';
+                            solutionContainer.appendChild(solutionIframe);
+                    
+                            if (loigiaiArray.length > 0) {
+                                // Tải mặc định bài đầu tiên vào iframe
+                                solutionIframe.src = loigiaiArray[0].file;
+                    
+                                // Duyệt qua danh sách để tạo ra các nút bấm tương ứng
+                                loigiaiArray.forEach((bai, index) => {
+                                    const btn = document.createElement('button');
+                                    btn.className = `tab-btn ${index === 0 ? 'active' : ''}`;
+                                    btn.innerText = bai.ten;
+                    
+                                    // Bắt sự kiện khi click vào nút
+                                    btn.onclick = () => {
+                                        // 1. Đổi link của iframe
+                                        solutionIframe.src = bai.file;
+                                        
+                                        // 2. Cập nhật lại màu sắc cho nút đang chọn
+                                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                                        btn.classList.add('active');
+                                    };
+                                    
+                                    // Nhúng nút vào khay
+                                    if (solutionTabs) solutionTabs.appendChild(btn);
+                                });
+                            }
+                        } else {
+                            solutionContainer.innerHTML = '<p style="color:red">Chưa có file hướng dẫn giải.</p>';
+                        }
                     }
                 } else {
                     document.getElementById('detail-title').innerText = "Không tìm thấy đề thi!";
