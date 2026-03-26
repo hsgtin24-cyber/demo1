@@ -14,6 +14,20 @@
     ]
   },
   {
+    "id": "2024-2025-ts10",
+    "ten": "Đề tuyển sinh 10 Tp.HCM 2024-2025",
+    "nam": 2025,
+    "kythi": "Tuyển sinh 10",
+    "dokho": "Dễ",
+    "mota": "Đề thi tuyển sinh vào lớp 10 Thành phố Hồ Chí Minh năm học 2024-2025.",
+    "file": "de/2024-2025-ts10.pdf",
+    "loigiai": [
+      { "ten": "Bài 1. Tuyệt chiêu", "file": "loigiai/2024-2025-ts10/bai1.html" },
+      { "ten": "Bài 2. Đắp núi", "file": "loigiai/2024-2025-ts10/bai2.html" },
+      { "ten": "Bài 3. Lọc nước", "file": "loigiai/2024-2025-ts10/bai3.html" }
+    ]
+  },
+  {
     "id": "2024-2025-oly10",
     "ten": "Đề Olympic 10 Tp.HCM 2024-2025",
     "nam": 2025,
