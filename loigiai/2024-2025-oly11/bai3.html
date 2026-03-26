@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 3: ROBOT - OLYMPIC 11 HCM 2024-2025</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for LaTeX -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'Fira Code', monospace; }
+        
+        /* Custom Scrollbar for Terminal */
+        .terminal-scroll::-webkit-scrollbar { width: 6px; }
+        .terminal-scroll::-webkit-scrollbar-track { background: #1f2937; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        
+        /* Grid CSS */
+        .grid-cell { transition: all 0.3s ease; }
+        .cell-r1 { background-color: #bfdbfe; border-color: #3b82f6; }
+        .cell-r2 { background-color: #fecaca; border-color: #ef4444; }
+        .cell-overlap { background-color: #d8b4fe; border-color: #9333ea; box-shadow: 0 0 10px rgba(147, 51, 234, 0.5); font-weight: bold;}
+        .cell-current-r1 { background-color: #2563eb; color: white; transform: scale(1.1); z-index: 10; border: 2px solid white;}
+        .cell-current-r2 { background-color: #dc2626; color: white; transform: scale(1.1); z-index: 10; border: 2px solid white;}
+        .cell-current-overlap { background-color: #7e22ce; color: white; transform: scale(1.2); z-index: 20; border: 2px solid white; box-shadow: 0 0 15px #9333ea;}
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen pb-20">
+
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-8 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Bài 3: ROBOT</h1>
+                    <p class="text-blue-200 text-sm font-medium">Kỳ thi Olympic Tháng 4 TP.HCM Lần X - Năm học 2024-2025 (Khối 11)</p>
+                </div>
+                <div class="bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm border border-white/30 text-center">
+                    <span class="block text-2xl font-bold text-yellow-400">7.0</span>
+                    <span class="text-xs uppercase tracking-wider">Điểm</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8 space-y-10">
+
+        <!-- PHẦN 0: ĐỀ BÀI -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center border-b pb-2">
+                <span class="bg-blue-100 text-blue-700 p-2 rounded-lg mr-3">📝</span> Đề bài chi tiết
+            </h2>
+            <div class="prose max-w-none text-slate-700 leading-relaxed">
+                <p>Hai robot di chuyển trong một bảng hình chữ nhật có kích thước $m \times n$ gồm các ô lưới vuông $1 \times 1$ đơn vị.</p>
+                <ul class="list-disc pl-5 space-y-2 mt-2">
+                    <li><strong>Robot thứ nhất</strong> bắt đầu hành trình từ ô ở góc trái trên di chuyển đến ô ở góc phải dưới. Trong quá trình di chuyển, robot thứ nhất chỉ đi sang phải hoặc đi xuống dưới.</li>
+                    <li><strong>Robot thứ hai</strong> bắt đầu hành trình từ ô ở góc phải dưới di chuyển đến ô ở góc trái trên. Trong quá trình di chuyển, robot thứ hai chỉ đi sang trái hoặc đi lên trên.</li>
+                </ul>
+                <p class="mt-4">Mỗi hành trình được mô tả bằng một xâu gồm các lệnh: <code>L</code> (sang trái), <code>R</code> (sang phải), <code>U</code> (đi lên), <code>D</code> (đi xuống). Đảm bảo các lệnh luôn dẫn các robot đi đến các vị trí cần đến.</p>
+                
+                <p class="font-semibold mt-4 text-indigo-700">Yêu cầu:</p>
+                <p>Hãy viết chương trình tìm số lượng ô mà cả hai robot cùng đi qua trong hành trình. Biết rằng hai robot di chuyển vào hai thời điểm khác nhau nên không xảy ra việc va chạm khi đi vào cùng một ô.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div class="bg-slate-50 p-4 rounded-lg border">
+                        <p class="font-semibold text-sm text-slate-500 mb-2">DỮ LIỆU VÀO (ROBOT.INP)</p>
+                        <ul class="text-sm list-disc pl-4 space-y-1">
+                            <li>Dòng 1: Hai số nguyên $m, n$ ($2 \le m, n \le 10^5$).</li>
+                            <li>Dòng 2: Hành trình robot 1 (chỉ gồm <code>D</code>, <code>R</code>).</li>
+                            <li>Dòng 3: Hành trình robot 2 (chỉ gồm <code>L</code>, <code>U</code>).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border">
+                        <p class="font-semibold text-sm text-slate-500 mb-2">KẾT QUẢ RA (ROBOT.OUT)</p>
+                        <ul class="text-sm list-disc pl-4 space-y-1">
+                            <li>Một số nguyên $K$ là số ô cả hai cùng đi qua.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sample Test -->
+                <div class="mt-6">
+                    <h3 class="font-bold text-slate-800 mb-2">Ví dụ:</h3>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1 bg-slate-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <div class="text-slate-400 text-xs mb-1 border-b border-slate-700 pb-1">ROBOT.INP</div>
+                            3 4<br>
+                            DRRDR<br>
+                            ULLUL
+                        </div>
+                        <div class="flex-1 bg-slate-900 text-white p-4 rounded-lg font-mono text-sm overflow-x-auto">
+                            <div class="text-slate-400 text-xs mb-1 border-b border-slate-700 pb-1">ROBOT.OUT</div>
+                            4
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 1: PHÂN TÍCH TOÁN HỌC -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center border-b pb-2">
+                <span class="bg-yellow-100 text-yellow-700 p-2 rounded-lg mr-3">🧠</span> Phân tích Toán học & Logic
+            </h2>
+            <div class="space-y-4 text-slate-700">
+                <p><strong>Đặc điểm đường đi:</strong></p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>Cả hai robot đều đi qua đúng $(m-1) + (n-1)$ bước để đến đích.</li>
+                    <li>Robot 1 chỉ đi xuống và sang phải $\Rightarrow$ Khoảng cách Manhattan từ điểm xuất phát $(1,1)$ luôn tăng dần đúng 1 đơn vị sau mỗi bước.</li>
+                    <li>Nghĩa là, để đến được ô $(r, c)$, Robot 1 bắt buộc phải dùng đúng $(r-1) + (c-1)$ bước.</li>
+                </ul>
+
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg my-4 text-sm text-amber-900">
+                    <strong>Định lý Đồng bộ (Synchronization Theorem):</strong><br>
+                    Vì khoảng cách từ góc $(1,1)$ đến ô $(r,c)$ luôn không đổi, nên nếu hai đường đi cắt nhau tại ô $(r,c)$, chúng <strong>BẮT BUỘC</strong> phải đến ô đó tại cùng một chỉ số bước tính từ góc $(1,1)$.
+                </div>
+
+                <p><strong>Chuyển đổi bài toán (Phép đảo ngược):</strong></p>
+                <p>Robot 2 bắt đầu từ $(m, n)$ và đi về $(1, 1)$. Nếu ta "quay ngược thời gian" hành trình của Robot 2, nó sẽ biến thành một hành trình đi từ $(1, 1)$ đến $(m, n)$.</p>
+                <blockquote class="bg-slate-50 border-l-4 border-indigo-500 p-3 text-sm font-mono text-indigo-900">
+                    S2_rev = Đảo ngược xâu(S2)<br>
+                    Thay thế: 'U' (lên) $\rightarrow$ 'D' (xuống), 'L' (trái) $\rightarrow$ 'R' (phải)
+                </blockquote>
+                <p>Sau khi biến đổi, bài toán quy về: Cho hai robot cùng xuất phát từ $(1,1)$ và cùng thực hiện xâu lệnh $S_1$ và $S_{2\_rev}$. Tại mỗi bước thứ $i$, kiểm tra xem tọa độ của chúng có trùng nhau không!</p>
+            </div>
+        </section>
+
+        <!-- PHẦN 2: THUẬT TOÁN -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center border-b pb-2">
+                <span class="bg-green-100 text-green-700 p-2 rounded-lg mr-3">⚙️</span> Phân tích Cách giải theo Subtask
+            </h2>
+
+            <!-- Subtask 1 -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Cách 1: Vét cạn (Dành cho Subtask 1: $m, n \le 1000$)</h3>
+                <p class="text-slate-700 mb-3 text-sm">Ý tưởng: Mô phỏng Robot 1, lưu toàn bộ các ô đã đi qua vào một mảng đánh dấu 2D (hoặc Hash Set). Sau đó mô phỏng Robot 2, nếu đi qua ô đã được đánh dấu thì tăng biến đếm.</p>
+<pre><code class="language-python rounded-lg shadow-md text-sm code-font">def solve_subtask_1(m, n, s1, s2):
+    visited = set()
+    r, c = 1, 1
+    visited.add((r, c))
+    
+    # Mô phỏng đường đi Robot 1
+    for move in s1:
+        if move == 'R': c += 1
+        else: r += 1
+        visited.add((r, c))
+        
+    ans = 0
+    r, c = m, n
+    if (r, c) in visited: ans += 1
+    
+    # Mô phỏng đường đi Robot 2
+    for move in s2:
+        if move == 'L': c -= 1
+        else: r -= 1
+        if (r, c) in visited: ans += 1
+        
+    return ans
+</code></pre>
+            </div>
+
+            <!-- Subtask 2 -->
+            <div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2 flex items-center">Cách 2: Đồng bộ bước đi (Dành cho Subtask 2: $m, n \le 10^5$) <span class="ml-2 bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full font-bold">100đ</span></h3>
+                <p class="text-slate-700 mb-3 text-sm">Ý tưởng: Đảo ngược lệnh của Robot 2. Dùng 2 con trỏ mô phỏng đồng thời bước tiến của cả 2 từ đỉnh $(1,1)$. Vì ở bước thứ $i$, chúng chỉ có thể cắt nhau nếu tọa độ trùng nhau hoàn toàn.</p>
+<pre><code class="language-python rounded-lg shadow-md text-sm code-font">def solve_optimal(m, n, s1, s2):
+    # Đảo ngược hành trình S2 và đổi hướng
+    s2_rev_chars = []
+    for char in reversed(s2):
+        if char == 'U': s2_rev_chars.append('D')
+        else: s2_rev_chars.append('R')
+        
+    r1, c1 = 1, 1
+    r2, c2 = 1, 1
+    ans = 1 # Luôn gặp nhau ở ô (1, 1)
+
+    # Chạy song song từng bước
+    for i in range(len(s1)):
+        # Di chuyển Robot 1
+        if s1[i] == 'R': c1 += 1
+        else: r1 += 1
+            
+        # Di chuyển Robot 2 (đã đảo ngược)
+        if s2_rev_chars[i] == 'R': c2 += 1
+        else: r2 += 1
+            
+        # Nếu tọa độ hoàn toàn trùng khớp tại cùng một bước
+        if r1 == r2 and c1 == c2:
+            ans += 1
+            
+    return ans
+</code></pre>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: SO SÁNH -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 overflow-hidden">
+            <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center border-b pb-2">
+                <span class="bg-purple-100 text-purple-700 p-2 rounded-lg mr-3">📊</span> Bảng so sánh thuật toán
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700">
+                            <th class="p-3 border">Phương pháp</th>
+                            <th class="p-3 border">Độ phức tạp Thời gian</th>
+                            <th class="p-3 border">Độ phức tạp Không gian</th>
+                            <th class="p-3 border">Đánh giá / Kết quả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="p-3 border font-semibold text-slate-800">1. Đánh dấu mảng 2D</td>
+                            <td class="p-3 border font-mono">$O(N + M)$</td>
+                            <td class="p-3 border font-mono">$O(N \times M)$</td>
+                            <td class="p-3 border text-amber-600 font-medium">Memory Limit Exceeded (MLE) ở Subtask 2</td>
+                        </tr>
+                        <tr class="border-b hover:bg-slate-50">
+                            <td class="p-3 border font-semibold text-slate-800">1b. Đánh dấu Hash Set</td>
+                            <td class="p-3 border font-mono">$O(N + M)$</td>
+                            <td class="p-3 border font-mono">$O(N + M)$</td>
+                            <td class="p-3 border text-amber-600 font-medium">Time Limit (TLE) do hằng số Hash lớn (C++)</td>
+                        </tr>
+                        <tr class="hover:bg-green-50">
+                            <td class="p-3 border font-semibold text-green-700">2. Đồng bộ Đồng thời</td>
+                            <td class="p-3 border font-mono font-bold">$O(N + M)$</td>
+                            <td class="p-3 border font-mono font-bold">$O(N + M)$ hoặc $O(1)$</td>
+                            <td class="p-3 border text-green-600 font-bold">Accepted (AC) 100%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PHẦN 4: VISUALIZER -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center border-b pb-2">
+                <span class="bg-cyan-100 text-cyan-700 p-2 rounded-lg mr-3">💻</span> Trình mô phỏng Thuật toán
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Control Panel -->
+                <div class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border space-y-4">
+                    <h3 class="font-bold text-slate-700 uppercase text-sm">Tham số Đầu vào</h3>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Thuật toán Mô phỏng</label>
+                        <select id="sim-mode" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm font-semibold text-indigo-700 bg-white shadow-sm">
+                            <option value="2">Cách 2: Đồng bộ bước đi (Tối ưu - O(N))</option>
+                            <option value="1">Cách 1: Vét cạn (Đánh dấu 2D - O(N+M))</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">Số dòng (m)</label>
+                            <input type="number" id="inp-m" value="3" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm font-mono" max="15">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">Số cột (n)</label>
+                            <input type="number" id="inp-n" value="4" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm font-mono" max="15">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">S1 (Robot 1: D, R)</label>
+                        <input type="text" id="inp-s1" value="DRRDR" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm font-mono uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">S2 (Robot 2: U, L)</label>
+                        <input type="text" id="inp-s2" value="ULLUL" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm font-mono uppercase">
+                    </div>
+                    
+                    <div class="pt-2 border-t mt-4 flex flex-col gap-2">
+                        <button onclick="loadSim()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 rounded-md transition text-sm">
+                            🔄 Nạp Dữ Liệu
+                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="stepSim()" id="btn-step" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition text-sm disabled:opacity-50">
+                                ⏭ Bước Tiếp
+                            </button>
+                            <button onclick="autoSim()" id="btn-auto" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-md transition text-sm disabled:opacity-50">
+                                🚀 Chạy Tự Động
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="sim-note" class="bg-indigo-50 p-3 rounded-lg border border-indigo-100 text-xs text-indigo-800 mt-4">
+                        <!-- Content inserted via JS -->
+                    </div>
+                </div>
+
+                <!-- Simulation & Terminal -->
+                <div class="lg:col-span-2 flex flex-col gap-4">
+                    <!-- Grid Canvas Area -->
+                    <div class="bg-white border rounded-xl flex-1 flex flex-col items-center justify-center p-4 min-h-[300px] overflow-auto relative">
+                        <!-- Legend -->
+                        <div class="absolute top-2 left-2 flex gap-3 text-[10px] font-semibold text-slate-500 bg-white/80 p-1 rounded backdrop-blur z-10">
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-200 inline-block rounded-sm border border-blue-400"></span> Robot 1</div>
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 bg-red-200 inline-block rounded-sm border border-red-400"></span> Robot 2</div>
+                            <div class="flex items-center gap-1"><span class="w-3 h-3 bg-purple-400 inline-block rounded-sm border border-purple-600"></span> Trùng nhau</div>
+                        </div>
+
+                        <!-- Info Header -->
+                        <div class="mb-4 text-center mt-6">
+                            <div id="sim-status" class="text-sm font-bold text-slate-700">Vui lòng nạp dữ liệu</div>
+                            <div id="sim-ans" class="text-xl font-bold text-indigo-600 mt-1">Kết quả: 0</div>
+                        </div>
+                        
+                        <!-- Grid Matrix -->
+                        <div id="grid-container" class="grid gap-1 bg-slate-200 p-1 rounded-lg">
+                            <!-- JS generates cells here -->
+                        </div>
+                    </div>
+
+                    <!-- Terminal -->
+                    <div class="bg-[#1e1e1e] rounded-xl overflow-hidden shadow-inner flex flex-col h-48">
+                        <div class="bg-[#2d2d2d] text-gray-400 text-xs px-4 py-1.5 font-mono flex items-center justify-between border-b border-black">
+                            <span>> terminal_trace.log</span>
+                            <span id="step-counter" class="text-green-400">Step: 0/0</span>
+                        </div>
+                        <div id="terminal-output" class="p-3 text-xs font-mono terminal-scroll flex-1 overflow-y-auto space-y-1">
+                            <div class="text-green-400">Ready.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript Visualizer Logic -->
+    <script>
+        // Init Syntax Highlighting
+        hljs.highlightAll();
+
+        // State variables
+        let m, n, s1, rawS2, s2_rev;
+        let simMode = 2; 
+        let states = []; // Dùng để lưu trữ toàn bộ lịch sử các bước
+        let step = 0;
+        let maxStep = 0;
+        let ansCount = 0;
+        let autoTimer = null;
+
+        const term = document.getElementById('terminal-output');
+        const gridContainer = document.getElementById('grid-container');
+        const btnStep = document.getElementById('btn-step');
+        const btnAuto = document.getElementById('btn-auto');
+        const simNote = document.getElementById('sim-note');
+
+        // Terminal Log function
+        function printLog(msg, type = "system") {
+            const line = document.createElement('div');
+            let colorClass = "text-gray-300";
+            if(type === "info") colorClass = "text-blue-300";
+            if(type === "warn") colorClass = "text-yellow-400";
+            if(type === "error") colorClass = "text-red-400 font-bold";
+            if(type === "success") colorClass = "text-green-400";
+            if(type === "highlight") colorClass = "text-purple-400 font-bold";
+            
+            line.className = colorClass;
+            line.innerText = `> ${msg}`;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function buildGridUI() {
+            gridContainer.innerHTML = '';
+            gridContainer.style.gridTemplateColumns = `repeat(${n}, minmax(0, 1fr))`;
+            
+            // Limit cell size visually
+            let cellSize = "w-8 h-8";
+            if(Math.max(m,n) > 10) cellSize = "w-6 h-6 text-[8px]";
+            else if(Math.max(m,n) <= 5) cellSize = "w-12 h-12 text-sm";
+
+            for(let r = 1; r <= m; r++) {
+                for(let c = 1; c <= n; c++) {
+                    const cell = document.createElement('div');
+                    cell.id = `cell-${r}-${c}`;
+                    cell.className = `bg-white rounded-sm flex items-center justify-center font-mono text-slate-300 grid-cell ${cellSize}`;
+                    cell.innerText = `${r},${c}`;
+                    gridContainer.appendChild(cell);
+                }
+            }
+        }
+
+        function updateGridUI() {
+            // Reset colors
+            for(let r = 1; r <= m; r++) {
+                for(let c = 1; c <= n; c++) {
+                    const el = document.getElementById(`cell-${r}-${c}`);
+                    el.className = el.className.replace(/cell-(r1|r2|overlap|current-r1|current-r2|current-overlap)/g, '').trim();
+                }
+            }
+
+            let tempAns = 0;
+
+            if (simMode === 1) {
+                // Render Mode 1 (Vét cạn)
+                for (let i = 0; i <= step; i++) {
+                    let s = states[i];
+                    if (s.type === 'M1_R1') {
+                        let el = document.getElementById(`cell-${s.r}-${s.c}`);
+                        el.classList.add('cell-r1');
+                    } else if (s.type === 'M1_R2') {
+                        let el = document.getElementById(`cell-${s.r}-${s.c}`);
+                        if (s.overlap) {
+                            el.classList.remove('cell-r1');
+                            el.classList.add('cell-overlap');
+                            tempAns++;
+                        } else {
+                            el.classList.add('cell-r2');
+                        }
+                    }
+                }
+                
+                // Highlight Current Head
+                let curState = states[step];
+                let elCur = document.getElementById(`cell-${curState.r}-${curState.c}`);
+                if (curState.type === 'M1_R1') {
+                    elCur.classList.remove('cell-r1');
+                    elCur.classList.add('cell-current-r1');
+                } else if (curState.type === 'M1_R2') {
+                    elCur.classList.remove('cell-overlap', 'cell-r2');
+                    if (curState.overlap) elCur.classList.add('cell-current-overlap');
+                    else elCur.classList.add('cell-current-r2');
+                }
+                ansCount = tempAns;
+            } else {
+                // Render Mode 2 (Đồng bộ)
+                let overlapSet = new Set();
+                for(let i = 0; i <= step; i++) {
+                    let s = states[i];
+                    let el1 = document.getElementById(`cell-${s.r1}-${s.c1}`);
+                    let el2 = document.getElementById(`cell-${s.r2}-${s.c2}`);
+                    
+                    if(s.overlap) {
+                        el1.classList.add('cell-overlap');
+                        overlapSet.add(`${s.r1},${s.c1}`);
+                        tempAns++;
+                    } else {
+                        if(!overlapSet.has(`${s.r1},${s.c1}`)) el1.classList.add('cell-r1');
+                        if(!overlapSet.has(`${s.r2},${s.c2}`)) el2.classList.add('cell-r2');
+                    }
+                }
+
+                // Highlight Current Heads
+                let curState = states[step];
+                let elHead1 = document.getElementById(`cell-${curState.r1}-${curState.c1}`);
+                let elHead2 = document.getElementById(`cell-${curState.r2}-${curState.c2}`);
+
+                if(curState.overlap) {
+                    elHead1.classList.add('cell-current-overlap');
+                    elHead1.classList.remove('cell-overlap'); 
+                } else {
+                    elHead1.classList.add('cell-current-r1');
+                    elHead1.classList.remove('cell-r1');
+                    elHead2.classList.add('cell-current-r2');
+                    elHead2.classList.remove('cell-r2');
+                }
+                ansCount = tempAns;
+            }
+
+            document.getElementById('sim-ans').innerText = `Kết quả: ${ansCount}`;
+            document.getElementById('step-counter').innerText = `Step: ${step}/${maxStep}`;
+        }
+
+        function loadSim() {
+            if(autoTimer) clearInterval(autoTimer);
+            btnStep.disabled = false;
+            btnAuto.disabled = false;
+            term.innerHTML = '';
+            
+            simMode = parseInt(document.getElementById('sim-mode').value);
+            m = parseInt(document.getElementById('inp-m').value);
+            n = parseInt(document.getElementById('inp-n').value);
+            s1 = document.getElementById('inp-s1').value.trim().toUpperCase();
+            rawS2 = document.getElementById('inp-s2').value.trim().toUpperCase();
+
+            // Set Note Text
+            if (simMode === 1) {
+                simNote.innerHTML = `<strong>Lưu ý Mô phỏng: Cách 1 (Vét cạn)</strong><br> - Robot 1 đi từ (1,1) đến (m,n) và đánh dấu đường đi.<br> - Sau đó Robot 2 đi từ (m,n) về (1,1), nếu gặp ô đã đánh dấu thì tăng biến đếm.`;
+            } else {
+                simNote.innerHTML = `<strong>Lưu ý Mô phỏng: Cách 2 (Đồng bộ)</strong><br> - Biến đổi Robot 2 thành <code>S2_rev</code> đi từ (1,1) đến (m,n).<br> - Cả hai đi từng bước đồng thời, cắt nhau khi tọa độ trùng nhau hoàn toàn.`;
+            }
+
+            // Validations
+            if(isNaN(m) || isNaN(n) || m < 2 || n < 2) {
+                printLog("Lỗi: m, n phải là số nguyên >= 2", "error"); return;
+            }
+            if(m > 20 || n > 20) {
+                printLog("Lỗi: Canvas giới hạn m, n <= 20 để tránh lag UI.", "error"); return;
+            }
+            let pathLen = m + n - 2;
+            if(s1.length !== pathLen || rawS2.length !== pathLen) {
+                printLog(`Lỗi: Độ dài S1, S2 phải bằng m + n - 2 = ${pathLen}`, "error"); return;
+            }
+            if(!/^[DR]+$/.test(s1)) { printLog("Lỗi: S1 chỉ chứa D, R", "error"); return; }
+            if(!/^[LU]+$/.test(rawS2)) { printLog("Lỗi: S2 chỉ chứa L, U", "error"); return; }
+
+            // Validate endpoints logic theoretically
+            let tr1 = 1, tc1 = 1, tr2 = m, tc2 = n;
+            for(let i=0; i<pathLen; i++) {
+                if(s1[i] === 'R') tc1++; else tr1++;
+                if(rawS2[i] === 'L') tc2--; else tr2--;
+            }
+            if(tr1 !== m || tc1 !== n || tr2 !== 1 || tc2 !== 1) {
+                printLog(`Lỗi Logic Đề bài: Đường đi không khớp kích thước bảng!`, "error");
+                btnStep.disabled = true; btnAuto.disabled = true;
+                return;
+            }
+
+            // Generate States Sequence
+            states = [];
+            
+            if (simMode === 1) {
+                printLog(`Đã chọn Cách 1: Vét cạn O(N+M)`, "warn");
+                let visited = new Set();
+                let r1 = 1, c1 = 1;
+                visited.add(`${r1},${c1}`);
+                states.push({ type: 'M1_R1', r: r1, c: c1 });
+                
+                for(let i=0; i<pathLen; i++) {
+                    if(s1[i] === 'R') c1++; else r1++;
+                    visited.add(`${r1},${c1}`);
+                    states.push({ type: 'M1_R1', r: r1, c: c1 });
+                }
+
+                let r2 = m, c2 = n;
+                let overlap = visited.has(`${r2},${c2}`);
+                states.push({ type: 'M1_R2', r: r2, c: c2, overlap: overlap });
+                
+                for(let i=0; i<pathLen; i++) {
+                    if(rawS2[i] === 'L') c2--; else r2--;
+                    overlap = visited.has(`${r2},${c2}`);
+                    states.push({ type: 'M1_R2', r: r2, c: c2, overlap: overlap });
+                }
+            } else {
+                printLog(`Đã chọn Cách 2: Đồng bộ bước đi O(N)`, "warn");
+                s2_rev = rawS2.split('').reverse().map(c => c === 'U' ? 'D' : 'R').join('');
+                printLog(`S2 gốc: ${rawS2} -> Đảo ngược & Đổi hướng: ${s2_rev}`, "info");
+
+                let r1 = 1, c1 = 1, r2 = 1, c2 = 1;
+                states.push({ type: 'M2', r1: r1, c1: c1, r2: r2, c2: c2, overlap: true });
+
+                for(let i=0; i<pathLen; i++) {
+                    if(s1[i] === 'R') c1++; else r1++;
+                    if(s2_rev[i] === 'R') c2++; else r2++;
+                    let overlap = (r1 === r2 && c1 === c2);
+                    states.push({ type: 'M2', r1: r1, c1: c1, r2: r2, c2: c2, overlap: overlap });
+                }
+            }
+
+            step = 0;
+            maxStep = states.length - 1;
+
+            buildGridUI();
+            updateGridUI();
+            
+            document.getElementById('sim-status').innerText = `Đã nạp xong. Sẵn sàng chạy.`;
+            if (simMode === 1) {
+                printLog(`Bước 0: R1 bắt đầu tại (1,1) và đánh dấu ô`, "system");
+            } else {
+                printLog("Bước 0: Cả hai cùng bắt đầu tại (1,1) -> TRÙNG NHAU (+1)", "highlight");
+            }
+        }
+
+        function stepSim() {
+            if (step >= maxStep) {
+                printLog(`Hoàn thành! Tổng số ô trùng nhau: ${ansCount}`, "success");
+                btnStep.disabled = true;
+                btnAuto.disabled = true;
+                if(autoTimer) clearInterval(autoTimer);
+                document.getElementById('sim-status').innerText = `Hoàn thành mô phỏng!`;
+                return;
+            }
+
+            step++;
+            let s = states[step];
+            
+            if (simMode === 1) {
+                if (s.type === 'M1_R1') {
+                    printLog(`Bước ${step}: R1 đi đến (${s.r},${s.c})`, "info");
+                } else {
+                    let msg = `Bước ${step}: R2 đi đến (${s.r},${s.c})`;
+                    if (s.overlap) printLog(msg + " -> GẶP ĐƯỜNG R1 (+1)", "highlight");
+                    else printLog(msg, "system");
+                }
+            } else {
+                let msg = `Bước ${step}: R1(${s.r1},${s.c1}) | R2_rev(${s.r2},${s.c2})`;
+                if(s.overlap) printLog(msg + " -> TRÙNG NHAU (+1)", "highlight");
+                else printLog(msg, "system");
+            }
+
+            updateGridUI();
+            
+            if (step === maxStep) {
+                document.getElementById('sim-status').innerText = `Hoàn thành mô phỏng!`;
+                printLog(`========== KẾT THÚC ==========`, "success");
+                printLog(`Tổng số ô đi qua chung: ${ansCount}`, "success");
+                btnStep.disabled = true;
+                btnAuto.disabled = true;
+                if(autoTimer) clearInterval(autoTimer);
+            }
+        }
+
+        function autoSim() {
+            if(autoTimer) clearInterval(autoTimer);
+            btnStep.disabled = true;
+            btnAuto.disabled = true;
+            document.getElementById('sim-status').innerText = `Đang chạy tự động...`;
+            
+            // Adjust speed based on mode to keep total time reasonable
+            let speed = (simMode === 1) ? 200 : 500;
+
+            autoTimer = setInterval(() => {
+                if(step < maxStep) {
+                    stepSim();
+                } else {
+                    clearInterval(autoTimer);
+                }
+            }, speed);
+        }
+
+        // Initialize empty state on load
+        window.onload = () => {
+            loadSim();
+        };
+    </script>
+</body>
+</html>

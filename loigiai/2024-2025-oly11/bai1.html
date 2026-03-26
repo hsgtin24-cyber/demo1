@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1: Nghe Nhạc - Thuật Toán & Mô Phỏng</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .terminal-scroll::-webkit-scrollbar { width: 8px; }
+        .terminal-scroll::-webkit-scrollbar-track { background: #1f2937; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        .array-box { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased pb-20">
+
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-12 px-6 shadow-lg mb-8">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-4xl font-extrabold mb-3 uppercase tracking-wider">Bài 1: Nghe Nhạc</h1>
+            <p class="text-lg font-medium text-blue-200">Kỳ thi Olympic Tin Học Lớp 11 - TP.HCM (6 Điểm)</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 space-y-12">
+
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-500 pb-2 mb-6 inline-block">📋 Phần 0: Đề Bài Chi Tiết</h2>
+            
+            <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+                <p>Bạn An rất thích nghe nhạc nhưng chỉ có <strong>$k$</strong> phút thời gian rảnh.</p>
+                <p>An có danh sách <strong>$n$</strong> bài hát, mỗi bài có độ dài là <strong>$m_i$</strong> phút.</p>
+                <p>An phải nghe hết một bài hát trước khi nghe bài tiếp theo.</p>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg">
+                    <strong class="text-blue-800">Yêu cầu:</strong> Hãy viết chương trình tìm ra một <strong>dãy liên tiếp</strong> các bài hát sao cho số lượng bài hát là nhiều nhất có thể và An phải đủ thời gian để nghe toàn bộ các bài hát này.
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <h3 class="font-bold text-gray-900 mb-2">Dữ liệu vào (NGHENHAC.INP):</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Dòng đầu tiên chứa hai số nguyên dương $n$ và $k$ ($1 \le n \le 10^5$, $1 \le k \le 10^9$).</li>
+                            <li>Dòng tiếp theo chứa $n$ số nguyên dương $m_i$ ($1 \le m_i \le 10^4$).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 mb-2">Kết quả ra (NGHENHAC.OUT):</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Ghi ra một số nguyên là số lượng bài hát tối đa mà An có thể nghe.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-gray-900 mt-6 mb-2">Bảng Ví dụ (Sample Test):</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse rounded-lg overflow-hidden shadow-sm">
+                        <thead>
+                            <tr class="bg-gray-800 text-white">
+                                <th class="p-3 border-b border-gray-700">NGHENHAC.INP</th>
+                                <th class="p-3 border-b border-gray-700">NGHENHAC.OUT</th>
+                                <th class="p-3 border-b border-gray-700">Giải thích</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white text-gray-800">
+                            <tr class="border-b border-gray-200">
+                                <td class="p-3 font-mono whitespace-pre text-sm bg-gray-50">5 20
+9 3 5 4 7</td>
+                                <td class="p-3 font-mono text-sm font-bold text-blue-600 bg-gray-50">4</td>
+                                <td class="p-3 text-sm">An có thể nghe các bài hát ở các vị trí 2, 3, 4, 5 (độ dài 3, 5, 4, 7) với tổng thời gian là 19 phút $\le 20$.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-indigo-500 pb-2 mb-6 inline-block">🧠 Phần 1: Phân Tích Toán Học & Logic</h2>
+            
+            <div class="space-y-4 text-gray-700 text-lg">
+                <p><strong>Dạng bài:</strong> Tìm mảng con liên tiếp (Contiguous Subarray) có tổng các phần tử không vượt quá một hằng số cho trước sao cho độ dài mảng con là lớn nhất.</p>
+                <p><strong>Mô hình hóa toán học:</strong> Cho mảng $A$ gồm $n$ phần tử dương. Cần tìm cặp chỉ số $(L, R)$ thỏa mãn $1 \le L \le R \le n$ sao cho:</p>
+                <div class="bg-gray-50 p-4 rounded-lg text-center overflow-x-auto">
+                    $$ \sum_{i=L}^{R} m_i \le k \quad \text{và} \quad (R - L + 1) \text{ đạt giá trị lớn nhất.} $$
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-5 rounded-r-lg mt-6 shadow-sm">
+                    <h4 class="font-bold text-yellow-800 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        Cảnh báo giới hạn (Constraints & Data Types)
+                    </h4>
+                    <ul class="list-disc pl-5 mt-2 text-yellow-900 text-sm space-y-1">
+                        <li><strong>Kiểu dữ liệu:</strong> Tổng thời gian lớn nhất có thể là $10^5 \times 10^4 = 10^9$. Giá trị này vừa khít với giới hạn của số nguyên 32-bit (Int32). Tuy nhiên, trong C/C++, để an toàn tính toán tổng biến thiên, luôn khuyến nghị dùng <code>long long</code> cho biến lưu tổng (hoặc <code>int64_t</code>). Trong Python, số nguyên tự động xử lý độ lớn.</li>
+                        <li><strong>Thời gian chạy:</strong> 40% test cuối có $N \le 10^5$. Một thuật toán $O(N^2)$ sẽ mất khoảng $10^{10}$ phép toán, dẫn đến Time Limit Exceeded (TLE). Bắt buộc phải có thuật toán tối ưu $O(N)$ hoặc $O(N \log N)$.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-emerald-500 pb-2 mb-6 inline-block">⚙️ Phần 2: Phân Tích Cách Giải Theo Subtask</h2>
+            
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-emerald-700 mb-3">Cách 1: Vét cạn (Brute Force) - Ăn 60% số điểm</h3>
+                <p class="text-gray-700 mb-3"><strong>Ý tưởng logic:</strong> Duyệt qua tất cả các vị trí bắt đầu $i$. Với mỗi $i$, ta thử kéo dài dãy bài hát đến vị trí $j$ chừng nào tổng thời gian chưa vượt quá $k$. Kỹ thuật này duyệt mọi mảng con có thể xảy ra.</p>
+                <blockquote class="bg-gray-100 p-4 border-l-4 border-gray-400 italic text-gray-600 mb-4 rounded-r">
+                    Khởi tạo max_len = 0<br>
+                    Lặp i từ 0 đến n-1:<br>
+                    &nbsp;&nbsp;Khởi tạo current_sum = 0<br>
+                    &nbsp;&nbsp;Lặp j từ i đến n-1:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;current_sum += m[j]<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Nếu current_sum &le; k: cập nhật max_len = max(max_len, j - i + 1)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Ngược lại: dừng vòng lặp j (vì các phần tử m đều dương, cộng tiếp chắc chắn &gt; k)
+                </blockquote>
+                <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_subtask1(n, k, m):
+    max_len = 0
+    for i in range(n):
+        current_sum = 0
+        for j in range(i, n):
+            current_sum += m[j]
+            if current_sum &lt;= k:
+                max_len = max(max_len, j - i + 1)
+            else:
+                break # Dừng sớm do tổng đã vượt quá k
+    return max_len</code></pre>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-emerald-700 mb-3">Cách 2: Kỹ thuật Hai con trỏ / Cửa sổ trượt (Sliding Window) - 100% số điểm</h3>
+                <p class="text-gray-700 mb-3"><strong>Ý tưởng logic:</strong> Thay vì tính lại tổng từ đầu cho mỗi vị trí, ta duy trì một "cửa sổ" bài hát từ <code>left</code> đến <code>right</code>. Mở rộng cửa sổ bằng cách tiến <code>right</code>. Nếu tổng vượt quá $k$, ta thu hẹp cửa sổ bằng cách đẩy <code>left</code> lên và trừ bớt <code>m[left]</code> cho đến khi tổng $\le k$ trở lại. Vì mỗi phần tử được đưa vào cửa sổ tối đa 1 lần và lấy ra tối đa 1 lần, độ phức tạp chỉ là $O(N)$.</p>
+                <blockquote class="bg-blue-50 p-4 border-l-4 border-blue-400 italic text-blue-900 mb-4 rounded-r">
+                    Khởi tạo left = 0, current_sum = 0, max_len = 0<br>
+                    Lặp right từ 0 đến n-1:<br>
+                    &nbsp;&nbsp;current_sum += m[right] (Thêm bài hát mới vào danh sách nghe)<br>
+                    &nbsp;&nbsp;Trong khi current_sum &gt; k:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;current_sum -= m[left] (Bỏ bài hát cũ nhất ra khỏi danh sách)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;left += 1 (Thu hẹp cửa sổ)<br>
+                    &nbsp;&nbsp;Cập nhật max_len = max(max_len, right - left + 1)
+                </blockquote>
+                <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_subtask2(n, k, m):
+    left = 0
+    current_sum = 0
+    max_len = 0
+    
+    for right in range(n):
+        current_sum += m[right]
+        
+        # Nếu vượt quá thời gian, loại bỏ các bài hát từ bên trái
+        while current_sum &gt; k and left &lt;= right:
+            current_sum -= m[left]
+            left += 1
+            
+        # Lúc này current_sum <= k, ta ghi nhận độ dài
+        max_len = max(max_len, right - left + 1)
+        
+    return max_len</code></pre>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-purple-500 pb-2 mb-6 inline-block">📊 Phần 3: Bảng So Sánh Thuật Toán</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse rounded-lg overflow-hidden shadow-sm">
+                    <thead>
+                        <tr class="bg-purple-700 text-white">
+                            <th class="p-4 font-semibold text-center border-r border-purple-600">Thuật toán</th>
+                            <th class="p-4 font-semibold text-center border-r border-purple-600">Thời gian</th>
+                            <th class="p-4 font-semibold text-center border-r border-purple-600">Không gian</th>
+                            <th class="p-4 font-semibold text-center">Kết quả dự kiến</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700">
+                        <tr class="border-b border-gray-200 bg-white hover:bg-gray-50">
+                            <td class="p-4 font-medium text-center border-r border-gray-200">Cách 1: Vét cạn</td>
+                            <td class="p-4 text-center border-r border-gray-200 font-mono text-red-600">$O(N^2)$</td>
+                            <td class="p-4 text-center border-r border-gray-200 font-mono">$O(1)$</td>
+                            <td class="p-4 text-center font-bold text-yellow-600">60 điểm (TLE test lớn)</td>
+                        </tr>
+                        <tr class="bg-purple-50 hover:bg-purple-100">
+                            <td class="p-4 font-medium text-center border-r border-purple-100">Cách 2: Cửa sổ trượt</td>
+                            <td class="p-4 text-center border-r border-purple-100 font-mono text-green-600">$O(N)$</td>
+                            <td class="p-4 text-center border-r border-purple-100 font-mono">$O(1)$</td>
+                            <td class="p-4 text-center font-bold text-green-600">100 điểm (Accepted)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-orange-500 pb-2 mb-6 inline-block">💻 Phần 4: Trình Mô Phỏng Tương Tác (Visualizer)</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-inner">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Thông số mô phỏng
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Thời gian rảnh $k$ (phút):</label>
+                            <input type="number" id="input-k" value="20" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Mảng bài hát $m_i$ (cách nhau dấu phẩy):</label>
+                            <input type="text" id="input-m" value="9, 3, 5, 4, 7" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Chọn thuật toán:</label>
+                            <select id="algo-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm">
+                                <option value="sliding-window">Cách 2: Cửa sổ trượt O(N)</option>
+                                <option value="brute-force">Cách 1: Vét cạn O(N²)</option>
+                            </select>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-200 space-y-2">
+                            <button id="btn-load" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition shadow text-sm">
+                                Nạp Dữ Liệu / Reset
+                            </button>
+                            <div class="flex gap-2">
+                                <button id="btn-step" class="w-1/2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded transition shadow text-sm disabled:opacity-50" disabled>
+                                    Bước Tiếp ⏭️
+                                </button>
+                                <button id="btn-auto" class="w-1/2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition shadow text-sm disabled:opacity-50" disabled>
+                                    Tự Động ▶️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 flex flex-col gap-4">
+                    <div class="bg-gray-800 rounded-xl p-4 shadow-inner flex flex-col justify-center items-center min-h-[120px] overflow-x-auto">
+                        <div id="array-visualizer" class="flex gap-2 p-2">
+                            <span class="text-gray-400 italic text-sm">Nhấn "Nạp Dữ Liệu" để bắt đầu...</span>
+                        </div>
+                        <div id="visualizer-stats" class="mt-4 text-white font-mono text-sm flex gap-6 hidden">
+                            <span class="bg-blue-600 px-3 py-1 rounded">Sum: <span id="stat-sum">0</span>/<span id="stat-k">20</span></span>
+                            <span class="bg-green-600 px-3 py-1 rounded">Max Len: <span id="stat-maxlen">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 rounded-xl p-1 shadow-inner relative flex-1 min-h-[300px]">
+                        <div class="absolute top-0 left-0 w-full bg-gray-800 rounded-t-xl px-4 py-2 border-b border-gray-700 flex justify-between items-center">
+                            <span class="text-gray-300 font-mono text-xs">Terminal Trace </span>
+                            <span class="flex gap-1">
+                                <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            </span>
+                        </div>
+                        <div id="terminal-output" class="terminal-scroll pt-12 p-4 font-mono text-sm h-full max-h-[400px] overflow-y-auto">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Kích hoạt HighlightJS
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+
+        // -----------------------------------------
+        // LOGIC MÔ PHỎNG VISUALIZER
+        // -----------------------------------------
+        
+        let simulationSteps = [];
+        let currentStepIdx = 0;
+        let autoRunInterval = null;
+        let isAutoRunning = false;
+        
+        // Cấu trúc Dữ liệu
+        let globalK = 0;
+        let globalM = [];
+
+        // UI Elements
+        const terminalOut = document.getElementById("terminal-output");
+        const btnLoad = document.getElementById("btn-load");
+        const btnStep = document.getElementById("btn-step");
+        const btnAuto = document.getElementById("btn-auto");
+        const arrayVis = document.getElementById("array-visualizer");
+        const statSum = document.getElementById("stat-sum");
+        const statMaxlen = document.getElementById("stat-maxlen");
+        const statK = document.getElementById("stat-k");
+        const statContainer = document.getElementById("visualizer-stats");
+
+        const COLORS = {
+            system: "text-blue-400 font-bold",
+            info: "text-gray-300",
+            warn: "text-yellow-400",
+            error: "text-red-500",
+            success: "text-green-400 font-bold"
+        };
+
+        function printLog(msg, type = "info") {
+            const div = document.createElement("div");
+            div.className = `mb-1.5 ${COLORS[type] || COLORS.info}`;
+            div.innerHTML = `<span class="opacity-50 select-none mr-2">❯</span> ${msg}`;
+            terminalOut.appendChild(div);
+            terminalOut.scrollTop = terminalOut.scrollHeight;
+        }
+
+        function clearTerminal() {
+            terminalOut.innerHTML = '';
+        }
+
+        function renderArrayBase(arr) {
+            arrayVis.innerHTML = '';
+            arr.forEach((val, idx) => {
+                const box = document.createElement("div");
+                box.id = `box-${idx}`;
+                box.className = `array-box w-12 h-12 flex flex-col justify-center items-center rounded bg-gray-700 text-white font-mono shadow-md border-2 border-transparent relative`;
+                
+                const valSpan = document.createElement("span");
+                valSpan.className = "font-bold text-lg z-10";
+                valSpan.innerText = val;
+                
+                const idxSpan = document.createElement("span");
+                idxSpan.className = "text-[10px] text-gray-400 absolute bottom-0 w-full text-center bg-gray-800 bg-opacity-80 rounded-b";
+                idxSpan.innerText = idx;
+
+                box.appendChild(valSpan);
+                box.appendChild(idxSpan);
+                arrayVis.appendChild(box);
+            });
+            statContainer.classList.remove("hidden");
+            statK.innerText = globalK;
+            statSum.innerText = 0;
+            statMaxlen.innerText = 0;
+        }
+
+        function applyStepState(step) {
+            // Cập nhật stats
+            statSum.innerText = step.sum !== undefined ? step.sum : "-";
+            statMaxlen.innerText = step.maxLen !== undefined ? step.maxLen : "-";
+
+            // Cập nhật UI mảng
+            const boxes = document.querySelectorAll(".array-box");
+            boxes.forEach(box => {
+                box.className = "array-box w-12 h-12 flex flex-col justify-center items-center rounded bg-gray-700 text-white font-mono shadow-md border-2 border-transparent relative";
+                // Xóa con trỏ
+                const pointers = box.querySelectorAll('.pointer-tag');
+                pointers.forEach(p => p.remove());
+            });
+
+            if(step.pointers) {
+                const { left, right, type } = step.pointers;
+                
+                for(let i = 0; i < globalM.length; i++) {
+                    const box = document.getElementById(`box-${i}`);
+                    if(!box) continue;
+
+                    // Tô màu các ô trong mảng con đang xét
+                    if (type === 'sliding') {
+                        if (i >= left && i <= right) {
+                            box.classList.remove("bg-gray-700");
+                            box.classList.add(step.sum > globalK ? "bg-red-800" : "bg-blue-800");
+                            box.classList.add("border-blue-400");
+                        }
+                    } else if (type === 'brute') {
+                        if (i >= left && i <= right) {
+                            box.classList.remove("bg-gray-700");
+                            box.classList.add(step.sum > globalK ? "bg-red-800" : "bg-purple-800");
+                            box.classList.add("border-purple-400");
+                        }
+                    }
+
+                    // Gắn nhãn con trỏ L, R
+                    if (i === left) {
+                        const lTag = document.createElement("div");
+                        lTag.className = "pointer-tag absolute -top-6 text-xs font-bold text-yellow-300 bg-gray-900 px-1 rounded";
+                        lTag.innerText = "L";
+                        box.appendChild(lTag);
+                    }
+                    if (i === right) {
+                        const rTag = document.createElement("div");
+                        rTag.className = "pointer-tag absolute -bottom-6 text-xs font-bold text-green-300 bg-gray-900 px-1 rounded z-20";
+                        rTag.innerText = "R";
+                        box.appendChild(rTag);
+                    }
+                }
+            }
+        }
+
+        // GENERATE STEPS CHO ALGORITHMS
+        function generateSlidingWindowSteps(n, k, m) {
+            let steps = [];
+            let left = 0;
+            let current_sum = 0;
+            let max_len = 0;
+
+            steps.push({ msg: `Khởi tạo: left=0, current_sum=0, max_len=0. k=${k}`, type: "system", sum: 0, maxLen: 0, pointers: {left:0, right:-1, type: 'sliding'} });
+
+            for (let right = 0; right < n; right++) {
+                current_sum += m[right];
+                steps.push({ 
+                    msg: `Tiến right=${right}. Thêm m[${right}]=${m[right]} vào tổng. current_sum = ${current_sum}`, 
+                    type: "info",
+                    sum: current_sum, maxLen: max_len, pointers: {left, right, type: 'sliding'}
+                });
+
+                while (current_sum > k && left <= right) {
+                    steps.push({ 
+                        msg: `CẢNH BÁO: current_sum (${current_sum}) > k (${k}). Cần thu hẹp cửa sổ.`, 
+                        type: "warn",
+                        sum: current_sum, maxLen: max_len, pointers: {left, right, type: 'sliding'}
+                    });
+                    
+                    current_sum -= m[left];
+                    left++;
+                    
+                    steps.push({ 
+                        msg: `Đã loại m[${left-1}] ra khỏi tổng. Tăng left=${left}. current_sum mới = ${current_sum}`, 
+                        type: "warn",
+                        sum: current_sum, maxLen: max_len, pointers: {left, right, type: 'sliding'}
+                    });
+                }
+
+                if(right - left + 1 > max_len) {
+                    max_len = right - left + 1;
+                    steps.push({ 
+                        msg: `=> Cập nhật max_len = ${max_len} (đoạn liên tiếp [${left}..${right}])`, 
+                        type: "success",
+                        sum: current_sum, maxLen: max_len, pointers: {left, right, type: 'sliding'}
+                    });
+                } else {
+                    steps.push({ 
+                        msg: `Đoạn [${left}..${right}] hợp lệ, độ dài ${right - left + 1}. Không lớn hơn max_len hiện tại.`, 
+                        type: "info",
+                        sum: current_sum, maxLen: max_len, pointers: {left, right, type: 'sliding'}
+                    });
+                }
+            }
+            steps.push({ msg: `KẾT THÚC THUẬT TOÁN. Kết quả: ${max_len}`, type: "system", sum: current_sum, maxLen: max_len, pointers: null });
+            return steps;
+        }
+
+        function generateBruteForceSteps(n, k, m) {
+            let steps = [];
+            let max_len = 0;
+
+            steps.push({ msg: `Khởi tạo vét cạn: max_len=0. k=${k}`, type: "system", sum: 0, maxLen: 0, pointers: {left:-1, right:-1, type: 'brute'} });
+
+            for (let i = 0; i < n; i++) {
+                let current_sum = 0;
+                steps.push({ msg: `--- Xét vị trí bắt đầu i=${i} ---`, type: "system", sum: 0, maxLen: max_len, pointers: {left:i, right:i-1, type: 'brute'} });
+                
+                for (let j = i; j < n; j++) {
+                    current_sum += m[j];
+                    steps.push({ 
+                        msg: `Thử tới j=${j}. Cộng m[${j}]=${m[j]}. current_sum = ${current_sum}`, 
+                        type: "info",
+                        sum: current_sum, maxLen: max_len, pointers: {left:i, right:j, type: 'brute'}
+                    });
+
+                    if (current_sum <= k) {
+                        if(j - i + 1 > max_len) {
+                            max_len = j - i + 1;
+                            steps.push({ 
+                                msg: `Tổng <= ${k}. Kỷ lục mới: max_len = ${max_len}`, 
+                                type: "success",
+                                sum: current_sum, maxLen: max_len, pointers: {left:i, right:j, type: 'brute'}
+                            });
+                        }
+                    } else {
+                        steps.push({ 
+                            msg: `Tổng ${current_sum} > k (${k}). Dừng mảng con xuất phát từ i=${i}.`, 
+                            type: "error",
+                            sum: current_sum, maxLen: max_len, pointers: {left:i, right:j, type: 'brute'}
+                        });
+                        break;
+                    }
+                }
+            }
+            steps.push({ msg: `KẾT THÚC THUẬT TOÁN. Kết quả: ${max_len}`, type: "system", sum: "-", maxLen: max_len, pointers: null });
+            return steps;
+        }
+
+        // KHI BẤM NÚT NẠP DỮ LIỆU
+        btnLoad.addEventListener("click", () => {
+            // Dừng auto run
+            if(autoRunInterval) clearInterval(autoRunInterval);
+            isAutoRunning = false;
+            btnAuto.innerHTML = "Tự Động ▶️";
+            
+            clearTerminal();
+            
+            const kStr = document.getElementById("input-k").value;
+            const mStr = document.getElementById("input-m").value;
+            const algo = document.getElementById("algo-select").value;
+
+            globalK = parseInt(kStr);
+            if(isNaN(globalK) || globalK < 1) {
+                printLog("Lỗi: k phải là số nguyên dương hợp lệ.", "error");
+                return;
+            }
+
+            // Parse array
+            try {
+                globalM = mStr.split(",").map(x => {
+                    const val = parseInt(x.trim());
+                    if(isNaN(val)) throw "NaN";
+                    return val;
+                });
+            } catch(e) {
+                printLog("Lỗi định dạng mảng m. Vui lòng nhập số cách nhau bằng dấu phẩy.", "error");
+                return;
+            }
+
+            if(globalM.length === 0) {
+                printLog("Mảng rỗng!", "error");
+                return;
+            }
+
+            renderArrayBase(globalM);
+
+            if(algo === "sliding-window") {
+                printLog(`[System] Đang chuẩn bị mô phỏng Cửa Sổ Trượt O(N) với N=${globalM.length}, K=${globalK}`, "system");
+                simulationSteps = generateSlidingWindowSteps(globalM.length, globalK, globalM);
+            } else {
+                printLog(`[System] Đang chuẩn bị mô phỏng Vét Cạn O(N²) với N=${globalM.length}, K=${globalK}`, "system");
+                simulationSteps = generateBruteForceSteps(globalM.length, globalK, globalM);
+            }
+
+            currentStepIdx = 0;
+            btnStep.disabled = false;
+            btnAuto.disabled = false;
+            printLog("Dữ liệu nạp thành công. Nhấn 'Bước Tiếp' để chạy.", "success");
+        });
+
+        // HÀM CHẠY 1 BƯỚC
+        function runOneStep() {
+            if(currentStepIdx < simulationSteps.length) {
+                const step = simulationSteps[currentStepIdx];
+                printLog(step.msg, step.type);
+                applyStepState(step);
+                currentStepIdx++;
+                
+                if(currentStepIdx >= simulationSteps.length) {
+                    btnStep.disabled = true;
+                    if(isAutoRunning) {
+                        clearInterval(autoRunInterval);
+                        isAutoRunning = false;
+                        btnAuto.innerHTML = "Tự Động ▶️";
+                        btnAuto.disabled = true;
+                    }
+                }
+            }
+        }
+
+        btnStep.addEventListener("click", () => {
+            if(isAutoRunning) { // Tạm dừng nếu đang chạy auto
+                clearInterval(autoRunInterval);
+                isAutoRunning = false;
+                btnAuto.innerHTML = "Tự Động ▶️";
+            }
+            runOneStep();
+        });
+
+        btnAuto.addEventListener("click", () => {
+            if(isAutoRunning) {
+                clearInterval(autoRunInterval);
+                isAutoRunning = false;
+                btnAuto.innerHTML = "Tự Động ▶️";
+                btnAuto.classList.replace("bg-red-500", "bg-orange-500");
+                btnAuto.classList.replace("hover:bg-red-600", "hover:bg-orange-600");
+            } else {
+                isAutoRunning = true;
+                btnAuto.innerHTML = "Dừng ⏸️";
+                btnAuto.classList.replace("bg-orange-500", "bg-red-500");
+                btnAuto.classList.replace("hover:bg-orange-600", "hover:bg-red-600");
+                autoRunInterval = setInterval(runOneStep, 800); // Tốc độ 800ms / bước
+            }
+        });
+
+    </script>
+</body>
+</html>
