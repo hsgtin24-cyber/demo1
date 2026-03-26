@@ -1,16 +1,30 @@
 [
   {
-    "id": "bai1-olympic10",
+    "id": "2024-2025-oly10",
     "ten": "Đếm học sinh xuất sắc",
     "nam": 2025,
-    "kythi": "Olympic 10, 11",
+    "kythi": "Olympic 10",
     "dokho": "Dễ",
     "mota": "Viết chương trình Python đếm số lượng học sinh có điểm trung bình >= 8.0.",
-    "file": "de/2024-2025 OLYMPIC 10 HCM.pdf",
+    "file": "de/2024-2025-oly10.pdf",
     "loigiai": [
-      { "ten": "Bài 1", "file": "loigiai/bai1.html" },
-      { "ten": "Bài 2", "file": "loigiai/bai2.html" },
-      { "ten": "Bài 3", "file": "loigiai/bai3.html" }
+      { "ten": "Bài 1", "file": "loigiai/2024-2025-oly10/bai1.html" },
+      { "ten": "Bài 2", "file": "loigiai/2024-2025-oly10/bai2.html" },
+      { "ten": "Bài 3", "file": "loigiai/2024-2025-oly10/bai3.html" }
+    ]
+  },
+  {
+    "id": "2024-2025-oly11",
+    "ten": "Đếm học sinh xuất sắc",
+    "nam": 2025,
+    "kythi": "Olympic 11",
+    "dokho": "Dễ",
+    "mota": "Viết chương trình Python đếm số lượng học sinh có điểm trung bình >= 8.0.",
+    "file": "de/2024-2025-oly11.pdf",
+    "loigiai": [
+      { "ten": "Bài 1", "file": "loigiai/2024-2025-oly11/bai1.html" },
+      { "ten": "Bài 2", "file": "loigiai/2024-2025-oly11/bai2.html" },
+      { "ten": "Bài 3", "file": "loigiai/2024-2025-oly11/bai3.html" }
     ]
   },
   {
