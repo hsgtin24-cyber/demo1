@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2: Đắp núi - Visualizer & Solution</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- MathJax for Math rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+
+    <!-- Highlight.js for Code Formatting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        /* Custom Scrollbar for Terminal */
+        .term-scroll::-webkit-scrollbar { width: 6px; }
+        .term-scroll::-webkit-scrollbar-track { background: #1e293b; }
+        .term-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        
+        /* Bar transitions for Visualizer */
+        .bar-transition { transition: all 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased pb-20">
+
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-8 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <h1 class="text-4xl font-extrabold tracking-tight mb-2">Bài 2: Đắp núi</h1>
+            <div class="flex items-center space-x-4 text-blue-100 font-medium">
+                <span class="bg-blue-900 px-3 py-1 rounded-full text-sm">3 Điểm</span>
+                <span>Kỳ thi Tuyển sinh lớp 10 TP.HCM (2024 - 2025)</span>
+                <span class="bg-yellow-500 text-yellow-900 px-3 py-1 rounded-full text-sm font-bold">Thời gian: 1s</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8 space-y-12">
+
+        <!-- PHẦN 0: ĐỀ BÀI CHI TIẾT -->
+        <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3">📄</span> Phần 0: Đề bài chi tiết
+            </h2>
+            <div class="prose max-w-none text-gray-700 space-y-4">
+                <p>Trong một trò chơi xây địa hình 2D, một khu vực $A$ gồm $n$ vùng liên tiếp có độ cao lần lượt là $A_1, A_2, \dots, A_x, \dots, A_{n-1}, A_n$.</p>
+                <p>Khu vực $A$ được gọi là một <strong>ngọn núi</strong> khi sườn bên trái của nó tăng đơn điệu và sườn bên phải của nó giảm đơn điệu. Nghĩa là, khi $A$ là ngọn núi với đỉnh núi là vùng có chiều cao $A_x$, thì $n$ vùng liên tiếp của $A$ phải có độ cao đảm bảo $A_1 < A_2 < \dots < A_x$ và $A_x > \dots > A_{n-1} > A_n$ ($1 < x < n$). Hai vùng đầu tiên và cuối cùng của khu vực $A$ không được là đỉnh núi.</p>
+                <p>Người chơi có thể tăng độ cao của các vùng để đắp $A$ thành một ngọn núi. Với mỗi vùng $A_i$ ($1 \le i \le n$), việc <strong>tăng độ cao lên 1 đơn vị sẽ tốn chi phí là 1 điểm</strong>.</p>
+                <p><strong>Yêu cầu:</strong> Hãy viết chương trình tính chi phí tối thiểu để đắp khu vực $A$ thành một ngọn núi.</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 class="font-bold text-gray-800 mb-2">Dữ liệu vào (DAPNUI.INP):</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Dòng đầu chứa số nguyên $n$ ($3 \le n \le 10^5$).</li>
+                        <li>Dòng tiếp theo gồm $n$ số nguyên $A_1, A_2, \dots, A_n$ ($0 \le A_i \le 10^9, 1 \le i \le n$). Các số cách nhau một khoảng trắng.</li>
+                    </ul>
+                    <h3 class="font-bold text-gray-800 mt-4 mb-2">Kết quả (DAPNUI.OUT):</h3>
+                    <p>Một số nguyên duy nhất cho biết chi phí tối thiểu để đắp khu vực $A$ thành một ngọn núi.</p>
+                </div>
+
+                <h3 class="font-bold text-gray-800 mt-6 mb-2">Ví dụ (Sample Test):</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left border-collapse border border-gray-300">
+                        <thead class="bg-gray-100 text-gray-700">
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2">DAPNUI.INP</th>
+                                <th class="border border-gray-300 px-4 py-2">DAPNUI.OUT</th>
+                                <th class="border border-gray-300 px-4 py-2">Giải thích</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 font-mono whitespace-pre">5<br>1 1 1 1 1</td>
+                                <td class="border border-gray-300 px-4 py-2 font-mono font-bold text-blue-600">4</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    Có nhiều phương án đắp:<br>
+                                    - Mảng <code>1 2 3 2 1</code>: Chi phí 1 + 2 + 1 = 4 điểm (Tối thiểu).<br>
+                                    - Mảng <code>1 4 3 2 1</code>: Chi phí 3 + 2 + 1 = 6 điểm.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 font-mono whitespace-pre">6<br>3 4 5 6 5 1</td>
+                                <td class="border border-gray-300 px-4 py-2 font-mono font-bold text-blue-600">0</td>
+                                <td class="border border-gray-300 px-4 py-2">Đã là ngọn núi sẵn, không cần đắp.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 1: PHÂN TÍCH TOÁN HỌC & LOGIC -->
+        <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="bg-indigo-100 text-indigo-600 p-2 rounded-lg mr-3">🧠</span> Phần 1: Phân tích Toán học & Logic
+            </h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>Dạng bài:</strong> Quy hoạch động (Dynamic Programming) trên Mảng tiền tố / Hậu tố kết hợp Tham lam (Greedy).</p>
+                <p>Giả sử chúng ta chọn vị trí $x$ ($1 < x < n$) làm đỉnh núi. Mảng lúc này được chia làm 3 phần:</p>
+                <ul class="list-disc list-inside ml-4 space-y-2">
+                    <li><strong>Sườn trái</strong> $A[1 \dots x-1]$: Phải là một dãy <em>tăng ngặt</em> ($H_1 < H_2 < \dots < H_{x-1}$).</li>
+                    <li><strong>Sườn phải</strong> $A[x+1 \dots n]$: Phải là một dãy <em>giảm ngặt</em> ($H_{x+1} > H_{x+2} > \dots > H_n$).</li>
+                    <li><strong>Đỉnh núi</strong> $A[x]$: Phải lớn hơn cả $H_{x-1}$ và $H_{x+1}$ ($H_x > H_{x-1}$ và $H_x > H_{x+1}$).</li>
+                </ul>
+                <p>Vì chúng ta <strong>chỉ có thể tăng độ cao</strong> (không thể giảm), để tối thiểu hóa chi phí, tại mỗi bước ta chỉ tăng phần tử hiện tại lên mức tối thiểu vừa đủ để thỏa mãn điều kiện dãy tăng/giảm ngặt.</p>
+                
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mt-6 rounded-r-lg">
+                    <h4 class="font-bold text-amber-800 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                        Cảnh báo kiểu dữ liệu (Data Type Warning)
+                    </h4>
+                    <p class="text-sm text-amber-900 mt-1">
+                        Độ cao $A_i$ lên tới $10^9$. Tổng chi phí có thể vượt quá giới hạn của số nguyên 32-bit (Int). Trong C++, bắt buộc phải sử dụng <code>long long</code>. Trong Python, số nguyên tự động mở rộng nhưng cần chú ý thiết lập giá trị <code>INF</code> đủ lớn (vd: <code>float('inf')</code>).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 2: PHÂN TÍCH CÁCH GIẢI -->
+        <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <span class="bg-green-100 text-green-600 p-2 rounded-lg mr-3">⚙️</span> Phần 2: Hai hướng tiếp cận theo Subtask
+            </h2>
+
+            <!-- Cách 1 -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-gray-800 mb-3 border-b pb-2">Cách 1: Vét cạn (Brute Force) - Cho 60% số điểm ($N \le 10^3$)</h3>
+                <p class="text-gray-700 mb-3">
+                    <strong>Ý tưởng:</strong> Duyệt qua mọi đỉnh $x$ có thể ($1 < x < N$). Với mỗi đỉnh $x$, duyệt ngược về bên trái để tính chi phí xây sườn trái, và duyệt về bên phải để tính chi phí xây sườn phải. Cuối cùng cộng chi phí cho đỉnh.
+                </p>
+                <blockquote class="bg-gray-50 border-l-4 border-gray-400 p-3 italic text-gray-600 mb-4 text-sm">
+                    Mã giả:
+                    <br>1. min_cost = INF
+                    <br>2. For x từ 2 đến n-1:
+                    <br>3. &nbsp;&nbsp;&nbsp;&nbsp;cost_left = tính_chi_phí_tăng_ngặt_từ_1_đến_x-1()
+                    <br>4. &nbsp;&nbsp;&nbsp;&nbsp;cost_right = tính_chi_phí_giảm_ngặt_từ_x+1_đến_n()
+                    <br>5. &nbsp;&nbsp;&nbsp;&nbsp;cost_peak = tính_chi_phí_nâng_đỉnh_x_lớn_hơn_2_bên()
+                    <br>6. &nbsp;&nbsp;&nbsp;&nbsp;min_cost = Min(min_cost, cost_left + cost_right + cost_peak)
+                </blockquote>
+<pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_subtask_1(n, A):
+    min_total_cost = float('inf')
+    
+    # Thử mọi vị trí làm đỉnh núi (x từ 1 đến n-2, index 0-based)
+    for x in range(1, n - 1):
+        cost = 0
+        
+        # 1. Tính toán sườn TRÁI (phải tăng ngặt)
+        prev_h = A[0]
+        for i in range(1, x):
+            req_h = prev_h + 1
+            h = max(A[i], req_h)
+            cost += h - A[i]
+            prev_h = h
+        left_adjacent_h = prev_h
+        
+        # 2. Tính toán sườn PHẢI (phải giảm ngặt)
+        prev_h = A[n-1]
+        for i in range(n - 2, x, -1):
+            req_h = prev_h + 1
+            h = max(A[i], req_h)
+            cost += h - A[i]
+            prev_h = h
+        right_adjacent_h = prev_h
+        
+        # 3. Tính toán ĐỈNH x
+        peak_h = max([A[x], left_adjacent_h + 1, right_adjacent_h + 1])
+        cost += peak_h - A[x]
+        
+        if cost < min_total_cost:
+            min_total_cost = cost
+            
+    return min_total_cost
+</code></pre>
+            </div>
+
+            <!-- Cách 2 -->
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3 border-b pb-2">Cách 2: Tiền xử lý DP (Tối ưu) - Cho 100% số điểm ($N \le 10^5$)</h3>
+                <p class="text-gray-700 mb-3">
+                    <strong>Ý tưởng:</strong> Ở cách 1, việc tính lại sườn trái và phải bị lặp lại nhiều lần. Ta có thể <em>tiền xử lý (Precompute)</em> 2 mảng DP:
+                    <br>- <code>L[i]</code>: Độ cao tối thiểu tại $i$ để dãy $A[0 \dots i]$ tăng ngặt. Đi kèm mảng <code>CostL[i]</code> lưu tổng chi phí.
+                    <br>- <code>R[i]</code>: Độ cao tối thiểu tại $i$ để dãy $A[i \dots n-1]$ giảm ngặt. Đi kèm mảng <code>CostR[i]</code> lưu tổng chi phí.
+                    <br>Sau khi tính xong 2 mảng này trong $O(N)$, ta duyệt đỉnh $x$ một lần nữa trong $O(N)$ để tìm đáp án tối ưu.
+                </p>
+                <blockquote class="bg-blue-50 border-l-4 border-blue-400 p-3 italic text-gray-700 mb-4 text-sm">
+                    Mã giả DP:
+                    <br>L[0] = A[0], CostL[0] = 0
+                    <br>For i = 1 to n-1: L[i] = max(A[i], L[i-1] + 1); CostL[i] = CostL[i-1] + (L[i] - A[i])
+                    <br>-- Làm tương tự cho R và CostR từ phải sang trái --
+                </blockquote>
+<pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_optimal(n, A):
+    # Khởi tạo mảng DP cho sườn trái
+    L = [0] * n
+    CostL = [0] * n
+    L[0] = A[0]
+    
+    for i in range(1, n):
+        L[i] = max(A[i], L[i-1] + 1)
+        CostL[i] = CostL[i-1] + (L[i] - A[i])
+        
+    # Khởi tạo mảng DP cho sườn phải
+    R = [0] * n
+    CostR = [0] * n
+    R[n-1] = A[n-1]
+    
+    for i in range(n-2, -1, -1):
+        R[i] = max(A[i], R[i+1] + 1)
+        CostR[i] = CostR[i+1] + (R[i] - A[i])
+        
+    min_total_cost = float('inf')
+    
+    # Duyệt để tìm đỉnh x tối ưu (O(N))
+    for x in range(1, n - 1):
+        # Đỉnh phải cao hơn đỉnh kề trái và kề phải
+        peak_h = max([A[x], L[x-1] + 1, R[x+1] + 1])
+        
+        # Tổng chi phí nếu chọn x làm đỉnh
+        cost = CostL[x-1] + CostR[x+1] + (peak_h - A[x])
+        
+        if cost < min_total_cost:
+            min_total_cost = cost
+            
+    return min_total_cost
+</code></pre>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: BẢNG SO SÁNH -->
+        <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="bg-purple-100 text-purple-600 p-2 rounded-lg mr-3">📊</span> Phần 3: Bảng So sánh Thuật toán
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border-collapse rounded-lg overflow-hidden shadow-sm">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-6 py-3 font-semibold">Thuật toán</th>
+                            <th class="px-6 py-3 font-semibold">Thời gian (Time)</th>
+                            <th class="px-6 py-3 font-semibold">Không gian (Space)</th>
+                            <th class="px-6 py-3 font-semibold text-center">Kết quả dự kiến ($N=10^5$)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 text-gray-700">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium">Cách 1: Vét cạn hai chiều</td>
+                            <td class="px-6 py-4 font-mono">$O(N^2)$</td>
+                            <td class="px-6 py-4 font-mono">$O(1)$</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold">TLE (Chỉ được 60%)</span>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 bg-green-50/30">
+                            <td class="px-6 py-4 font-medium text-green-700">Cách 2: DP Tiền xử lý (Tối ưu)</td>
+                            <td class="px-6 py-4 font-mono font-bold text-green-700">$O(N)$</td>
+                            <td class="px-6 py-4 font-mono">$O(N)$</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">AC (100% Điểm)</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PHẦN 4: TRÌNH MÔ PHỎNG TƯƠNG TÁC -->
+        <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <span class="bg-rose-100 text-rose-600 p-2 rounded-lg mr-3">💻</span> Phần 4: Trình mô phỏng (Visualizer)
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Cột trái: Điều khiển & Mảng -->
+                <div class="lg:col-span-2 space-y-4">
+                    <!-- Bảng điều khiển -->
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Dãy đầu vào $A_i$:</label>
+                                <input type="text" id="inputArray" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500" value="1 1 1 1 1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Thuật toán:</label>
+                                <select id="algoSelect" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="2" selected>Cách 2: DP O(N) (Tối ưu)</option>
+                                    <option value="1">Cách 1: Vét cạn O(N²)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tốc độ mô phỏng:</label>
+                                <select id="speedSelect" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="1000">Chậm (1s)</option>
+                                    <option value="400" selected>Bình thường (0.4s)</option>
+                                    <option value="100">Nhanh (0.1s)</option>
+                                    <option value="10">Rất Nhanh (10ms)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="initVisualizer()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">Nạp Dữ Liệu</button>
+                            <button onclick="nextStep()" id="btnNext" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm font-medium transition" disabled>Bước Tiếp ⏭️</button>
+                            <button onclick="toggleAutoPlay()" id="btnAuto" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition" disabled>Chạy Tự Động ▶️</button>
+                        </div>
+                    </div>
+
+                    <!-- Khu vực trực quan hóa (Canvas/Bars) -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 h-80 flex flex-col justify-end relative overflow-hidden" id="visualizerContainer">
+                        <!-- Bars sẽ được render bằng JS vào đây -->
+                        <div class="absolute inset-0 flex items-center justify-center text-gray-400" id="visPlaceholder">
+                            Nhập dữ liệu và nhấn "Nạp Dữ Liệu" để bắt đầu.
+                        </div>
+                        <div id="barsWrapper" class="flex justify-around items-end w-full h-full pb-6 hidden"></div>
+                    </div>
+                    
+                    <!-- Chú thích đồ họa -->
+                    <div class="flex justify-center space-x-6 text-sm">
+                        <div class="flex items-center"><span class="w-4 h-4 bg-slate-400 rounded mr-2"></span> Độ cao ban đầu $A_i$</div>
+                        <div class="flex items-center"><span class="w-4 h-4 bg-orange-400 rounded mr-2"></span> Chi phí đắp thêm</div>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Terminal -->
+                <div class="bg-[#0d1117] rounded-xl flex flex-col h-[500px] lg:h-auto overflow-hidden shadow-inner border border-gray-800">
+                    <div class="bg-[#161b22] px-4 py-2 flex items-center border-b border-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span id="terminalTitle" class="ml-4 text-xs text-gray-400 font-mono tracking-wider">Terminal</span>
+                    </div>
+                    <div id="terminal" class="p-4 font-mono text-sm overflow-y-auto term-scroll flex-grow space-y-1">
+                        <div class="text-blue-400"># Sẵn sàng...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Kịch bản Javascript mô phỏng -->
+    <script>
+        // --- HIGHLIGHT.JS INIT ---
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+
+        // --- STATE QUẢN LÝ ---
+        let state = {
+            algo: 2, // 1: Brute Force, 2: DP
+            A: [], L: [], CostL: [], R: [], CostR: [],
+            n: 0, phase: 0, subPhase: '', i: 0, x: 1,
+            bestPeak: -1, minCost: Infinity,
+            currentCost: 0, prevHLeft: 0, prevHRight: 0,
+            autoPlayId: null, isPlaying: false, maxVisualHeight: 1
+        };
+
+        const DOMElements = {
+            input: document.getElementById('inputArray'),
+            algoSelect: document.getElementById('algoSelect'),
+            term: document.getElementById('terminal'),
+            termTitle: document.getElementById('terminalTitle'),
+            btnNext: document.getElementById('btnNext'),
+            btnAuto: document.getElementById('btnAuto'),
+            speed: document.getElementById('speedSelect'),
+            barsWrapper: document.getElementById('barsWrapper'),
+            placeholder: document.getElementById('visPlaceholder')
+        };
+
+        // --- TERMINAL LOGGER ---
+        function printLog(msg, type = 'info') {
+            const div = document.createElement('div');
+            let colorClass = 'text-gray-300';
+            
+            switch(type) {
+                case 'system': colorClass = 'text-blue-400 font-bold'; break;
+                case 'success': colorClass = 'text-green-400 font-bold'; break;
+                case 'warn': colorClass = 'text-yellow-400'; break;
+                case 'error': colorClass = 'text-red-400'; break;
+                case 'highlight': colorClass = 'text-fuchsia-400'; break;
+            }
+            
+            div.className = colorClass;
+            div.innerHTML = `<span class="text-gray-500 mr-2">></span>${msg}`;
+            DOMElements.term.appendChild(div);
+            DOMElements.term.scrollTop = DOMElements.term.scrollHeight;
+        }
+
+        function clearTerminal() {
+            DOMElements.term.innerHTML = '';
+        }
+
+        // --- VISUALIZER ENGINE ---
+        function initVisualizer() {
+            const rawStr = DOMElements.input.value.trim();
+            const arr = rawStr.split(/\s+/).map(Number);
+            
+            if (arr.length < 3) {
+                printLog("Lỗi: Cần ít nhất 3 phần tử để tạo thành núi.", "error");
+                return;
+            }
+            if (arr.some(isNaN)) {
+                printLog("Lỗi: Dữ liệu nhập vào phải là số.", "error");
+                return;
+            }
+
+            // Reset base state
+            state.A = arr;
+            state.n = arr.length;
+            state.algo = parseInt(DOMElements.algoSelect.value);
+            state.bestPeak = -1;
+            state.minCost = Infinity;
+            
+            // Calc UI scaling
+            let maxArr = Math.max(...state.A);
+            state.maxVisualHeight = maxArr + state.n; 
+
+            // Alg-specific setup
+            if (state.algo === 2) {
+                DOMElements.termTitle.innerText = "Mô phỏng Thuật toán DP O(N)";
+                state.L = Array(state.n).fill(0);
+                state.CostL = Array(state.n).fill(0);
+                state.R = Array(state.n).fill(0);
+                state.CostR = Array(state.n).fill(0);
+                state.L[0] = state.A[0];
+                state.R[state.n - 1] = state.A[state.n - 1];
+                state.phase = 1; // DP Left
+                state.i = 1;
+            } else {
+                DOMElements.termTitle.innerText = "Mô phỏng Thuật toán Vét cạn O(N²)";
+                state.phase = 1; // Running brute force
+                state.subPhase = 'START_X';
+                state.x = 1; // Thử đỉnh đầu tiên
+            }
+
+            // UI Reset
+            DOMElements.btnNext.disabled = false;
+            DOMElements.btnAuto.disabled = false;
+            stopAutoPlay();
+            clearTerminal();
+            renderInitialBars();
+            
+            printLog(`Đã nạp mảng A = [${state.A.join(', ')}]`, "system");
+            if (state.algo === 2) {
+                printLog("Chuẩn bị tính mảng sườn trái (DP Left)...", "info");
+            } else {
+                printLog("Bắt đầu thử từng đỉnh x từ 1 đến n-2...", "info");
+            }
+        }
+
+        function renderInitialBars() {
+            DOMElements.placeholder.classList.add('hidden');
+            DOMElements.barsWrapper.classList.remove('hidden');
+            DOMElements.barsWrapper.innerHTML = '';
+
+            state.A.forEach((val, idx) => {
+                const col = document.createElement('div');
+                col.className = 'flex flex-col items-center justify-end w-full px-1 relative h-full';
+                col.id = `col-${idx}`;
+
+                const baseH = (val / state.maxVisualHeight) * 100;
+                
+                col.innerHTML = `
+                    <div class="absolute -top-6 text-xs font-mono font-bold text-gray-500 w-full text-center z-10" id="val-${idx}">${val}</div>
+                    <div class="w-full flex flex-col justify-end items-center h-full">
+                        <div id="add-${idx}" class="w-full bg-orange-400 bar-transition rounded-t-sm" style="height: 0%"></div>
+                        <div id="base-${idx}" class="w-full bg-slate-400 bar-transition rounded-sm" style="height: ${Math.max(baseH, 2)}%"></div>
+                    </div>
+                    <div class="mt-2 text-xs font-mono text-gray-400">i=${idx}</div>
+                `;
+                DOMElements.barsWrapper.appendChild(col);
+            });
+        }
+
+        function updateBar(idx, finalHeight, costSoFar, isPeakHighlight = false) {
+            const baseVal = state.A[idx];
+            const addedVal = finalHeight - baseVal;
+            
+            const baseH = (baseVal / state.maxVisualHeight) * 100;
+            const addH = (addedVal / state.maxVisualHeight) * 100;
+
+            const baseEl = document.getElementById(`base-${idx}`);
+            const addEl = document.getElementById(`add-${idx}`);
+            const valEl = document.getElementById(`val-${idx}`);
+
+            addEl.style.height = `${addH}%`;
+            
+            if (isPeakHighlight) {
+                addEl.classList.remove('bg-orange-400');
+                addEl.classList.add('bg-fuchsia-500');
+                baseEl.classList.remove('bg-slate-400');
+                baseEl.classList.add('bg-fuchsia-700');
+            } else {
+                addEl.classList.add('bg-orange-400');
+                addEl.classList.remove('bg-fuchsia-500');
+                baseEl.classList.add('bg-slate-400');
+                baseEl.classList.remove('bg-fuchsia-700');
+            }
+
+            valEl.innerHTML = `${finalHeight}<br><span class="text-[10px] text-gray-400">(+${addedVal})</span>`;
+        }
+
+        function resetBarColors() {
+            for(let k=0; k<state.n; k++) {
+                const baseEl = document.getElementById(`base-${k}`);
+                const addEl = document.getElementById(`add-${k}`);
+                addEl.classList.add('bg-orange-400');
+                addEl.classList.remove('bg-fuchsia-500');
+                baseEl.classList.add('bg-slate-400');
+                baseEl.classList.remove('bg-fuchsia-700');
+            }
+        }
+        
+        function resetViewsToOriginal() {
+            for(let k=0; k<state.n; k++) {
+                updateBar(k, state.A[k], 0);
+            }
+        }
+
+        function renderFinalBestMountain(x) {
+            resetBarColors();
+            let prevH = state.A[0];
+            updateBar(0, prevH, 0);
+            
+            // Tái tạo sườn trái tốt nhất
+            for(let k=1; k<x; k++) {
+                prevH = Math.max(state.A[k], prevH + 1);
+                updateBar(k, prevH, 0);
+            }
+            let leftH = prevH;
+
+            // Tái tạo sườn phải tốt nhất
+            prevH = state.A[state.n-1];
+            updateBar(state.n-1, prevH, 0);
+            let rightHeights = [];
+            for(let k=state.n-2; k>x; k--) {
+                prevH = Math.max(state.A[k], prevH + 1);
+                rightHeights[k] = prevH;
+                updateBar(k, prevH, 0);
+            }
+            let rightH = (state.n-2 >= x+1) ? rightHeights[x+1] : state.A[state.n-1];
+
+            // Tái tạo đỉnh
+            let peakH = Math.max(state.A[x], leftH + 1, rightH + 1);
+            updateBar(x, peakH, 0, true);
+
+            // Flash effect
+            const col = document.getElementById(`col-${x}`);
+            col.classList.add('animate-bounce');
+            setTimeout(()=> col.classList.remove('animate-bounce'), 1000);
+        }
+
+        // --- STEP ROUTER ---
+        function nextStep() {
+            if (state.algo === 2) {
+                nextStepDP();
+            } else {
+                nextStepBruteForce();
+            }
+        }
+
+        // --- ALGO 1: BRUTE FORCE (O(N^2)) ---
+        function nextStepBruteForce() {
+            if (state.phase === 'DONE') return;
+
+            let x = state.x;
+
+            if (state.subPhase === 'START_X') {
+                printLog(`\n--- Đang thử đỉnh x = ${x} (Hệ số A[${x}] = ${state.A[x]}) ---`, "system");
+                resetViewsToOriginal();
+                state.currentCost = 0;
+                state.prevHLeft = state.A[0];
+                state.subPhase = 'LEFT';
+                state.i = 1;
+                
+                // Nếu không có phần tử bên trái (x=1), chuyển sang phải
+                if (state.i >= x) {
+                    state.subPhase = 'RIGHT';
+                    state.i = state.n - 2;
+                    state.prevHRight = state.A[state.n - 1];
+                }
+                return; // Tạm dừng để render text header
+            }
+
+            if (state.subPhase === 'LEFT') {
+                let i = state.i;
+                let req = state.prevHLeft + 1;
+                let h = Math.max(state.A[i], req);
+                let added = h - state.A[i];
+                state.currentCost += added;
+                state.prevHLeft = h;
+
+                printLog(`[Sườn Trái x=${x}] i=${i}: h = max(${state.A[i]}, ${req}) = ${h}. Chi phí += ${added}`, "warn");
+                updateBar(i, h, state.currentCost);
+                
+                state.i++;
+                if (state.i >= x) {
+                    state.subPhase = 'RIGHT';
+                    state.i = state.n - 2;
+                    state.prevHRight = state.A[state.n - 1];
+                }
+            } 
+            else if (state.subPhase === 'RIGHT') {
+                let i = state.i;
+                
+                // Cần đảm bảo x không đè vào right nếu n nhỏ
+                if (i > x) {
+                    let req = state.prevHRight + 1;
+                    let h = Math.max(state.A[i], req);
+                    let added = h - state.A[i];
+                    state.currentCost += added;
+                    state.prevHRight = h;
+
+                    printLog(`[Sườn Phải x=${x}] i=${i}: h = max(${state.A[i]}, ${req}) = ${h}. Chi phí += ${added}`, "info");
+                    updateBar(i, h, state.currentCost);
+                    
+                    state.i--;
+                }
+                
+                if (state.i <= x) {
+                    state.subPhase = 'PEAK';
+                }
+            } 
+            else if (state.subPhase === 'PEAK') {
+                let peakH = Math.max(state.A[x], state.prevHLeft + 1, state.prevHRight + 1);
+                let added = peakH - state.A[x];
+                state.currentCost += added;
+
+                printLog(`[Tính Đỉnh x=${x}] H = max(${state.A[x]}, ${state.prevHLeft+1}, ${state.prevHRight+1}) = ${peakH}`, "highlight");
+                printLog(`  -> Tổng chi phí nếu chọn x=${x}: ${state.currentCost}`);
+
+                updateBar(x, peakH, state.currentCost, true);
+
+                if (state.currentCost < state.minCost) {
+                    state.minCost = state.currentCost;
+                    state.bestPeak = x;
+                    printLog(`  ★ Cập nhật Min Cost mới: ${state.minCost} (tại đỉnh ${x})`, "success");
+                }
+
+                state.x++;
+                if (state.x === state.n - 1) {
+                    state.phase = 'DONE';
+                    printLog(`\n=== KẾT THÚC VÉT CẠN ===`, "system");
+                    printLog(`Chi phí tối thiểu: ${state.minCost} (Đỉnh lý tưởng nhất: ${state.bestPeak})`, "success");
+                    
+                    renderFinalBestMountain(state.bestPeak);
+                    DOMElements.btnNext.disabled = true;
+                    stopAutoPlay();
+                } else {
+                    state.subPhase = 'START_X';
+                }
+            }
+        }
+
+        // --- ALGO 2: DYNAMIC PROGRAMMING (O(N)) ---
+        function nextStepDP() {
+            if (state.phase === 1) {
+                let i = state.i;
+                let req = state.L[i-1] + 1;
+                state.L[i] = Math.max(state.A[i], req);
+                let added = state.L[i] - state.A[i];
+                state.CostL[i] = state.CostL[i-1] + added;
+                
+                printLog(`L[${i}] = max(A[${i}], L[${i-1}]+1) = max(${state.A[i]}, ${req}) = ${state.L[i]}. Chi phí += ${added}`, "warn");
+                updateBar(i, state.L[i], state.CostL[i]);
+
+                state.i++;
+                if (state.i === state.n) {
+                    state.phase = 2;
+                    state.i = state.n - 2; 
+                    printLog(`\n--- Hoàn tất sườn trái. Bắt đầu sườn phải (DP Right) ---`, "system");
+                    setTimeout(() => resetViewsToOriginal(), 800);
+                }
+            } 
+            else if (state.phase === 2) {
+                let i = state.i;
+                let req = state.R[i+1] + 1;
+                state.R[i] = Math.max(state.A[i], req);
+                let added = state.R[i] - state.A[i];
+                state.CostR[i] = state.CostR[i+1] + added;
+
+                printLog(`R[${i}] = max(A[${i}], R[${i+1}]+1) = max(${state.A[i]}, ${req}) = ${state.R[i]}. Chi phí += ${added}`, "info");
+                updateBar(i, state.R[i], state.CostR[i]);
+
+                state.i--;
+                if (state.i < 0) {
+                    state.phase = 3;
+                    state.i = 1; 
+                    printLog(`\n--- Hoàn tất sườn phải. Bắt đầu tìm Đỉnh Núi tối ưu ---`, "system");
+                    setTimeout(() => resetViewsToOriginal(), 800);
+                }
+            }
+            else if (state.phase === 3) {
+                let x = state.i;
+                let peakH = Math.max(state.A[x], state.L[x-1] + 1, state.R[x+1] + 1);
+                let peakCost = peakH - state.A[x];
+                let totalCost = state.CostL[x-1] + state.CostR[x+1] + peakCost;
+
+                printLog(`Thử đỉnh tại x=${x} (A[${x}]=${state.A[x]}):`, "highlight");
+                printLog(`  Đỉnh H = max(${state.A[x]}, L[${x-1}]+1, R[${x+1}]+1) = ${peakH}`);
+                printLog(`  Cost = CostL[${x-1}] (${state.CostL[x-1]}) + CostR[${x+1}] (${state.CostR[x+1]}) + Nâng đỉnh (${peakCost}) = ${totalCost}`);
+
+                // Visualize the mountain for this peak using DP arrays
+                resetBarColors();
+                for(let k=0; k<x; k++) updateBar(k, k === x ? peakH : state.L[k], 0);
+                updateBar(x, peakH, 0, true);
+                for(let k=x+1; k<state.n; k++) updateBar(k, state.R[k], 0);
+
+                if (totalCost < state.minCost) {
+                    state.minCost = totalCost;
+                    state.bestPeak = x;
+                    printLog(`  ★ Cập nhật Min Cost mới: ${state.minCost} (tại đỉnh ${x})`, "success");
+                }
+
+                state.i++;
+                if (state.i === state.n - 1) {
+                    state.phase = 4;
+                    printLog(`\n=== KẾT THÚC DP O(N) ===`, "system");
+                    printLog(`Chi phí tối thiểu: ${state.minCost} (Đỉnh lý tưởng nhất: ${state.bestPeak})`, "success");
+                    
+                    renderFinalBestMountain(state.bestPeak);
+                    
+                    DOMElements.btnNext.disabled = true;
+                    stopAutoPlay();
+                }
+            }
+        }
+
+        // --- AUTOPLAY LOGIC ---
+        function toggleAutoPlay() {
+            if (state.isPlaying) {
+                stopAutoPlay();
+            } else {
+                startAutoPlay();
+            }
+        }
+
+        function startAutoPlay() {
+            state.isPlaying = true;
+            DOMElements.btnAuto.innerHTML = "Tạm Dừng ⏸️";
+            DOMElements.btnAuto.classList.replace('bg-green-600', 'bg-red-600');
+            DOMElements.btnAuto.classList.replace('hover:bg-green-700', 'hover:bg-red-700');
+            
+            const speed = parseInt(DOMElements.speed.value) || 500;
+            
+            state.autoPlayId = setInterval(() => {
+                if (state.algo === 2 && state.phase === 4) {
+                    stopAutoPlay();
+                } else if (state.algo === 1 && state.phase === 'DONE') {
+                    stopAutoPlay();
+                } else {
+                    nextStep();
+                }
+            }, speed);
+        }
+
+        function stopAutoPlay() {
+            state.isPlaying = false;
+            clearInterval(state.autoPlayId);
+            DOMElements.btnAuto.innerHTML = "Chạy Tự Động ▶️";
+            DOMElements.btnAuto.classList.replace('bg-red-600', 'bg-green-600');
+            DOMElements.btnAuto.classList.replace('hover:bg-red-700', 'hover:bg-green-700');
+        }
+    </script>
+</body>
+</html>

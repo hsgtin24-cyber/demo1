@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1: Tuyệt Chiêu - TS10 HCM 2024-2025</title>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for Math Formulas -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+    <!-- Highlight.js for Code Syntax -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .terminal-bg { background-color: #1e1e1e; }
+        .log-system { color: #87ceeb; }
+        .log-info { color: #d4d4d4; }
+        .log-warn { color: #f59e0b; }
+        .log-error { color: #ef4444; }
+        .log-success { color: #10b981; }
+        .code-font { font-family: 'Fira Code', 'Courier New', Courier, monospace; }
+        
+        /* Custom scrollbar for terminal */
+        #terminal::-webkit-scrollbar { width: 8px; }
+        #terminal::-webkit-scrollbar-track { background: #1e1e1e; }
+        #terminal::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        #terminal::-webkit-scrollbar-thumb:hover { background: #888; }
+    </style>
+</head>
+<body class="text-gray-800 antialiased leading-relaxed pb-12">
+
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-8 shadow-lg mb-8">
+        <div class="max-w-6xl mx-auto px-4">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2"><i class="fa-solid fa-gamepad mr-3"></i>Bài 1: Tuyệt chiêu (3 điểm)</h1>
+            <p class="text-blue-100 text-lg"><i class="fa-solid fa-graduation-cap mr-2"></i>Kỳ thi Tuyển sinh lớp 10 Chuyên Tin HCM 2024-2025</p>
+        </div>
+    </header>
+
+    <div class="max-w-6xl mx-auto px-4 space-y-10">
+
+        <!-- PHẦN 0: ĐỀ BÀI -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 border-l-4 border-blue-600">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-file-lines mr-2 text-blue-600"></i>Phần 0: Đề bài chi tiết</h2>
+            <div class="prose max-w-none text-gray-700">
+                <p>Một trò chơi điện tử được thiết kế cho phép người chơi sử dụng nhiều tuyệt chiêu. Hệ thống sẽ lưu giữ quá trình sử dụng tuyệt chiêu của người chơi bằng một dãy $n$ các số nguyên dương $a_1, a_2, \dots, a_i, \dots, a_n$ ($a_i$ là mã số của tuyệt chiêu mà người chơi đã sử dụng ở lượt thứ $i$).</p>
+                <p>Trò chơi có quy định là khi một tuyệt chiêu được sử dụng ở lượt chơi thứ $i$, thì người chơi chỉ có thể sử dụng lại tuyệt chiêu đó từ lượt chơi thứ $i+k$ trở đi.</p>
+                
+                <h3 class="font-bold text-lg mt-4 text-gray-900">Yêu cầu:</h3>
+                <p>Hãy viết chương trình kiểm tra việc sử dụng các tuyệt chiêu của người chơi.</p>
+                
+                <h3 class="font-bold text-lg mt-4 text-gray-900">Dữ liệu vào (TUYETCHIEU.INP):</h3>
+                <ul class="list-disc pl-5 mb-4">
+                    <li>Dòng đầu chứa 2 số nguyên dương $n$ và $k$ ($1 \le n \le 10^6, 1 \le k \le 10^4$).</li>
+                    <li>Dòng tiếp theo gồm $n$ số nguyên dương $a_1, a_2, \dots, a_n$ ($a_i \le 10^6, 1 \le i \le n$). Các số cách nhau một khoảng trắng.</li>
+                </ul>
+
+                <h3 class="font-bold text-lg mt-4 text-gray-900">Kết quả (TUYETCHIEU.OUT):</h3>
+                <p>Ghi ra một số nguyên duy nhất cho biết tuyệt chiêu nào đã sử dụng vi phạm quy định. Nếu có nhiều hơn một tuyệt chiêu vi phạm, thì ghi tuyệt chiêu vi phạm có <strong>mã nhỏ nhất</strong>. Nếu không vi phạm, ghi <code>-1</code>.</p>
+                
+                <p class="font-semibold text-red-600 mt-2">Ràng buộc: 1 giây. 60% test: $n \le 10^3$. 40% test: $n \le 10^6$.</p>
+
+                <!-- Bảng ví dụ -->
+                <div class="overflow-x-auto mt-6">
+                    <table class="w-full border-collapse border border-gray-300 rounded-lg shadow-sm">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2 text-left">TUYETCHIEU.INP</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">TUYETCHIEU.OUT</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Giải thích</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 whitespace-pre code-font text-blue-700 font-semibold bg-blue-50">6 3<br>9 9 3 1 4 1</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-red-600 bg-red-50 text-center">1</td>
+                                <td class="border border-gray-300 px-4 py-2">Tuyệt chiêu 9 dùng ở lượt 1, chỉ được dùng lại từ lượt 4 ($1+3$), nhưng dùng ở lượt 2 $\rightarrow$ vi phạm.<br>Tuyệt chiêu 1 dùng ở lượt 4 và lượt 6 $\rightarrow$ vi phạm ($6 < 4+3$).<br>Mã vi phạm nhỏ nhất là 1.</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 whitespace-pre code-font text-blue-700 font-semibold bg-blue-50">5 2<br>1 2 3 1 3</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-green-600 bg-green-50 text-center">-1</td>
+                                <td class="border border-gray-300 px-4 py-2">TC 1 dùng lượt 1 & 4 (Hợp lệ). TC 3 dùng lượt 3 & 5 (Hợp lệ).<br>Không ai vi phạm, xuất -1.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 1: PHÂN TÍCH TOÁN HỌC -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 border-l-4 border-amber-500">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-brain mr-2 text-amber-500"></i>Phần 1: Phân tích Toán học & Logic</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-bold text-lg text-indigo-700">1. Dạng bài & Cấu trúc dữ liệu</h3>
+                    <p class="mt-2 text-gray-700">Đây là bài toán kiểm tra điều kiện dựa trên lịch sử xuất hiện của phần tử. Ta cần lưu vết vị trí (lượt) cuối cùng mà một giá trị $x$ xuất hiện.</p>
+                    <ul class="list-disc pl-5 mt-2 text-gray-700">
+                        <li>Duyệt mảng $a$ từ $i = 1$ đến $n$.</li>
+                        <li>Gọi $x = a_i$. Giả sử lần gần nhất $x$ được sử dụng là lượt $p$.</li>
+                        <li>Quy định: Chỉ được dùng lại ở lượt $\ge p + k$. Tức là khoảng cách giữa 2 lần sử dụng liên tiếp phải $\ge k$.</li>
+                        <li>Điều kiện vi phạm: $i - p < k$.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                    <h3 class="font-bold text-amber-800"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Cảnh báo Giới hạn & Kiểu dữ liệu</h3>
+                    <p class="mt-2 text-sm text-amber-900">
+                        - $n \le 10^6$: Thuật toán $O(N^2)$ sẽ bị <strong>Time Limit Exceeded (TLE)</strong>. Cần giải pháp $O(N \log N)$ hoặc $O(N)$.<br><br>
+                        - $a_i \le 10^6$: Giá trị mã tuyệt chiêu khá nhỏ, ta hoàn toàn có thể dùng một <strong>mảng đánh dấu (Frequency/Position Array)</strong> có kích thước $10^6 + 1$ để lưu vị trí xuất hiện cuối cùng thay vì dùng Hash Map/Dictionary, giúp tăng tốc độ đáng kể trong C++/Pascal.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 2: CÁCH GIẢI THEO SUBTASK -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 border-l-4 border-green-600">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-code mr-2 text-green-600"></i>Phần 2: Phân tích cách giải</h2>
+            
+            <!-- Cách 1 -->
+            <div class="mb-8">
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Cách 1: Vét cạn (Brute Force) - Ăn 60% số điểm</h3>
+                <p class="text-gray-700 mb-2">Ý tưởng: Duyệt từng phần tử $a[i]$. Với mỗi phần tử, tìm xem trong $k-1$ phần tử tiếp theo có phần tử nào trùng với $a[i]$ không. Nếu có, thì $a[i]$ vi phạm.</p>
+                <blockquote class="bg-gray-50 border-l-4 border-gray-300 italic p-3 mb-3 text-sm text-gray-600">
+                    Mã giả: Vòng lặp i từ 1 đến N. Vòng lặp j từ i+1 đến min(N, i+k-1). Nếu a[i] == a[j] -> Vi phạm, cập nhật min_ans.
+                </blockquote>
+                <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_subtask1(n, k, a):
+    ans = float('inf')
+    for i in range(n):
+        # Kiểm tra k-1 phần tử tiếp theo
+        limit = min(n, i + k)
+        for j in range(i + 1, limit):
+            if a[i] == a[j]:
+                ans = min(ans, a[i])
+                break # Đã vi phạm rồi thì không cần ktra tiếp cho a[i] ở vị trí này
+                
+    return ans if ans != float('inf') else -1</code></pre>
+            </div>
+
+            <!-- Cách 2 -->
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Cách 2: Tối ưu với mảng lưu vết - Ăn 100% số điểm</h3>
+                <p class="text-gray-700 mb-2">Ý tưởng: Sử dụng mảng `last_pos` để lưu lại lượt chơi cuối cùng mà tuyệt chiêu $x$ được sử dụng. Khởi tạo mảng bằng 0. Khi duyệt tới $a_i$, nếu `last_pos[a[i]] > 0` và `i - last_pos[a[i]] < k` thì vi phạm. Cập nhật lại `last_pos[a[i]] = i`.</p>
+                <blockquote class="bg-green-50 border-l-4 border-green-400 italic p-3 mb-3 text-sm text-gray-700">
+                    Mã giả: Tạo mảng last_pos kích thước 10^6+1. Duyệt i từ 1 -> n. x = a[i]. Nếu i - last_pos[x] < k -> cập nhật kq = min(kq, x). Cuối vòng lặp gán last_pos[x] = i.
+                </blockquote>
+                <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_subtask2(n, k, a):
+    MAX_VAL = 10**6 + 1
+    last_pos = [0] * MAX_VAL # Lưu lượt cuối cùng dùng tuyệt chiêu
+    ans = float('inf')
+    
+    for i in range(1, n + 1):
+        x = a[i - 1]
+        
+        # Nếu đã từng dùng và khoảng cách < k
+        if last_pos[x] != 0 and (i - last_pos[x] < k):
+            if x < ans:
+                ans = x
+                
+        # Cập nhật lượt dùng mới nhất
+        last_pos[x] = i
+        
+    return ans if ans != float('inf') else -1</code></pre>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: BẢNG SO SÁNH -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 border-l-4 border-purple-500">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-scale-balanced mr-2 text-purple-500"></i>Phần 3: So sánh Thuật toán</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 border-b-2 border-gray-300 text-gray-700">
+                            <th class="p-3">Thuật toán</th>
+                            <th class="p-3">Độ phức tạp Thời gian</th>
+                            <th class="p-3">Độ phức tạp Không gian</th>
+                            <th class="p-3">Kết quả dự kiến ($N=10^6$)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="p-3 font-semibold text-gray-800">Cách 1: Vét cạn</td>
+                            <td class="p-3 code-font text-red-600">$O(N \times K)$</td>
+                            <td class="p-3 code-font">$O(N)$</td>
+                            <td class="p-3"><span class="bg-red-100 text-red-700 px-2 py-1 rounded text-sm font-bold">TLE (Time Limit Exceeded)</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="p-3 font-semibold text-green-700">Cách 2: Tối ưu (Mảng vị trí)</td>
+                            <td class="p-3 code-font text-green-600">$O(N)$</td>
+                            <td class="p-3 code-font">$O(\max(a_i))$</td>
+                            <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm font-bold">AC (Accepted - 100đ)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PHẦN 4: TRÌNH MÔ PHỎNG -->
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 border-l-4 border-rose-500" id="visualizer">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2"><i class="fa-solid fa-laptop-code mr-2 text-rose-500"></i>Phần 4: Trình mô phỏng tương tác (Visualizer)</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Bảng điều khiển (Left Column) -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nhập Dữ Liệu (Test Case):</label>
+                        <textarea id="sim-input" rows="4" class="w-full p-3 border rounded text-sm code-font focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none">6 3&#10;9 9 3 1 4 1</textarea>
+                        
+                        <label class="block text-sm font-bold text-gray-700 mt-4 mb-2">Chọn Thuật Toán:</label>
+                        <select id="sim-algo" class="w-full p-2 border rounded text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none mb-4">
+                            <option value="optimal">Cách 2: Tối ưu O(N) (Khuyên dùng)</option>
+                            <option value="brute">Cách 1: Vét cạn O(N*K)</option>
+                        </select>
+
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <button id="btn-load" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold text-sm transition"><i class="fa-solid fa-download mr-1"></i> Nạp Dữ Liệu</button>
+                            <button id="btn-step" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded font-semibold text-sm transition opacity-50 cursor-not-allowed" disabled><i class="fa-solid fa-forward-step mr-1"></i> Bước Tiếp</button>
+                            <button id="btn-auto" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold text-sm transition opacity-50 cursor-not-allowed" disabled><i class="fa-solid fa-play mr-1"></i> Chạy Tự Động</button>
+                        </div>
+                        
+                        <!-- Trạng thái biến -->
+                        <div class="mt-6 border-t pt-4">
+                            <h4 class="font-bold text-sm text-gray-700 mb-2">Trạng Thái (Variables):</h4>
+                            <div class="grid grid-cols-2 gap-2 text-sm code-font bg-white p-3 rounded border">
+                                <div><span class="text-gray-500">min_ans:</span> <span id="var-ans" class="font-bold text-red-600">INF</span></div>
+                                <div><span class="text-gray-500">Lượt i:</span> <span id="var-i" class="font-bold">-</span></div>
+                                <div class="col-span-2"><span class="text-gray-500">last_pos:</span> <span id="var-arr" class="text-xs break-all">{}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Trace (Right Column) -->
+                <div class="lg:col-span-7">
+                    <div class="terminal-bg rounded-lg shadow-inner h-[400px] flex flex-col relative">
+                        <!-- Header Terminal -->
+                        <div class="bg-gray-800 px-4 py-2 rounded-t-lg flex items-center justify-between border-b border-gray-700">
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <span class="text-xs text-gray-400 font-mono">Terminal Trace - Execution</span>
+                        </div>
+                        
+                        <!-- Nội dung Terminal -->
+                        <div id="terminal" class="p-4 flex-1 overflow-y-auto code-font text-sm leading-relaxed whitespace-pre-wrap">
+<span class="log-system">Welcome to Algorithm Visualizer.</span>
+<span class="log-info">Hãy nhập dữ liệu và nhấn "Nạp Dữ Liệu" để bắt đầu...</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Kích hoạt Highlight.js
+        hljs.highlightAll();
+
+        // ------------------ VISUALIZER LOGIC ------------------ //
+        const terminal = document.getElementById('terminal');
+        const btnLoad = document.getElementById('btn-load');
+        const btnStep = document.getElementById('btn-step');
+        const btnAuto = document.getElementById('btn-auto');
+        const inputData = document.getElementById('sim-input');
+        const selectAlgo = document.getElementById('sim-algo');
+        
+        const varAns = document.getElementById('var-ans');
+        const varI = document.getElementById('var-i');
+        const varArr = document.getElementById('var-arr');
+
+        let generator = null;
+        let autoInterval = null;
+        let isRunning = false;
+
+        // Hàm in ra terminal
+        function printLog(msg, type = 'info') {
+            const span = document.createElement('span');
+            span.className = `block log-${type} mb-1`;
+            span.textContent = msg;
+            terminal.appendChild(span);
+            terminal.scrollTop = terminal.scrollHeight; // Auto scroll to bottom
+        }
+
+        function clearTerminal() {
+            terminal.innerHTML = '';
+        }
+
+        function updateStateUI(ans, i, arrState) {
+            varAns.textContent = ans === Infinity ? 'INF' : ans;
+            varI.textContent = i !== null ? i : '-';
+            // Rút gọn state mảng để hiển thị
+            let arrStr = JSON.stringify(arrState);
+            if(arrStr.length > 50) arrStr = arrStr.substring(0, 47) + '...}';
+            varArr.textContent = arrStr;
+        }
+
+        // --- GENERATOR: Thuật toán Tối ưu O(N) ---
+        function* optimalGenerator(n, k, a) {
+            printLog(`[SYSTEM] Bắt đầu chạy Cách 2: Tối ưu O(N)`, 'system');
+            printLog(`[SYSTEM] N = ${n}, K = ${k}`, 'system');
+            
+            let last_pos = {}; // Giả lập mảng last_pos bằng object cho tiện hiển thị
+            let ans = Infinity;
+            updateStateUI(ans, '-', last_pos);
+            yield; // Dừng chờ
+
+            for (let i = 1; i <= n; i++) {
+                let x = a[i - 1];
+                printLog(`\n--- Lượt ${i}: Người chơi dùng tuyệt chiêu [${x}] ---`, 'info');
+                updateStateUI(ans, i, last_pos);
+                yield;
+
+                if (last_pos[x] !== undefined) {
+                    let prev_pos = last_pos[x];
+                    let dist = i - prev_pos;
+                    printLog(`> Tuyệt chiêu [${x}] từng dùng ở lượt ${prev_pos}. Khoảng cách: ${i} - ${prev_pos} = ${dist}`, 'system');
+                    yield;
+
+                    if (dist < k) {
+                        printLog(`> ⚠ VI PHẠM! Khoảng cách ${dist} < ${k} (Cooldown).`, 'warn');
+                        if (x < ans) {
+                            ans = x;
+                            printLog(`> Cập nhật mã vi phạm nhỏ nhất: ans = ${ans}`, 'success');
+                            updateStateUI(ans, i, last_pos);
+                        } else {
+                            printLog(`> ${x} vi phạm nhưng không nhỏ hơn min hiện tại (${ans}). Bỏ qua.`, 'info');
+                        }
+                    } else {
+                        printLog(`> Khoảng cách hợp lệ (${dist} >= ${k}).`, 'success');
+                    }
+                } else {
+                    printLog(`> Tuyệt chiêu [${x}] được dùng lần đầu tiên.`, 'info');
+                }
+                yield;
+
+                last_pos[x] = i;
+                printLog(`> Cập nhật last_pos[${x}] = ${i}`, 'system');
+                updateStateUI(ans, i, last_pos);
+                yield;
+            }
+
+            printLog(`\n[HOÀN THÀNH] Duyệt xong mảng.`, 'system');
+            if (ans === Infinity) {
+                printLog(`Kết luận: Không có vi phạm. Output: -1`, 'success');
+            } else {
+                printLog(`Kết luận: Mã vi phạm nhỏ nhất là: ${ans}`, 'error');
+            }
+        }
+
+        // --- GENERATOR: Thuật toán Vét cạn O(N*K) ---
+        function* bruteGenerator(n, k, a) {
+            printLog(`[SYSTEM] Bắt đầu chạy Cách 1: Vét cạn O(N*K)`, 'system');
+            printLog(`[SYSTEM] N = ${n}, K = ${k}`, 'system');
+            
+            let ans = Infinity;
+            updateStateUI(ans, '-', {});
+            yield;
+
+            for (let i = 0; i < n; i++) {
+                let limit = Math.min(n, i + k);
+                printLog(`\n--- Kiểm tra vị trí ${i+1} (TC: ${a[i]}) ---`, 'info');
+                updateStateUI(ans, i+1, {});
+                yield;
+
+                let violated = false;
+                for (let j = i + 1; j < limit; j++) {
+                    printLog(`> So sánh với vị trí ${j+1} (TC: ${a[j]})`, 'system');
+                    yield;
+                    
+                    if (a[i] === a[j]) {
+                        printLog(`> ⚠ VI PHẠM! Trùng tuyệt chiêu [${a[i]}] trong khoảng < ${k}`, 'warn');
+                        if (a[i] < ans) {
+                            ans = a[i];
+                            printLog(`> Cập nhật mã vi phạm nhỏ nhất: ans = ${ans}`, 'success');
+                            updateStateUI(ans, i+1, {});
+                        }
+                        violated = true;
+                        break; // Đã tìm thấy vi phạm cho vị trí i, ko cần kiểm tra tiếp
+                    }
+                }
+                if(!violated) printLog(`> Không phát hiện vi phạm gần cho [${a[i]}]`, 'info');
+                yield;
+            }
+
+            printLog(`\n[HOÀN THÀNH] Duyệt xong.`, 'system');
+            if (ans === Infinity) {
+                printLog(`Kết luận: Không có vi phạm. Output: -1`, 'success');
+            } else {
+                printLog(`Kết luận: Mã vi phạm nhỏ nhất là: ${ans}`, 'error');
+            }
+        }
+
+        // Logic Nạp Dữ Liệu
+        btnLoad.addEventListener('click', () => {
+            // Reset Auto
+            if(autoInterval) { clearInterval(autoInterval); autoInterval = null; }
+            btnAuto.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Chạy Tự Động';
+            btnAuto.classList.remove('bg-red-600', 'hover:bg-red-700');
+            btnAuto.classList.add('bg-green-600', 'hover:bg-green-700');
+            isRunning = false;
+
+            clearTerminal();
+            const text = inputData.value.trim().split(/\s+/);
+            if (text.length < 2) {
+                printLog('[LỖI] Dữ liệu không hợp lệ. Vui lòng nhập đúng định dạng.', 'error');
+                return;
+            }
+
+            const n = parseInt(text[0]);
+            const k = parseInt(text[1]);
+            const a = [];
+            for(let i = 2; i < 2 + n; i++) {
+                if(!text[i] || isNaN(parseInt(text[i]))) {
+                    printLog(`[LỖI] Thiếu dữ liệu mảng. N=${n} nhưng mảng chỉ có ${a.length} phần tử.`, 'error');
+                    return;
+                }
+                a.push(parseInt(text[i]));
+            }
+
+            printLog(`[SUCCESS] Đọc dữ liệu thành công! N=${n}, K=${k}`, 'success');
+            
+            // Khởi tạo generator
+            const algo = selectAlgo.value;
+            if (algo === 'optimal') {
+                generator = optimalGenerator(n, k, a);
+            } else {
+                generator = bruteGenerator(n, k, a);
+            }
+
+            // Enable buttons
+            btnStep.disabled = false;
+            btnStep.classList.remove('opacity-50', 'cursor-not-allowed');
+            btnAuto.disabled = false;
+            btnAuto.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            // Chạy bước đầu (khởi tạo)
+            generator.next();
+        });
+
+        // Logic Bước Tiếp
+        btnStep.addEventListener('click', () => {
+            if(!generator) return;
+            const res = generator.next();
+            if(res.done) {
+                printLog('[INFO] Đã kết thúc mô phỏng.', 'system');
+                btnStep.disabled = true;
+                btnStep.classList.add('opacity-50', 'cursor-not-allowed');
+                btnAuto.disabled = true;
+                btnAuto.classList.add('opacity-50', 'cursor-not-allowed');
+                if(autoInterval) clearInterval(autoInterval);
+            }
+        });
+
+        // Logic Chạy Tự Động
+        btnAuto.addEventListener('click', () => {
+            if(!generator) return;
+            
+            if(isRunning) {
+                // Đang chạy -> Tạm dừng
+                clearInterval(autoInterval);
+                btnAuto.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Tiếp Tục';
+                btnAuto.classList.remove('bg-red-600', 'hover:bg-red-700');
+                btnAuto.classList.add('bg-green-600', 'hover:bg-green-700');
+                isRunning = false;
+            } else {
+                // Bắt đầu chạy
+                btnAuto.innerHTML = '<i class="fa-solid fa-pause mr-1"></i> Tạm Dừng';
+                btnAuto.classList.remove('bg-green-600', 'hover:bg-green-700');
+                btnAuto.classList.add('bg-red-600', 'hover:bg-red-700');
+                isRunning = true;
+                
+                autoInterval = setInterval(() => {
+                    const res = generator.next();
+                    if(res.done) {
+                        clearInterval(autoInterval);
+                        printLog('[INFO] Đã kết thúc mô phỏng.', 'system');
+                        btnStep.disabled = true;
+                        btnStep.classList.add('opacity-50', 'cursor-not-allowed');
+                        btnAuto.disabled = true;
+                        btnAuto.classList.add('opacity-50', 'cursor-not-allowed');
+                        btnAuto.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Chạy Tự Động';
+                        isRunning = false;
+                    }
+                }, 500); // Tốc độ chạy 500ms / bước
+            }
+        });
+
+    </script>
+</body>
+</html>

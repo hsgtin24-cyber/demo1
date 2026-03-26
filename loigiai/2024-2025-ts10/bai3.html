@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Giải: Lọc Nước - Thuật Toán & Mô Phỏng</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for Math notation -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Highlight.js for Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        /* Custom Scrollbar for Terminal */
+        .terminal-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .terminal-scroll::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        .terminal-scroll::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+        .terminal-scroll::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased">
+
+    <!-- HEADER -->
+    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                    Bài 3: Lọc Nước
+                </h1>
+                <p class="text-blue-100 text-sm mt-1">Kỳ thi TS10 TP.HCM 2024-2025 • Chuyên Tin</p>
+            </div>
+            <div class="flex gap-2 mt-3 md:mt-0">
+                <span class="bg-blue-800 text-xs font-semibold px-3 py-1 rounded-full border border-blue-400">Time Limit: 1.0s</span>
+                <span class="bg-blue-800 text-xs font-semibold px-3 py-1 rounded-full border border-blue-400">4 Điểm</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        
+        <!-- PHẦN LÝ THUYẾT VÀ PHÂN TÍCH (Căn giữa, tối ưu độ rộng để dễ đọc) -->
+        <div class="max-w-5xl mx-auto space-y-6">
+            
+            <!-- PHẦN 0: ĐỀ BÀI -->
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-xl font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <span class="bg-blue-100 text-blue-600 p-1 rounded">0</span> Đề Bài Chi Tiết
+                </h2>
+                <div class="prose prose-sm max-w-none text-slate-600">
+                    <p>Trên một vùng núi, người dân tự thiết kế mô hình xử lý nước uống cho các hộ dân vùng cao. Họ đặt \(n\) hệ thống lưu giữ nước từ các nguồn trên cao đổ về. Lượng nước đưa vào \(n\) hệ thống lần lượt là \(a_1, a_2, \dots, a_n\) (lít).</p>
+                    <p>Các hệ thống có cấu tạo giống nhau. Mỗi hệ thống có \(m\) bồn chứa nước được đánh số từ \(1, 2, \dots, m\) với dung tích lần lượt là \(r_1, r_2, \dots, r_m\) (lít). Bồn chứa nước số 1 được đặt ở vị trí cao nhất, tiếp đến là bồn số 2, \dots và thấp nhất là bồn số \(m\). Khi nước vào hệ thống, nước sẽ chảy vào bồn số 1 trước, chỉ khi nào đầy bồn số 1, nước mới chảy tiếp qua bồn số 2, tương tự cho đến bồn số \(m\).</p>
+                    <p>Đồng thời, họ xây dựng \(m\) máy xử lý nước uống. Máy xử lý nước số 1 sẽ xử lý nước từ các bồn chứa số 1 của tất cả các hệ thống. Tương tự cho các máy xử lý nước còn lại.</p>
+                    <p class="font-semibold text-slate-800">Yêu cầu:</p>
+                    <p>Hãy viết chương trình tính lượng nước thu được trong từng máy xử lý nước.</p>
+                    <p><img src="hinh.png"></p>
+                    <div class="bg-slate-50 p-4 rounded-lg my-4 border border-slate-200">
+                        <p class="font-bold text-slate-700 mb-2">Dữ liệu vào (LOCNUOC.INP):</p>
+                        <ul class="list-disc pl-5">
+                            <li>Dòng đầu: Hai số nguyên \(n, m\) (\(1 \le n \le 2 \cdot 10^5, 1 \le m \le 10^9\)).</li>
+                            <li>Dòng hai: \(n\) số nguyên \(a_1, a_2, \dots, a_n\) (\(1 \le a_i \le 10^5\)).</li>
+                            <li>Dòng ba: \(m\) số nguyên \(r_1, r_2, \dots, r_m\) (\(1 \le r_i \le 10^5\)).</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-lg my-4 border border-slate-200">
+                        <p class="font-bold text-slate-700 mb-2">Kết quả ra (LOCNUOC.OUT):</p>
+                        <p>Ghi ra một dòng gồm các số nguyên là lượng nước thu được ở từng máy xử lý <strong>có nước</strong>. Các số cách nhau một khoảng trắng.</p>
+                    </div>
+
+                    <h3 class="font-bold text-slate-800 mt-4 mb-2">Ví dụ (Sample Test)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse border border-slate-300">
+                            <thead>
+                                <tr class="bg-slate-100">
+                                    <th class="border border-slate-300 p-2">LOCNUOC.INP</th>
+                                    <th class="border border-slate-300 p-2">LOCNUOC.OUT</th>
+                                    <th class="border border-slate-300 p-2 w-1/2">Giải thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-slate-300 p-2 align-top font-mono whitespace-pre">4 5
+6 8 2 5
+4 3 2 7 6</td>
+                                    <td class="border border-slate-300 p-2 align-top font-mono font-bold text-green-600">14 6 1</td>
+                                    <td class="border border-slate-300 p-2 text-xs">
+                                        <ul class="list-disc pl-4 space-y-1">
+                                            Lượng nước của 4 hệ thống lần lượt là 6, 8, 2, 5 lít.<br>
+Dung tích của 5 bồn chứa nước lần lượt là 4, 3, 2, 7, 6 lít.<br>
+<li>Các bồn chứa nước số 1: hệ thống 1, 2 và 4 nhận được
+4x3=12 lít, riêng hệ thống 3 chỉ nhận được 2 lít. Vậy, máy
+xử lý nước số 1 nhận được 12+2=14 lít.<br>
+Lượng nước còn lại ở các hệ thống sẽ là 2, 4, 0, 1 lít.</li>
+<li>Các bồn chứa nước số 2 của 4 hệ thống lần lượt nhận được
+2, 3, 0, 1 lít. Vậy, máy xử lý nước số 2 nhận được 6 lít.<br>
+Lượng nước còn lại ở các hệ thống sẽ là 0, 1, 0, 0 lít.</li>
+<li>Các bồn chứa nước số 3 của 4 hệ thống lần lượt nhận được:
+0, 1, 0, 0 lít. Vậy, máy xử lý nước số 3 nhận được 1 lít.<br>
+Lượng nước còn lại ở các hệ thống sẽ là 0, 0, 0, 0 lít.</li>
+<li>Các bồn chứa nước số 4, 5 không có nước. Vậy, máy xử lý
+nước số 4, 5 không nhận được nước nên không in ra.</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN 1: PHÂN TÍCH -->
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-xl font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <span class="bg-blue-100 text-blue-600 p-1 rounded">1</span> Phân Tích Toán Học & Logic
+                </h2>
+                <div class="space-y-4 text-slate-700 text-sm">
+                    <p><strong>Dạng bài:</strong> Mô phỏng (Simulation), Mảng Cộng Dồn (Prefix Sum), Tìm Kiếm Nhị Phân (Binary Search) / Mảng Hiệu (Difference Array).</p>
+                    
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded text-yellow-800">
+                        <p class="font-bold flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                            Cảnh báo giới hạn & Kiểu dữ liệu
+                        </p>
+                        <ul class="list-disc pl-5 mt-1">
+                            <li>Kích thước \(m \le 10^9\), nếu duyệt qua tất cả \(m\) bồn sẽ bị <strong>Time Limit Exceeded (TLE)</strong> và không thể lưu mảng kích thước \(10^9\).</li>
+                            <li><strong>Nhận xét quan trọng:</strong> \(a_i \le 10^5\), lượng nước tối đa trong một hệ thống là \(10^5\). Vì mỗi bồn \(r_j \ge 1\), nước chảy sâu nhất không vượt quá \(10^5\) tầng bồn. Vậy ta chỉ cần quan tâm tối đa \(10^5\) bồn đầu tiên!</li>
+                            <li>Tổng nước có thể lên tới \(N \times \max(a_i) = 2 \cdot 10^5 \times 10^5 = 2 \cdot 10^{10}\). Do đó, tổng nước thu được ở mỗi máy phải dùng kiểu số nguyên 64-bit (<strong>long long</strong> trong C++ / mặc định trong Python).</li>
+                        </ul>
+                    </div>
+
+                    <p><strong>Mô hình hóa:</strong> Xét riêng một hệ thống có \(x\) lít nước (\(x = a_i\)). Hệ thống này sẽ đi qua các bồn có dung tích \(r_1, r_2, \dots, r_m\).</p>
+                    <p>Gọi mảng cộng dồn của \(r\) là \(P\), với \(P_k = \sum_{j=1}^k r_j\).</p>
+                    <p>Hệ thống có \(x\) nước sẽ:
+                        <ul class="list-disc pl-5">
+                            <li>Làm <strong>đầy hoàn toàn</strong> các bồn từ \(1\) đến \(k\), với \(k\) là chỉ số lớn nhất sao cho \(P_k \le x\).</li>
+                            <li>Đổ <strong>phần dư</strong> \((x - P_k)\) vào bồn thứ \(k+1\).</li>
+                            <li>Các bồn từ \(k+2\) trở đi không nhận được giọt nước nào.</li>
+                        </ul>
+                    </p>
+                </div>
+            </section>
+
+            <!-- PHẦN 2: CÁCH GIẢI THEO SUBTASK -->
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-xl font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <span class="bg-blue-100 text-blue-600 p-1 rounded">2</span> Phân Tích Cách Giải
+                </h2>
+                
+                <!-- Cách 1 -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-rose-600 mb-2">Cách 1: Vét cạn (Brute Force) - 40% số điểm</h3>
+                    <div class="text-sm text-slate-700 space-y-2">
+                        <p><strong>Ý tưởng:</strong> Mô phỏng chính xác quá trình nước chảy. Duyệt qua từng hệ thống, với mỗi hệ thống ta lại duyệt qua từng bồn chứa, trừ dần lượng nước hiện có.</p>
+                        <blockquote class="border-l-4 border-slate-300 bg-slate-50 p-3 italic">
+                            For i = 1 to n: <br>
+                            &nbsp;&nbsp;water = a[i]<br>
+                            &nbsp;&nbsp;For j = 1 to m:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;if water == 0: break<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;take = min(water, r[j])<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;ans[j] += take<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;water -= take
+                        </blockquote>
+                        <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">def solve_subtask_1(n, m, a, r):
+    ans = [0] * m
+    for water in a:
+        for j in range(m):
+            if water == 0:
+                break
+            take = min(water, r[j])
+            ans[j] += take
+            water -= take
+            
+    # In ra kết quả các máy có nước
+    res = []
+    for x in ans:
+        if x > 0: res.append(x)
+        else: break
+    print(" ".join(map(str, res)))</code></pre>
+                    </div>
+                </div>
+
+                <!-- Cách 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold text-emerald-600 mb-2">Cách 2: Prefix Sum + Mảng Hiệu (Optimal) - 100% số điểm</h3>
+                    <div class="text-sm text-slate-700 space-y-2">
+                        <p><strong>Ý tưởng:</strong> Rút gọn vòng lặp bồn \(m\) xuống \(\le 10^5\). Tạo mảng cộng dồn \(P\) cho bồn chứa. Với mỗi lượng nước \(x = a_i\), dùng <strong>Tìm kiếm nhị phân (Binary Search)</strong> để tìm số bồn \(k\) bị làm đầy hoàn toàn. Thay vì cộng tuần tự cho từng bồn, ta dùng mảng hiệu (Difference Array) để đánh dấu số lượng hệ thống làm đầy bồn, và một mảng riêng để cộng phần dư.</p>
+                        <blockquote class="border-l-4 border-slate-300 bg-slate-50 p-3 italic">
+                            1. Tạo prefix sum P cho mảng r (chỉ tạo tới khi P[k] > max(A)).<br>
+                            2. Khởi tạo mảng diff = [0], partial = [0].<br>
+                            3. For x in a:<br>
+                            &nbsp;&nbsp;&nbsp;Tìm k lớn nhất sao cho P[k] <= x.<br>
+                            &nbsp;&nbsp;&nbsp;Tăng diff[1] += 1; Giảm diff[k+1] -= 1 (đánh dấu làm đầy bồn 1 đến k).<br>
+                            &nbsp;&nbsp;&nbsp;Cộng phần dư: partial[k+1] += (x - P[k]).<br>
+                            4. Cộng dồn mảng diff để tính tổng số hệ thống làm đầy bồn j.<br>
+                            5. Nước ở bồn j = diff[j] * r[j] + partial[j].
+                        </blockquote>
+                        <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;">import bisect
+
+def solve_optimal(n, m, a, r):
+    max_a = max(a)
+    
+    # 1. Giới hạn số lượng bồn thực tế cần quan tâm
+    P = [0]
+    sum_r = 0
+    eff_m = 0
+    for x in r:
+        sum_r += x
+        P.append(sum_r)
+        eff_m += 1
+        if sum_r > max_a:
+            break
+            
+    diff = [0] * (eff_m + 2)
+    partial = [0] * (eff_m + 2)
+    
+    # 2. Xử lý từng hệ thống bằng mảng hiệu
+    for x in a:
+        if x == 0: continue
+        # Tìm bồn cuối cùng bị làm đầy hoàn toàn (chỉ số 1-based)
+        k = bisect.bisect_right(P, x) - 1
+        
+        if k > 0:
+            diff[1] += 1
+            diff[k + 1] -= 1
+            
+        # Bồn k+1 nhận phần nước dư
+        if k < eff_m and x - P[k] > 0:
+            partial[k + 1] += (x - P[k])
+            
+    # 3. Phục hồi mảng kết quả
+    res = []
+    full_count = 0
+    for j in range(1, eff_m + 1):
+        full_count += diff[j]
+        # Tổng nước = Số hệ thống làm đầy * dung tích + phần nước dư lẻ
+        ans = full_count * r[j - 1] + partial[j]
+        if ans > 0:
+            res.append(ans)
+        else:
+            break
+            
+    print(" ".join(map(str, res)))</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN 3: BẢNG SO SÁNH -->
+            <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-xl font-bold text-slate-800 mb-4 border-b pb-2 flex items-center gap-2">
+                    <span class="bg-blue-100 text-blue-600 p-1 rounded">3</span> Bảng So Sánh Thuật Toán
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse border border-slate-300">
+                        <thead>
+                            <tr class="bg-slate-100">
+                                <th class="border border-slate-300 p-3">Tiêu Chí</th>
+                                <th class="border border-slate-300 p-3 text-rose-600">Cách 1 (Vét Cạn)</th>
+                                <th class="border border-slate-300 p-3 text-emerald-600">Cách 2 (Mảng Hiệu)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-slate-300 p-3 font-semibold bg-slate-50">Thời Gian (Time)</td>
+                                <td class="border border-slate-300 p-3">\(O(N \times M)\)</td>
+                                <td class="border border-slate-300 p-3">\(O(N \log K + K)\) với \(K \le 10^5\)</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-300 p-3 font-semibold bg-slate-50">Không Gian (Space)</td>
+                                <td class="border border-slate-300 p-3">\(O(M)\)</td>
+                                <td class="border border-slate-300 p-3">\(O(K)\)</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-300 p-3 font-semibold bg-slate-50">Giới hạn qua được</td>
+                                <td class="border border-slate-300 p-3">Subtask 1 (40đ)</td>
+                                <td class="border border-slate-300 p-3 font-bold">Full Subtask (100đ)</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-300 p-3 font-semibold bg-slate-50">Đánh giá</td>
+                                <td class="border border-slate-300 p-3 text-xs text-rose-500">TLE do 2 vòng lặp lồng nhau khi \(N, M\) lớn.</td>
+                                <td class="border border-slate-300 p-3 text-xs text-emerald-500">AC. Tối ưu cực tốt nhờ tính chất chặn được số lượng bồn \(K\).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- PHẦN 4: TRÌNH MÔ PHỎNG (CHUYỂN XUỐNG CUỐI) -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 max-w-7xl mx-auto w-full">
+            <h2 class="text-xl font-bold text-slate-800 mb-6 border-b pb-2 flex items-center gap-2">
+                <span class="bg-blue-100 text-blue-600 p-1 rounded">4</span> Trình Mô Phỏng (Visualizer)
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- CỘT TRÁI CỦA MÔ PHỎNG: Input Form & Buttons -->
+                <div class="space-y-4 text-sm bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Số hệ thống (N)</label>
+                            <input type="number" id="inputN" value="4" class="w-full border border-slate-300 rounded p-2 focus:ring focus:ring-blue-200">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Số bồn (M)</label>
+                            <input type="number" id="inputM" value="5" class="w-full border border-slate-300 rounded p-2 focus:ring focus:ring-blue-200">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Mảng lượng nước (A)</label>
+                        <input type="text" id="inputA" value="6 8 2 5" class="w-full border border-slate-300 rounded p-2 focus:ring focus:ring-blue-200 font-mono">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Mảng dung tích bồn (R)</label>
+                        <input type="text" id="inputR" value="4 3 2 7 6" class="w-full border border-slate-300 rounded p-2 focus:ring focus:ring-blue-200 font-mono">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Thuật toán</label>
+                        <select id="algoSelect" class="w-full border border-slate-300 rounded p-2 focus:ring focus:ring-blue-200 bg-white">
+                            <option value="brute">Cách 1: Vét cạn (Dễ nhìn từng bước)</option>
+                            <option value="optimal">Cách 2: Tối ưu (Prefix Sum + Diff Array)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button id="btnStep" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-3 rounded shadow-sm transition-colors flex justify-center items-center gap-1 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
+                            <span id="txtStep">Bắt đầu / Từng bước</span>
+                        </button>
+                        <button id="btnAuto" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded shadow-sm transition-colors flex justify-center items-center gap-1 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg>
+                            Chạy tự động
+                        </button>
+                        <button id="btnClear" class="bg-slate-300 hover:bg-slate-400 text-slate-800 font-bold py-2 px-3 rounded shadow-sm transition-colors flex justify-center items-center gap-1 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                            Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CỘT PHẢI CỦA MÔ PHỎNG: Terminal Trace -->
+                <div class="bg-[#1e1e1e] rounded-xl shadow-md border border-slate-800 overflow-hidden flex flex-col h-96 lg:h-auto min-h-[400px]">
+                    <div class="bg-slate-800 px-4 py-2 flex items-center gap-2 text-xs font-mono text-slate-400 border-b border-slate-700">
+                        <div class="flex gap-1.5">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-2">terminal-trace.exe</span>
+                    </div>
+                    <div id="terminalBody" class="p-4 flex-1 overflow-y-auto terminal-scroll font-mono text-xs text-slate-300 space-y-1">
+                        <div class="text-green-400">Ready to execute. Input data and click "Bắt đầu".</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TRÌNH MÔ PHỎNG SCRIPT -->
+    <script>
+        // Init Syntax Highlighter
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+
+        // DOM Elements
+        const terminalBody = document.getElementById('terminalBody');
+        const btnStep = document.getElementById('btnStep');
+        const txtStep = document.getElementById('txtStep');
+        const btnAuto = document.getElementById('btnAuto');
+        const btnClear = document.getElementById('btnClear');
+        
+        const inputN = document.getElementById('inputN');
+        const inputM = document.getElementById('inputM');
+        const inputA = document.getElementById('inputA');
+        const inputR = document.getElementById('inputR');
+        const algoSelect = document.getElementById('algoSelect');
+
+        // State Machine Variables for Step/Auto
+        let isSimulating = false;
+        let isAuto = false;
+        let resolveStep = null;
+        let abortFlag = false;
+
+        // Common Sleep Function
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        // State Machine Wait Function
+        async function waitFn(ms) {
+            if (abortFlag) throw "ABORTED";
+            
+            if (isAuto) {
+                await sleep(ms);
+            } else {
+                // Pause and wait for next step click
+                await new Promise(resolve => resolveStep = resolve);
+                resolveStep = null; // Clear resolver
+            }
+
+            if (abortFlag) throw "ABORTED";
+        }
+
+        // Terminal Print
+        function printLog(msg, type = 'normal') {
+            const div = document.createElement('div');
+            // Parse array strings for styling like [1, 2, 3]
+            msg = msg.replace(/\[(.*?)\]/g, '<span class="text-cyan-300">[$1]</span>');
+
+            if (type === 'normal') div.className = 'text-slate-300';
+            else if (type === 'info') div.className = 'text-blue-400';
+            else if (type === 'warn') div.className = 'text-yellow-400';
+            else if (type === 'error') div.className = 'text-red-400 font-bold';
+            else if (type === 'success') div.className = 'text-green-400 font-bold';
+            else if (type === 'highlight') div.className = 'text-fuchsia-400';
+            
+            div.innerHTML = `> ${msg}`;
+            terminalBody.appendChild(div);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        // --- Event Listeners ---
+        
+        btnClear.addEventListener('click', () => {
+            abortFlag = true;
+            if (resolveStep) resolveStep(); // Release any stuck promises
+            
+            setTimeout(() => {
+                terminalBody.innerHTML = '<div class="text-green-400">Đã làm mới. Ready.</div>';
+                isSimulating = false;
+                txtStep.innerHTML = 'Bắt đầu / Từng bước';
+            }, 100);
+        });
+
+        btnStep.addEventListener('click', async () => {
+            if (!isSimulating) {
+                startSimulation(false); // Start in step mode
+            } else {
+                // Already simulating, proceed to next step
+                if (resolveStep) resolveStep();
+            }
+        });
+
+        btnAuto.addEventListener('click', async () => {
+            if (!isSimulating) {
+                startSimulation(true); // Start in auto mode
+            } else {
+                // Already simulating, switch to auto mode
+                isAuto = true;
+                if (resolveStep) resolveStep();
+            }
+        });
+
+        // --- Runner Logic ---
+        
+        async function startSimulation(autoFlag) {
+            isSimulating = true;
+            isAuto = autoFlag;
+            abortFlag = false;
+            terminalBody.innerHTML = '';
+            txtStep.innerHTML = 'Bước tiếp theo';
+            
+            try {
+                // Parse Input
+                const N = parseInt(inputN.value);
+                const M = parseInt(inputM.value);
+                const A = inputA.value.trim().split(/\s+/).map(Number);
+                const R = inputR.value.trim().split(/\s+/).map(Number);
+
+                if(isNaN(N) || isNaN(M) || A.some(isNaN) || R.some(isNaN)) {
+                    throw new Error("Dữ liệu đầu vào không hợp lệ. Vui lòng kiểm tra lại.");
+                }
+                if(A.length !== N || R.length !== M) {
+                    printLog(`Cảnh báo: Số phần tử thực tế của A (${A.length}) hoặc R (${R.length}) không khớp với N, M. Đang mô phỏng theo độ dài thực tế...`, 'warn');
+                }
+
+                printLog(`Bắt đầu chạy thuật toán: ${algoSelect.value === 'brute' ? 'Vét Cạn (Brute Force)' : 'Tối Ưu (Prefix Sum)'}`, 'info');
+                printLog(`A = [${A.join(', ')}]`);
+                printLog(`R = [${R.join(', ')}]`);
+                await waitFn(500);
+
+                if (algoSelect.value === 'brute') {
+                    await runBruteForce(A, R);
+                } else {
+                    await runOptimal(A, R);
+                }
+
+            } catch (err) {
+                if (err === "ABORTED") {
+                    printLog("Đã hủy quá trình mô phỏng.", "warn");
+                } else {
+                    printLog(err.message, 'error');
+                }
+            } finally {
+                isSimulating = false;
+                isAuto = false;
+                txtStep.innerHTML = 'Bắt đầu / Từng bước';
+            }
+        }
+
+        // --- Thuật Toán Vét Cạn ---
+        async function runBruteForce(A, R) {
+            let M = R.length;
+            let ans = new Array(M).fill(0);
+
+            for (let i = 0; i < A.length; i++) {
+                let water = A[i];
+                printLog(`\n--- Xử lý Hệ thống ${i + 1} có ${water} lít nước ---`, 'highlight');
+                await waitFn(400);
+
+                for (let j = 0; j < M; j++) {
+                    if (water === 0) {
+                        printLog(`   Hệ thống ${i+1} đã hết nước. Dừng bồn ${j+1}.`);
+                        await waitFn(200);
+                        break;
+                    }
+                    
+                    let take = Math.min(water, R[j]);
+                    ans[j] += take;
+                    water -= take;
+                    
+                    printLog(`   -> Bồn ${j+1} (chứa max ${R[j]}L): nhận ${take}L. Nước còn: ${water}L.`);
+                    await waitFn(300);
+                }
+            }
+
+            // Print Result
+            printLog(`\n--- KẾT THÚC ---`, 'info');
+            let res = [];
+            for(let x of ans) {
+                if(x > 0) res.push(x);
+                else break;
+            }
+            printLog(`Kết quả mảng Ans: [${ans.join(', ')}]`);
+            printLog(`OUTPUT MÁY CÓ NƯỚC: ${res.join(' ')}`, 'success');
+        }
+
+        // --- Thuật Toán Tối Ưu ---
+        async function runOptimal(A, R) {
+            let maxA = Math.max(...A);
+            printLog(`\n1. Xây dựng mảng Prefix Sum P cho R (Giới hạn maxA = ${maxA})`, 'info');
+            
+            let P = [0];
+            let sumR = 0;
+            let effM = 0;
+            for (let x of R) {
+                sumR += x;
+                P.push(sumR);
+                effM++;
+                if (sumR > maxA) break;
+            }
+            printLog(`   P = [${P.join(', ')}]`);
+            printLog(`   Giới hạn bồn hiệu dụng effM = ${effM}`);
+            await waitFn(800);
+
+            let diff = new Array(effM + 2).fill(0);
+            let partial = new Array(effM + 2).fill(0);
+
+            printLog(`\n2. Cập nhật mảng hiệu diff & partial cho từng hệ thống:`, 'info');
+            await waitFn(500);
+
+            for (let i = 0; i < A.length; i++) {
+                let x = A[i];
+                if (x === 0) continue;
+
+                // Binary search logic
+                let k = 0;
+                while (k < P.length - 1 && P[k+1] <= x) {
+                    k++;
+                }
+
+                printLog(`   Hệ thống ${i+1} (${x}L): Đầy hoàn toàn ${k} bồn. (P[${k}] = ${P[k]})`, 'highlight');
+                
+                if (k > 0) {
+                    diff[1] += 1;
+                    diff[k + 1] -= 1;
+                }
+                
+                if (k < effM && x - P[k] > 0) {
+                    let rem = x - P[k];
+                    partial[k + 1] += rem;
+                    printLog(`   -> Bồn ${k+1} nhận dư: ${rem}L`);
+                }
+                await waitFn(500);
+            }
+
+            printLog(`\n3. Trạng thái các mảng:`, 'info');
+            printLog(`   Diff    = [${diff.slice(1, effM+2).join(', ')}]`);
+            printLog(`   Partial = [${partial.slice(1, effM+2).join(', ')}]`);
+            await waitFn(800);
+
+            printLog(`\n4. Phục hồi kết quả:`, 'info');
+            let res = [];
+            let full_count = 0;
+            
+            for (let j = 1; j <= effM; j++) {
+                full_count += diff[j];
+                let val = full_count * R[j - 1] + partial[j];
+                printLog(`   Bồn ${j}: (${full_count} hệ thống làm đầy * ${R[j-1]}L) + ${partial[j]}L dư = ${val}L`);
+                if (val > 0) {
+                    res.push(val);
+                } else {
+                    break;
+                }
+                await waitFn(300);
+            }
+
+            printLog(`\n--- KẾT THÚC ---`, 'info');
+            printLog(`OUTPUT MÁY CÓ NƯỚC: ${res.join(' ')}`, 'success');
+        }
+
+    </script>
+</body>
+</html>
