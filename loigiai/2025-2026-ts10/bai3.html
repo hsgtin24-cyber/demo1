@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phân Tích Giải Thuật: Bài 3 - Máy Chủ (TS10 HCM 2025-2026)</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        mono: ['Fira Code', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- MathJax for Math Formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .terminal-scroll::-webkit-scrollbar { width: 8px; }
+        .terminal-scroll::-webkit-scrollbar-track { background: #1e1e1e; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        .terminal-scroll::-webkit-scrollbar-thumb:hover { background: #777; }
+        
+        .code-block { font-family: 'Fira Code', monospace; }
+        
+        .log-system { color: #888; font-style: italic; }
+        .log-info { color: #4facfe; }
+        .log-warn { color: #f6d365; }
+        .log-error { color: #ff758c; }
+        .log-success { color: #43e97b; font-weight: bold; }
+        
+        .tab-btn.active { border-bottom: 2px solid #3b82f6; color: #1d4ed8; font-weight: 600; }
+    </style>
+</head>
+<body class="text-gray-800 antialiased p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        
+        <!-- HEADER -->
+        <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 md:p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h4 class="text-blue-200 font-semibold tracking-wider text-sm mb-1">KÌ THI TUYỂN SINH LỚP 10 THPT NĂM HỌC 2025 - 2026 (HCM)</h4>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">Bài 3: Máy chủ (HOSTING)</h1>
+                    <div class="flex flex-wrap gap-2 text-sm mt-3">
+                        <span class="bg-blue-600/50 px-3 py-1 rounded-full border border-blue-400/30">Điểm: 4.0</span>
+                        <span class="bg-purple-600/50 px-3 py-1 rounded-full border border-purple-400/30">Mảng hiệu (Difference Array)</span>
+                        <span class="bg-red-600/50 px-3 py-1 rounded-full border border-red-400/30">Time Limit: 1.0s</span>
+                    </div>
+                </div>
+                <div class="bg-white/10 p-3 rounded-lg backdrop-blur-sm border border-white/20 text-sm">
+                    <p><span class="font-mono text-blue-200">INP:</span> HOSTING.INP</p>
+                    <p><span class="font-mono text-blue-200">OUT:</span> HOSTING.OUT</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-6 md:p-8">
+            <!-- PHẦN 0: ĐỀ BÀI -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-500 pl-3 mb-4">📍 0. Đề bài chi tiết</h2>
+                <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 leading-relaxed text-gray-700 text-justify">
+                    <p class="mb-3">Công ty VinaSatX cho thuê máy chủ hiện đang có \(N\) khách hàng. Mỗi khách hàng \(i\) có nhu cầu sẽ đăng ký các thông tin gồm: ngày bắt đầu thuê (\(x_i\)), số ngày sử dụng (\(d_i\)) và dung lượng cần dùng (\(k_i\)).</p>
+                    <p class="mb-3">Ngày công ty bắt đầu chạy máy chủ được xem là ngày 1, các ngày tiếp theo là ngày 2, ngày 3,... Để đánh giá biến động về dung lượng máy chủ cần cung cấp, công ty sẽ tính <strong>tổng dung lượng của tất cả khách thuê theo từng ngày</strong>. Những ngày không có khách thuê thì dung lượng cần dùng được xem là 0.</p>
+                    <p class="mb-3">Công ty cần lập bảng theo dõi quá trình biến động này từ <strong>ngày bắt đầu cho thuê (\(x_i\) nhỏ nhất)</strong> cho đến <strong>ngày cuối cùng máy chủ được khách hàng sử dụng</strong>.</p>
+                    <p class="font-semibold text-indigo-700">Yêu cầu: Viết chương trình thông báo quá trình biến động dung lượng (các giá trị dung lượng khi có sự thay đổi).</p>
+                    <p class="mt-3 text-sm"><strong>Dữ liệu vào (HOSTING.INP):</strong><br>
+                    - Dòng đầu: \(N\) (\(1 \le N \le 8 \times 10^5\)).<br>
+                    - \(N\) dòng tiếp theo: Mỗi dòng 3 số \(x_i, d_i, k_i\) (\(x_i + d_i \le 10^5\), \(1 \le k_i \le 10^9\)).
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Bảng Ví dụ (Sample Test)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-gray-300 text-sm">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-3 text-left w-1/4">HOSTING.INP</th>
+                                    <th class="border border-gray-300 p-3 text-left w-1/4">HOSTING.OUT</th>
+                                    <th class="border border-gray-300 p-3 text-left w-1/2">Giải thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 p-3 font-mono align-top whitespace-pre">3
+6 2 15
+3 6 9
+4 5 7</td>
+                                    <td class="border border-gray-300 p-3 font-mono font-bold text-blue-600 align-top">9 16 31 16</td>
+                                    <td class="border border-gray-300 p-3 align-top">
+                                        <ul class="list-disc pl-4 space-y-1">
+                                            <li>Ngày bắt đầu cho thuê sớm nhất: Ngày 3 (Khách 2).</li>
+                                            <li>Ngày 3: Khách 2 dùng (9) &rarr; Tổng = <strong>9</strong>.</li>
+                                            <li>Ngày 4, 5: Khách 2(9) + Khách 3(7) &rarr; Tổng = <strong>16</strong>.</li>
+                                            <li>Ngày 6, 7: Khách 1(15) + 2(9) + 3(7) &rarr; Tổng = <strong>31</strong>.</li>
+                                            <li>Ngày 8: Khách 2(9) + Khách 3(7) &rarr; Tổng = <strong>16</strong>.</li>
+                                            <li>Từ ngày 3 đến 8, dung lượng biến động lần lượt là: <strong>9, 16, 31, 16</strong>.</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN 1: PHÂN TÍCH -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-yellow-500 pl-3 mb-4">🧠 1. Phân tích Toán học & Logic</h2>
+                <div class="bg-white p-5 border border-gray-200 rounded-lg shadow-sm">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-2">Đặc điểm nhận dạng</h3>
+                            <p class="text-gray-600 mb-2">Bài toán yêu cầu <strong>cộng thêm một giá trị \(k_i\) vào một đoạn liên tiếp</strong> từ ngày \(x_i\) đến ngày \(x_i + d_i - 1\). Sau đó yêu cầu lấy giá trị tổng tại mỗi điểm.</p>
+                            <p class="text-gray-600">Đây là dấu hiệu kinh điển của kỹ thuật <strong>Mảng hiệu (Difference Array)</strong> hoặc <strong>Line Sweep (Quét cạn)</strong>.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-green-700 mb-2">Phân tích Ràng buộc (Quan trọng!)</h3>
+                            <ul class="list-disc pl-5 text-gray-600 space-y-1">
+                                <li>Số lượng khách: \(N \le 8 \cdot 10^5\) (Rất lớn, thuật toán \(O(N \log N)\) hoặc \(O(N)\)).</li>
+                                <li><strong>Chìa khóa:</strong> \(x_i + d_i \le 10^5\). Ngày lớn nhất xuất hiện chỉ là \(10^5\). Ta hoàn toàn có thể dùng một mảng độ dài \(10^5\) để đánh dấu mà không sợ vượt quá bộ nhớ (Memory Limit).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                        <div class="flex items-center mb-2">
+                            <svg class="w-6 h-6 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            <h3 class="font-bold text-yellow-800">CẢNH BÁO KIỂU DỮ LIỆU (DATA OVERFLOW)</h3>
+                        </div>
+                        <p class="text-yellow-800 text-sm">
+                            Tổng dung lượng trong 1 ngày có thể lên tới \(N \times \max(k_i) = 8 \cdot 10^5 \times 10^9 = 8 \cdot 10^{14}\). 
+                            Giá trị này vượt quá giới hạn của kiểu số nguyên 32-bit (khoảng \(2 \cdot 10^9\)). 
+                            <strong>Bắt buộc</strong> phải dùng kiểu số nguyên 64-bit (<code class="bg-yellow-200 px-1 rounded text-yellow-900">long long</code> trong C++, <code class="bg-yellow-200 px-1 rounded text-yellow-900">Int64</code> trong Pascal. Python tự động xử lý số lớn).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN 2: CÁCH GIẢI -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-green-500 pl-3 mb-6">⚙️ 2. Phân tích cách giải (Theo Subtask)</h2>
+
+                <!-- Cách 1 -->
+                <div class="mb-8 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="bg-gray-100 px-5 py-3 border-b border-gray-200 flex justify-between items-center cursor-pointer" onclick="document.getElementById('cách-1-content').classList.toggle('hidden')">
+                        <h3 class="font-bold text-gray-800">CÁCH 1: Vét cạn / Cộng dồn trực tiếp (Subtask 40%)</h3>
+                        <span class="text-blue-500 text-sm">Click để xem/ẩn ▼</span>
+                    </div>
+                    <div id="cách-1-content" class="p-5 hidden">
+                        <p class="mb-3 text-gray-700"><strong>Ý tưởng:</strong> Tạo một mảng <code>total_cap</code> khởi tạo bằng 0. Với mỗi khách hàng, dùng vòng lặp <code class="font-mono text-sm bg-gray-100 px-1 rounded">for</code> đi từ ngày \(x_i\) đến ngày \(x_i + d_i - 1\) để cộng thêm dung lượng \(k_i\) vào ngày tương ứng.</p>
+                        
+                        <blockquote class="bg-blue-50 border-l-4 border-blue-400 p-4 italic text-gray-700 text-sm mb-4">
+                            Mã giả:<br>
+                            - Khởi tạo mảng total_cap[100005] = 0<br>
+                            - For mỗi khách (x, d, k):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;For ngày i từ x đến x + d - 1:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total_cap[i] += k<br>
+                            - Lấy tổng biến động để in ra.
+                        </blockquote>
+
+                        <pre><code class="language-python rounded-lg shadow-md text-sm code-block">def solve_brute_force(n, customers):
+    total_cap = [0] * 100005
+    min_day, max_day = float('inf'), 0
+    
+    # Cộng dồn từng ngày cho từng khách
+    for x, d, k in customers:
+        min_day = min(min_day, x)
+        max_day = max(max_day, x + d - 1)
+        for day in range(x, x + d):
+            total_cap[day] += k
+            
+    # Duyệt để tìm biến động
+    ans = []
+    prev_cap = -1
+    for day in range(min_day, max_day + 1):
+        if total_cap[day] != prev_cap:
+            ans.append(total_cap[day])
+            prev_cap = total_cap[day]
+            
+    return " ".join(map(str, ans))</code></pre>
+                        <p class="mt-3 text-red-600 text-sm italic">❌ Độ phức tạp O(N * D) ~ 8.10^5 * 10^5 = 8.10^10 phép tính &rarr; Time Limit Exceeded (TLE) với subtask lớn.</p>
+                    </div>
+                </div>
+
+                <!-- Cách 2 -->
+                <div class="bg-white border border-indigo-200 rounded-xl overflow-hidden shadow-md ring-1 ring-indigo-50">
+                    <div class="bg-indigo-50 px-5 py-3 border-b border-indigo-100 flex justify-between items-center">
+                        <h3 class="font-bold text-indigo-900">CÁCH 2: Mảng hiệu (Difference Array) (Tối ưu - AC 100%)</h3>
+                        <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">Khuyên dùng</span>
+                    </div>
+                    <div class="p-5">
+                        <p class="mb-3 text-gray-700"><strong>Ý tưởng:</strong> Thay vì cộng vào từng ngày, ta chỉ đánh dấu sự thay đổi tại 2 điểm:</p>
+                        <ul class="list-disc pl-6 text-gray-700 mb-3 space-y-1">
+                            <li>Tại ngày bắt đầu \(x_i\), dung lượng tăng lên \(k_i\) &rarr; <code class="font-mono text-sm bg-gray-100 px-1 rounded text-green-600">diff[x_i] += k_i</code></li>
+                            <li>Tại ngày <strong>ngay sau khi hết hạn</strong> \(x_i + d_i\), dung lượng giảm đi \(k_i\) &rarr; <code class="font-mono text-sm bg-gray-100 px-1 rounded text-red-600">diff[x_i + d_i] -= k_i</code></li>
+                        </ul>
+                        <p class="mb-3 text-gray-700">Sau khi xử lý hết \(N\) khách, dung lượng tại ngày \(T\) chính là tổng dồn (prefix sum) của mảng <code class="font-mono text-sm">diff</code> từ đầu cho tới ngày \(T\).</p>
+                        
+                        <blockquote class="bg-indigo-50 border-l-4 border-indigo-500 p-4 italic text-gray-700 text-sm mb-4">
+                            Mã giả:<br>
+                            - Khởi tạo mảng diff[100005] = 0<br>
+                            - For mỗi khách (x, d, k):<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;diff[x] += k<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;diff[x + d] -= k<br>
+                            - current_cap = 0<br>
+                            - For ngày i từ ngày_nhỏ_nhất đến ngày_lớn_nhất:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;current_cap += diff[i]<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;Nếu current_cap != prev_cap &rarr; In ra biến động.
+                        </blockquote>
+
+                        <pre><code class="language-python rounded-lg shadow-md text-sm code-block">def solve_optimal(n, customers):
+    # Khởi tạo mảng hiệu đủ chứa giá trị lớn nhất của (xi + di)
+    MAX_DAY = 100005
+    diff = [0] * (MAX_DAY + 2)
+    
+    min_day = float('inf')
+    max_day = 0
+    
+    # 1. Tạo mảng hiệu (Chỉ mất O(N))
+    for x, d, k in customers:
+        diff[x] += k
+        diff[x + d] -= k
+        
+        # Lưu lại phạm vi ngày cần xét
+        min_day = min(min_day, x)
+        max_day = max(max_day, x + d - 1)
+        
+    ans = []
+    current_cap = 0
+    prev_cap = -1
+    
+    # 2. Cộng dồn để tính dung lượng thật sự từng ngày (Chỉ mất O(MaxD))
+    for i in range(min_day, max_day + 1):
+        current_cap += diff[i]
+        
+        # Ghi nhận biến động
+        if current_cap != prev_cap:
+            ans.append(current_cap)
+            prev_cap = current_cap
+            
+    return " ".join(map(str, ans))</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN 3: BẢNG SO SÁNH -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-purple-500 pl-3 mb-4">📊 3. Bảng so sánh Thuật toán</h2>
+                <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+                    <table class="w-full text-left border-collapse bg-white">
+                        <thead class="bg-gray-50 text-gray-700">
+                            <tr>
+                                <th class="p-4 border-b">Thuật toán</th>
+                                <th class="p-4 border-b">Độ phức tạp Thời gian</th>
+                                <th class="p-4 border-b">Độ phức tạp Không gian</th>
+                                <th class="p-4 border-b text-center">Kết quả dự kiến</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600">
+                            <tr class="hover:bg-gray-50 border-b">
+                                <td class="p-4 font-medium text-gray-800">Cách 1: Vét cạn</td>
+                                <td class="p-4">\( \mathcal{O}(N \times \max(D)) \)</td>
+                                <td class="p-4">\( \mathcal{O}(\max(X+D)) \)</td>
+                                <td class="p-4 text-center font-bold text-red-500">40% điểm (TLE)</td>
+                            </tr>
+                            <tr class="bg-indigo-50/50 hover:bg-indigo-50">
+                                <td class="p-4 font-medium text-indigo-700">Cách 2: Mảng hiệu</td>
+                                <td class="p-4 font-bold text-green-600">\( \mathcal{O}(N + \max(X+D)) \)</td>
+                                <td class="p-4">\( \mathcal{O}(\max(X+D)) \)</td>
+                                <td class="p-4 text-center font-bold text-green-600">100% điểm (AC)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PHẦN 4: TRÌNH MÔ PHỎNG (VISUALIZER) -->
+            <section class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-red-500 pl-3 mb-4">💻 4. Trình Mô Phỏng Tương Tác (Visualizer)</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 bg-gray-800 rounded-xl p-2 shadow-2xl">
+                    <!-- LEFT COLUMN: CONTROLS -->
+                    <div class="bg-white rounded-lg p-5 flex flex-col h-[500px]">
+                        <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            Dữ liệu & Cấu hình
+                        </h3>
+                        
+                        <label class="text-sm font-semibold text-gray-600 mb-1">Dữ liệu Test (Input)</label>
+                        <textarea id="txtInput" class="w-full flex-grow p-3 border border-gray-300 rounded-lg font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50" spellcheck="false">3
+6 2 15
+3 6 9
+4 5 7</textarea>
+
+                        <div class="mt-4">
+                            <label class="text-sm font-semibold text-gray-600 mb-1 block">Thuật toán mô phỏng</label>
+                            <select id="selAlgo" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                                <option value="diff">Mảng Hiệu (Optimal - O(N))</option>
+                                <option value="brute">Vét Cạn (Brute Force - O(N*D))</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 mt-4">
+                            <button id="btnLoad" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-2 rounded-lg text-sm transition-colors" onclick="initSimulation()">Nạp Dữ liệu</button>
+                            <button id="btnStep" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-2 rounded-lg text-sm transition-colors disabled:opacity-50" onclick="stepSimulation()" disabled>Tiếp tục ⏭</button>
+                            <button id="btnRun" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-2 rounded-lg text-sm transition-colors disabled:opacity-50 flex items-center justify-center" onclick="runAllSimulation()" disabled>Chạy Tự Động 🚀</button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: TERMINAL -->
+                    <div class="bg-[#1e1e1e] rounded-lg border border-gray-700 flex flex-col h-[500px] overflow-hidden">
+                        <div class="bg-gray-900 px-4 py-2 border-b border-gray-700 flex items-center justify-between">
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <span class="text-gray-400 text-xs font-mono">Trace_Terminal.exe</span>
+                        </div>
+                        <div id="terminalBody" class="p-4 font-mono text-sm flex-grow overflow-y-auto terminal-scroll">
+                            <div class="text-gray-500 italic mb-2">Welcome to Algorithm Visualizer. Vui lòng nhấn "Nạp Dữ liệu" để bắt đầu...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- SCRIPT CHÍNH -->
+    <script>
+        // Init Highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+
+        // Tương tác Terminal
+        const terminal = document.getElementById('terminalBody');
+        const btnStep = document.getElementById('btnStep');
+        const btnRun = document.getElementById('btnRun');
+        const btnLoad = document.getElementById('btnLoad');
+        
+        let simGenerator = null;
+        let isRunning = false;
+        let autoRunInterval = null;
+
+        function printLog(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log-${type} mb-1.5 leading-tight`;
+            
+            // Format time
+            const now = new Date();
+            const timeStr = `[${now.getSeconds().toString().padStart(2,'0')}.${now.getMilliseconds().toString().padStart(3,'0')}]`;
+            
+            div.innerHTML = `<span class="text-gray-600 mr-2">${timeStr}</span> ${msg}`;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight; // Auto scroll to bottom
+        }
+
+        function clearTerminal() {
+            terminal.innerHTML = '';
+        }
+
+        function stopAutoRun() {
+            if (autoRunInterval) {
+                clearInterval(autoRunInterval);
+                autoRunInterval = null;
+            }
+            btnRun.innerText = "Chạy Tự Động 🚀";
+            btnRun.classList.replace("bg-red-500", "bg-green-500");
+            btnRun.classList.replace("hover:bg-red-600", "hover:bg-green-600");
+            isRunning = false;
+        }
+
+        function parseInput() {
+            const text = document.getElementById('txtInput').value.trim();
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (lines.length === 0) throw new Error("Input trống!");
+            
+            let n = parseInt(lines[0]);
+            if (isNaN(n) || n <= 0) throw new Error("N không hợp lệ!");
+            
+            let customers = [];
+            for (let i = 1; i <= n; i++) {
+                if(i >= lines.length) break;
+                let parts = lines[i].split(/\s+/).map(Number);
+                if (parts.length >= 3) {
+                    customers.push({ x: parts[0], d: parts[1], k: parts[2], id: i });
+                }
+            }
+            return { n, customers };
+        }
+
+        // ====== GENERATOR THUẬT TOÁN MẢNG HIỆU (OPTIMAL) ======
+        function* diffArraySim(n, customers) {
+            yield { msg: `--- BẮT ĐẦU THUẬT TOÁN MẢNG HIỆU (DIFFERENCE ARRAY) ---`, type: 'system' };
+            
+            let MAX_DAY = 0;
+            let MIN_DAY = Infinity;
+            
+            for(let c of customers) {
+                MIN_DAY = Math.min(MIN_DAY, c.x);
+                MAX_DAY = Math.max(MAX_DAY, c.x + c.d - 1);
+            }
+            yield { msg: `> Khảo sát: Ngày sớm nhất = ${MIN_DAY}, Ngày muộn nhất = ${MAX_DAY}`, type: 'info' };
+            
+            let diff = {}; // Dùng object thay mảng để mô phỏng sparse array tránh tràn log nếu max quá lớn
+            yield { msg: `> Khởi tạo mảng <span class="text-white">diff</span> toàn số 0.`, type: 'info' };
+
+            yield { msg: `--- BƯỚC 1: XÂY DỰNG MẢNG HIỆU ---`, type: 'system' };
+            for(let i=0; i<customers.length; i++) {
+                let c = customers[i];
+                if(diff[c.x] === undefined) diff[c.x] = 0;
+                if(diff[c.x + c.d] === undefined) diff[c.x + c.d] = 0;
+                
+                let old_start = diff[c.x];
+                let old_end = diff[c.x + c.d];
+                
+                diff[c.x] += c.k;
+                diff[c.x + c.d] -= c.k;
+                
+                let logMsg = `Khách ${c.id} [Bắt đầu: ${c.x}, Dùng: ${c.d} ngày, Dung lượng: ${c.k}]:<br>
+                    &nbsp;&nbsp;<span class="text-green-400">diff[${c.x}] += ${c.k}</span> (Thành ${diff[c.x]})<br>
+                    &nbsp;&nbsp;<span class="text-red-400">diff[${c.x + c.d}] -= ${c.k}</span> (Thành ${diff[c.x + c.d]})`;
+                yield { msg: logMsg, type: 'warn' };
+            }
+
+            yield { msg: `--- BƯỚC 2: CỘNG DỒN TÌM KẾT QUẢ TỪ NGÀY ${MIN_DAY} ĐẾN ${MAX_DAY} ---`, type: 'system' };
+            let ans = [];
+            let current_cap = 0;
+            let prev_cap = -1;
+
+            for(let day = MIN_DAY; day <= MAX_DAY; day++) {
+                let d_val = diff[day] || 0;
+                let old_cap = current_cap;
+                current_cap += d_val;
+                
+                let msg = `Ngày ${day}: <code>diff[${day}] = ${d_val >= 0 ? '+'+d_val : d_val}</code>. Tổng dung lượng: <span class="text-white">${old_cap} &rarr; ${current_cap}</span>`;
+                
+                if(current_cap !== prev_cap) {
+                    ans.push(current_cap);
+                    msg += `<br>&nbsp;&nbsp;&rarr; <span class="text-green-400 font-bold">CÓ BIẾN ĐỘNG!</span> Ghi nhận: <b>${current_cap}</b>`;
+                    prev_cap = current_cap;
+                    yield { msg: msg, type: 'success' };
+                } else {
+                    yield { msg: msg, type: 'info' };
+                }
+            }
+
+            yield { msg: `--- KẾT THÚC ---`, type: 'system' };
+            yield { msg: `Mảng kết quả đầu ra: [ <span class="text-white text-lg">${ans.join(', ')}</span> ]`, type: 'success' };
+        }
+
+        // ====== GENERATOR THUẬT TOÁN VÉT CẠN (BRUTE FORCE) ======
+        function* bruteForceSim(n, customers) {
+            yield { msg: `--- BẮT ĐẦU THUẬT TOÁN VÉT CẠN ---`, type: 'system' };
+            
+            let MAX_DAY = 0;
+            let MIN_DAY = Infinity;
+            for(let c of customers) {
+                MIN_DAY = Math.min(MIN_DAY, c.x);
+                MAX_DAY = Math.max(MAX_DAY, c.x + c.d - 1);
+            }
+            yield { msg: `> Khảo sát: Ngày sớm nhất = ${MIN_DAY}, Ngày muộn nhất = ${MAX_DAY}`, type: 'info' };
+            
+            let cap = {}; 
+            yield { msg: `--- BƯỚC 1: LẶP ĐỂ CỘNG TỪNG NGÀY ---`, type: 'system' };
+            
+            for(let i=0; i<customers.length; i++) {
+                let c = customers[i];
+                yield { msg: `Xử lý Khách ${c.id} [Thuê từ ngày ${c.x} đến ${c.x + c.d - 1}, Dung lượng: ${c.k}]:`, type: 'warn' };
+                
+                // Mổ phỏng vòng lặp con
+                let changes = [];
+                for(let day = c.x; day < c.x + c.d; day++) {
+                    if(!cap[day]) cap[day] = 0;
+                    cap[day] += c.k;
+                    changes.push(`Ngày ${day}`);
+                }
+                yield { msg: `&nbsp;&nbsp;+ Đã cộng thêm ${c.k} vào các: ${changes.join(', ')}`, type: 'info' };
+            }
+
+            yield { msg: `--- BƯỚC 2: DUYỆT TÌM BIẾN ĐỘNG TỪ NGÀY ${MIN_DAY} ĐẾN ${MAX_DAY} ---`, type: 'system' };
+            let ans = [];
+            let prev_cap = -1;
+
+            for(let day = MIN_DAY; day <= MAX_DAY; day++) {
+                let current = cap[day] || 0;
+                let msg = `Ngày ${day}: Tổng = <span class="text-white">${current}</span>`;
+                
+                if(current !== prev_cap) {
+                    ans.push(current);
+                    msg += `<br>&nbsp;&nbsp;&rarr; <span class="text-green-400 font-bold">CÓ BIẾN ĐỘNG!</span> Thay đổi từ ${prev_cap} thành ${current}. Ghi nhận: <b>${current}</b>`;
+                    prev_cap = current;
+                    yield { msg: msg, type: 'success' };
+                } else {
+                    yield { msg: msg, type: 'info' };
+                }
+            }
+
+            yield { msg: `--- KẾT THÚC ---`, type: 'system' };
+            yield { msg: `Mảng kết quả đầu ra: [ <span class="text-white text-lg">${ans.join(', ')}</span> ]`, type: 'success' };
+        }
+
+
+        // ====== CONTROLLER ======
+        function initSimulation() {
+            stopAutoRun();
+            clearTerminal();
+            btnStep.disabled = false;
+            btnRun.disabled = false;
+            
+            try {
+                const data = parseInput();
+                const algo = document.getElementById('selAlgo').value;
+                
+                printLog(`Đã phân tích thành công ${data.customers.length} khách hàng. N = ${data.n}`, 'success');
+                
+                if (algo === 'diff') {
+                    simGenerator = diffArraySim(data.n, data.customers);
+                } else {
+                    simGenerator = bruteForceSim(data.n, data.customers);
+                }
+                
+                printLog("Máy ảo đã sẵn sàng. Nhấn 'Tiếp tục' để chạy từng bước.", 'system');
+            } catch (e) {
+                printLog(`LỖI: ${e.message}`, 'error');
+                btnStep.disabled = true;
+                btnRun.disabled = true;
+            }
+        }
+
+        function executeNextStep() {
+            if(!simGenerator) return false;
+            
+            const result = simGenerator.next();
+            if (result.done) {
+                printLog("Chương trình đã kết thúc.", 'system');
+                btnStep.disabled = true;
+                stopAutoRun();
+                btnRun.disabled = true;
+                return false;
+            }
+            
+            printLog(result.value.msg, result.value.type);
+            return true;
+        }
+
+        function stepSimulation() {
+            stopAutoRun();
+            executeNextStep();
+        }
+
+        function runAllSimulation() {
+            if (isRunning) {
+                stopAutoRun();
+            } else {
+                isRunning = true;
+                btnRun.innerText = "Tạm Dừng ⏸";
+                btnRun.classList.replace("bg-green-500", "bg-red-500");
+                btnRun.classList.replace("hover:bg-green-600", "hover:bg-red-600");
+                
+                // Set tốc độ chạy
+                const speed = 400; // ms per step
+                autoRunInterval = setInterval(() => {
+                    let hasNext = executeNextStep();
+                    if (!hasNext) stopAutoRun();
+                }, speed);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2: Cặp số may mắn - Lời giải & Mô phỏng</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Highlight.js for Code Formatting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <!-- MathJax for Math Formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .terminal {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        .terminal::-webkit-scrollbar { width: 8px; }
+        .terminal::-webkit-scrollbar-track { background: #1e1e1e; }
+        .terminal::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        
+        .log-system { color: #569cd6; } /* Blue */
+        .log-info { color: #d4d4d4; } /* White/Gray */
+        .log-warn { color: #ce9178; } /* Orange */
+        .log-error { color: #f44747; } /* Red */
+        .log-success { color: #b5cea8; } /* Green */
+        .log-highlight { color: #dcdcaa; font-weight: bold; } /* Yellow */
+        
+        blockquote {
+            border-left: 4px solid #3b82f6;
+            background-color: #eff6ff;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-extrabold tracking-tight">Bài 2: Cặp số may mắn</h1>
+            <div class="mt-3 flex gap-3 text-sm font-medium">
+                <span class="bg-blue-600 px-3 py-1 rounded-full shadow">🎯 3.5 Điểm</span>
+                <span class="bg-indigo-600 px-3 py-1 rounded-full shadow">⏱️ Giới hạn: 1.0s</span>
+                <span class="bg-purple-600 px-3 py-1 rounded-full shadow">💾 Bộ nhớ: 256MB</span>
+                <span class="bg-gray-800 px-3 py-1 rounded-full shadow">Kỳ thi: TS10 HCM 2025-2026</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-10">
+
+        <!-- PHẦN 0: ĐỀ BÀI -->
+        <section class="bg-white rounded-xl shadow-md p-6 border-l-8 border-blue-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center text-blue-700">
+                <span class="text-3xl mr-2">📄</span> Phần 0: Đề bài chi tiết
+            </h2>
+            <div class="prose max-w-none text-gray-700 leading-relaxed">
+                <p>Trong hội trại cuối năm, nhà trường tổ chức trò chơi xổ số may mắn. Thể lệ trò chơi như sau:</p>
+                <p>Người chơi sẽ chọn cặp số may mắn, cặp số may mắn là cặp số mà <strong>tích của chúng có chữ số ở hàng đơn vị bằng với số \(P\)</strong> do ban tổ chức công bố.</p>
+                <p>Tuy nhiên, người chơi sẽ có rất nhiều cách chọn cặp số khác nhau, vì thế ban tổ chức giới hạn phạm vi giá trị người chơi có thể chọn bằng hai số \(L\) và \(R\) (\(L \le R\)), số được chọn có giá trị không nhỏ hơn \(L\) và không lớn hơn \(R\).</p>
+                <p>Nhằm chuẩn bị tốt cho trò chơi, ban tổ chức cần biết được có bao nhiêu cặp số may mắn theo thể lệ trên. Ví dụ: với số \(L = 1, R = 7\) và \(P = 1\), sẽ có ba cặp số may mắn là \((1; 1)\), \((3; 7)\) và \((7; 3)\) vì tích của chúng đều có chữ số ở hàng đơn vị bằng 1.</p>
+                <p><strong>Yêu cầu:</strong> Hãy viết chương trình giúp ban tổ chức biết được số lượng cặp số may mắn khi dự kiến công bố giá trị \(L, R\) và \(P\).</p>
+                
+                <h3 class="text-lg font-semibold mt-4 text-gray-900">Dữ liệu vào (LUCKYNUM.INP):</h3>
+                <p>Gồm ba dòng: dòng đầu tiên là số \(L\), dòng thứ hai là số \(R\), dòng thứ ba là số \(P\) (\(1 \le L \le R \le 10^9\), \(0 \le P \le 9\)).</p>
+                
+                <h3 class="text-lg font-semibold mt-4 text-gray-900">Dữ liệu ra (LUCKYNUM.OUT):</h3>
+                <p>Gồm một dòng duy nhất cho biết số lượng cặp số may mắn theo yêu cầu.</p>
+
+                <h3 class="text-lg font-semibold mt-4 text-gray-900">Ví dụ:</h3>
+                <div class="overflow-x-auto mt-2">
+                    <table class="min-w-full bg-gray-50 border border-gray-200 rounded-lg">
+                        <thead class="bg-gray-200">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left text-gray-700 font-bold">LUCKYNUM.INP</th>
+                                <th class="py-2 px-4 border-b text-left text-gray-700 font-bold">LUCKYNUM.OUT</th>
+                                <th class="py-2 px-4 border-b text-left text-gray-700 font-bold">Giải thích</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-3 px-4 border-b font-mono">1<br>4<br>4</td>
+                                <td class="py-3 px-4 border-b font-mono font-bold text-blue-600">3</td>
+                                <td class="py-3 px-4 border-b text-sm">Ba cặp số may mắn là (1, 4), (2, 2) và (4, 1).<br>Vì tích của chúng có chữ số ở hàng đơn vị là 4.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-lg font-semibold mt-4 text-gray-900">Ràng buộc:</h3>
+                <ul class="list-disc list-inside space-y-1 mt-2 text-sm">
+                    <li>35% số điểm: \(R \le 1000\)</li>
+                    <li>15% số điểm: \(R \le 10^6\), \(P = 5\)</li>
+                    <li>15% số điểm: \(P = 5\)</li>
+                    <li>35% số điểm: Không có ràng buộc gì thêm (\(R \le 10^9\)).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- PHẦN 1: PHÂN TÍCH TOÁN HỌC & LOGIC -->
+        <section class="bg-white rounded-xl shadow-md p-6 border-l-8 border-yellow-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center text-yellow-600">
+                <span class="text-3xl mr-2">🧠</span> Phần 1: Phân tích Toán học & Logic
+            </h2>
+            <div class="space-y-4 text-gray-700">
+                <p><strong>Dạng bài:</strong> Tổ hợp, Đếm phân phối (Counting), Đồng dư thức (Modulo Arithmetic).</p>
+                <p>Chìa khóa của bài toán nằm ở câu: <em>"tích của chúng có chữ số ở hàng đơn vị bằng \(P\)"</em>.</p>
+                <p>Theo tính chất toán học, chữ số tận cùng của một tích \(x \times y\) chỉ phụ thuộc vào <strong>chữ số tận cùng của \(x\)</strong> và <strong>chữ số tận cùng của \(y\)</strong>.</p>
+                <p class="text-center font-bold text-lg p-3 bg-gray-100 rounded-lg">
+                    \((x \times y) \pmod{10} = ((x \pmod{10}) \times (y \pmod{10})) \pmod{10}\)
+                </p>
+                <p>Vì vậy, ta không cần quan tâm giá trị thực sự của các số trong đoạn \([L, R]\) là bao nhiêu, ta chỉ cần đếm xem trong đoạn \([L, R]\) có <strong>bao nhiêu số tận cùng là 0, bao nhiêu số tận cùng là 1, ..., bao nhiêu số tận cùng là 9</strong>.</p>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mt-4 rounded-r">
+                    <h3 class="text-red-700 font-bold flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                        CẢNH BÁO KIỂU DỮ LIỆU (OVERFLOW)
+                    </h3>
+                    <p class="text-sm text-red-600 mt-1">
+                        Với \(R = 10^9\), số lượng số tận cùng là một chữ số \(d\) có thể lên tới \(10^8\). Tích của số lượng các số này có thể đạt \((10^8) \times (10^8) = 10^{16}\). Giá trị này vượt qua giới hạn của kiểu số nguyên 32-bit (khoảng \(2 \times 10^9\)). <br>
+                        👉 <strong>Trong C++, BẮT BUỘC phải dùng kiểu <code>long long</code> cho biến kết quả và mảng đếm.</strong> (Python tự động xử lý số lớn nên không lo).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 2: PHÂN TÍCH CÁCH GIẢI THEO SUBTASK -->
+        <section class="bg-white rounded-xl shadow-md p-6 border-l-8 border-green-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center text-green-600">
+                <span class="text-3xl mr-2">⚙️</span> Phần 2: Thuật toán & Code
+            </h2>
+
+            <!-- Cách 1 -->
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-gray-800 border-b-2 border-green-200 pb-2 mb-4">Cách 1: Vét cạn (Brute Force) - Ăn 35% điểm</h3>
+                <p class="text-gray-700 mb-2"><strong>Ý tưởng:</strong> Sử dụng 2 vòng lặp lồng nhau duyệt qua mọi cặp \((x, y)\) trong đoạn \([L, R]\). Kiểm tra điều kiện và tăng biến đếm.</p>
+                
+                <blockquote>
+                    <strong>Mã giả:</strong><br>
+                    ans = 0<br>
+                    FOR x = L TO R:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;FOR y = L TO R:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF (x * y) % 10 == P THEN ans++<br>
+                    PRINT ans
+                </blockquote>
+
+                <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;"># Cách 1: Phù hợp cho Subtask R <= 1000
+def solve_bruteforce(L, R, P):
+    ans = 0
+    # Duyệt x từ L đến R
+    for x in range(L, R + 1):
+        # Duyệt y từ L đến R
+        for y in range(L, R + 1):
+            # Kiểm tra chữ số hàng đơn vị của tích
+            if (x * y) % 10 == P:
+                ans += 1
+    return ans
+</code></pre>
+            </div>
+
+            <!-- Cách 2 -->
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 border-b-2 border-green-200 pb-2 mb-4">Cách 2: Đếm phân phối theo O(1) - Lấy 100% điểm</h3>
+                <p class="text-gray-700 mb-2"><strong>Ý tưởng:</strong></p>
+                <ol class="list-decimal list-inside text-gray-700 space-y-2 mb-4">
+                    <li>Tạo mảng <code>cnt[10]</code> với <code>cnt[d]</code> là số lượng các số trong đoạn \([L, R]\) tận cùng là chữ số \(d\).</li>
+                    <li>Để tính <code>cnt[d]</code> nhanh chóng trong \(O(1)\):
+                        <ul class="list-disc list-inside ml-5 text-gray-600 mt-1">
+                            <li>Tìm số <strong>đầu tiên</strong> \(\ge L\) mà có chữ số tận cùng là \(d\). Gọi là <code>start</code>.</li>
+                            <li>Tìm số <strong>cuối cùng</strong> \(\le R\) mà có chữ số tận cùng là \(d\). Gọi là <code>end</code>.</li>
+                            <li>Nếu <code>start &le; end</code>, số lượng số là: \((end - start) / 10 + 1\). Nếu không, có 0 số.</li>
+                        </ul>
+                    </li>
+                    <li>Duyệt 2 vòng lặp nhỏ \(i, j\) từ \(0 \to 9\). Nếu \((i \times j) \pmod{10} = P\), ta cộng <code>cnt[i] * cnt[j]</code> vào kết quả.</li>
+                </ol>
+
+                <blockquote>
+                    <strong>Mã giả:</strong><br>
+                    cnt = array(10, 0)<br>
+                    FOR d = 0 TO 9:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;start = L + (d - L%10 + 10)%10<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;end = R - (R%10 - d + 10)%10<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;IF start <= end THEN cnt[d] = (end - start)/10 + 1<br>
+                    ans = 0<br>
+                    FOR i = 0 TO 9:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;FOR j = 0 TO 9:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF (i * j) % 10 == P THEN ans += cnt[i] * cnt[j]<br>
+                    PRINT ans
+                </blockquote>
+
+                <pre><code class="language-python rounded-lg shadow-md text-sm" style="font-family: 'Fira Code', monospace;"># Cách 2: Tối ưu O(1) qua Subtask 4 (R <= 10^9)
+def solve_optimal(L, R, P):
+    cnt = [0] * 10
+    
+    # B1: Đếm số lượng các số tận cùng bằng d (từ 0 đến 9)
+    for d in range(10):
+        # Tính phần dư của L và R khi chia cho 10
+        rem_L = L % 10
+        rem_R = R % 10
+        
+        # Tìm số nhỏ nhất >= L tận cùng là d
+        start = L + (d - rem_L + 10) % 10
+        
+        # Tìm số lớn nhất <= R tận cùng là d
+        end = R - (rem_R - d + 10) % 10
+        
+        if start <= end:
+            cnt[d] = (end - start) // 10 + 1
+            
+    ans = 0
+    # B2: Thử ghép các cặp chữ số tận cùng (i, j)
+    for i in range(10):
+        for j in range(10):
+            if (i * j) % 10 == P:
+                # Tổ hợp: Số cách chọn x tận cùng i, y tận cùng j
+                ans += cnt[i] * cnt[j]
+                
+    return ans
+</code></pre>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: SO SÁNH THUẬT TOÁN -->
+        <section class="bg-white rounded-xl shadow-md p-6 border-l-8 border-purple-500">
+            <h2 class="text-2xl font-bold mb-4 flex items-center text-purple-700">
+                <span class="text-3xl mr-2">📊</span> Phần 3: So sánh Độ phức tạp
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700">
+                            <th class="p-3 border-b-2 border-gray-300">Thuật toán</th>
+                            <th class="p-3 border-b-2 border-gray-300">Thời gian (Time)</th>
+                            <th class="p-3 border-b-2 border-gray-300">Không gian (Space)</th>
+                            <th class="p-3 border-b-2 border-gray-300">Đánh giá với \(R=10^9\)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600">
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="p-3 border-b font-medium">Cách 1: Vét cạn</td>
+                            <td class="p-3 border-b">\(O((R-L)^2)\)</td>
+                            <td class="p-3 border-b">\(O(1)\)</td>
+                            <td class="p-3 border-b text-red-600 font-bold">❌ TLE (Quá thời gian)</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="p-3 border-b font-medium">Cách 2: Đếm phân phối</td>
+                            <td class="p-3 border-b text-green-600 font-bold">\(O(1)\) (Rất nhanh)</td>
+                            <td class="p-3 border-b text-green-600 font-bold">\(O(1)\) (Biến đếm 10 phần tử)</td>
+                            <td class="p-3 border-b text-green-600 font-bold">✅ AC (Chấp nhận)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PHẦN 4: TRÌNH MÔ PHỎNG TƯƠNG TÁC -->
+        <section class="bg-white rounded-xl shadow-md p-6 border-l-8 border-indigo-500 mb-10">
+            <h2 class="text-2xl font-bold mb-4 flex items-center text-indigo-700">
+                <span class="text-3xl mr-2">💻</span> Phần 4: Trình Mô phỏng Tương tác (Visualizer)
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- CỘT TRÁI: BẢNG ĐIỀU KHIỂN -->
+                <div class="lg:col-span-4 space-y-5 bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-inner">
+                    <h3 class="font-bold text-gray-800 text-lg border-b pb-2">Control Panel</h3>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Giá trị L:</label>
+                            <input type="number" id="input-L" value="1" class="w-full border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Giá trị R:</label>
+                            <input type="number" id="input-R" value="4" class="w-full border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Giá trị P (0-9):</label>
+                            <input type="number" id="input-P" value="4" min="0" max="9" class="w-full border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 border">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Chọn Thuật toán:</label>
+                            <select id="algo-select" class="w-full border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 border bg-white">
+                                <option value="optimal">Cách 2 (Toán học O(1))</option>
+                                <option value="brute">Cách 1 (Vét cạn)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 pt-2">
+                        <button id="btn-load" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition">
+                            1. Nạp Dữ Liệu & Sẵn sàng
+                        </button>
+                        <div class="flex gap-2">
+                            <button id="btn-step" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded transition opacity-50 cursor-not-allowed" disabled>
+                                ⏭ Bước tiếp
+                            </button>
+                            <button id="btn-auto" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition opacity-50 cursor-not-allowed" disabled>
+                                ▶ Chạy Tự Động
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CỘT PHẢI: TERMINAL TRACE -->
+                <div class="lg:col-span-8 flex flex-col">
+                    <div class="bg-gray-800 rounded-t-lg p-2 flex items-center justify-between border-b border-gray-700 shadow">
+                        <div class="flex space-x-2 ml-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="text-gray-400 text-xs font-mono font-bold tracking-wider">LUCKYNUM.EXE</span>
+                        <div class="w-10"></div> <!-- Spacer -->
+                    </div>
+                    <div id="terminal" class="terminal flex-1 p-4 rounded-b-lg shadow-inner min-h-[400px] h-[400px]">
+                        <div class="log-system">Welcome to LuckyNum Trace Visualizer.</div>
+                        <div class="log-info">Hãy nhập dữ liệu L, R, P và bấm [Nạp Dữ Liệu] để bắt đầu.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TRÌNH ĐIỀU KHIỂN LOGIC (JAVASCRIPT) -->
+    <script>
+        // Khởi tạo Highlight.js
+        hljs.highlightAll();
+
+        // Giao tiếp DOM
+        const terminal = document.getElementById('terminal');
+        const btnLoad = document.getElementById('btn-load');
+        const btnStep = document.getElementById('btn-step');
+        const btnAuto = document.getElementById('btn-auto');
+        
+        let simGenerator = null;
+        let isAutoRunning = false;
+        let autoInterval = null;
+
+        // Hàm in log ra Terminal
+        function printLog(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log-${type} mb-1`;
+            // Chuyển đổi ký tự HTML an toàn
+            div.innerHTML = msg.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
+            terminal.appendChild(div);
+            // Tự động cuộn xuống dưới cùng
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function clearTerminal() {
+            terminal.innerHTML = '';
+        }
+
+        // --- CÁC HÀM GENERATOR ĐỂ MÔ PHỎNG TỪNG BƯỚC ---
+
+        // Mô phỏng Cách 1: Vét Cạn
+        function* bruteForceSim(L, R, P) {
+            let ans = 0;
+            yield { msg: `[BẮT ĐẦU] Thuật toán Vét cạn (Brute Force)\n- L = ${L}, R = ${R}, P = ${P}`, type: 'system' };
+            
+            for (let x = L; x <= R; x++) {
+                for (let y = L; y <= R; y++) {
+                    let product = x * y;
+                    let lastDigit = product % 10;
+                    
+                    let logStr = `Kiểm tra x = ${x}, y = ${y} => Tích = ${product}, Số tận cùng = ${lastDigit}`;
+                    
+                    if (lastDigit === P) {
+                        ans++;
+                        logStr += ` => KHỚP P=${P}! Số cặp ans = ${ans}`;
+                        yield { msg: logStr, type: 'highlight' };
+                    } else {
+                        yield { msg: logStr, type: 'info' };
+                    }
+                }
+            }
+            
+            yield { msg: `\n[KẾT THÚC] Tổng số cặp may mắn = ${ans}`, type: 'success' };
+        }
+
+        // Mô phỏng Cách 2: Toán học O(1)
+        function* optimalSim(L, R, P) {
+            yield { msg: `[BẮT ĐẦU] Thuật toán Tối ưu O(1)\n- L = ${L}, R = ${R}, P = ${P}`, type: 'system' };
+            
+            let cnt = new Array(10).fill(0);
+            yield { msg: `--- BƯỚC 1: Xây dựng mảng đếm tần suất chữ số tận cùng ---`, type: 'warn' };
+            
+            for (let d = 0; d <= 9; d++) {
+                let rem_L = L % 10;
+                let rem_R = R % 10;
+                
+                // Tránh lỗi modulo số âm trong JS
+                let start = L + ((d - rem_L + 10) % 10);
+                let end = R - ((rem_R - d + 10) % 10);
+                
+                let countStr = `Tìm số tận cùng là [${d}]: `;
+                if (start <= end) {
+                    let c = Math.floor((end - start) / 10) + 1;
+                    cnt[d] = c;
+                    countStr += `Số đầu tiên \u2265 L: ${start}, Số cuối cùng \u2264 R: ${end} => Có ${c} số.`;
+                } else {
+                    countStr += `Không có số nào trong đoạn [${L}, ${R}].`;
+                }
+                
+                if(cnt[d] > 0) {
+                    yield { msg: countStr, type: 'highlight' };
+                } else {
+                    yield { msg: countStr, type: 'info' };
+                }
+            }
+            
+            yield { msg: `\nMảng cnt = [${cnt.join(', ')}]`, type: 'warn' };
+            yield { msg: `\n--- BƯỚC 2: Thử ghép cặp (i, j) sao cho (i*j)%10 == P ---`, type: 'warn' };
+            
+            let ans = 0;
+            for (let i = 0; i <= 9; i++) {
+                for (let j = 0; j <= 9; j++) {
+                    if ((i * j) % 10 === P) {
+                        if (cnt[i] > 0 && cnt[j] > 0) {
+                            let pairs = cnt[i] * cnt[j];
+                            ans += pairs;
+                            yield { 
+                                msg: `Phát hiện (i=${i}, j=${j}) => (${i}*${j})%10 == ${P}.\n-> Có ${cnt[i]} số tận cùng ${i} ghép với ${cnt[j]} số tận cùng ${j} => Cộng ${pairs} cặp. Tổng ans = ${ans}`, 
+                                type: 'highlight' 
+                            };
+                        } else {
+                            yield { msg: `Cặp (i=${i}, j=${j}) thoả mãn nhưng không có số lượng đủ (cnt[${i}]=${cnt[i]}, cnt[${j}]=${cnt[j]}). Bỏ qua.`, type: 'info' };
+                        }
+                    }
+                }
+            }
+            
+            yield { msg: `\n[KẾT THÚC] Tổng số cặp may mắn = ${ans}`, type: 'success' };
+        }
+
+        // --- GẮN SỰ KIỆN NÚT BẤM ---
+
+        function toggleRunButtons(enable) {
+            if (enable) {
+                btnStep.disabled = false;
+                btnAuto.disabled = false;
+                btnStep.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnAuto.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btnStep.disabled = true;
+                btnAuto.disabled = true;
+                btnStep.classList.add('opacity-50', 'cursor-not-allowed');
+                btnAuto.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        btnLoad.addEventListener('click', () => {
+            // Dừng auto nếu đang chạy
+            if (isAutoRunning) stopAuto();
+            
+            const L = parseInt(document.getElementById('input-L').value);
+            const R = parseInt(document.getElementById('input-R').value);
+            const P = parseInt(document.getElementById('input-P').value);
+            const algo = document.getElementById('algo-select').value;
+
+            if (isNaN(L) || isNaN(R) || isNaN(P) || L < 1 || R < L || P < 0 || P > 9) {
+                clearTerminal();
+                printLog("LỖI: Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại điều kiện L<=R và 0<=P<=9.", "error");
+                toggleRunButtons(false);
+                return;
+            }
+
+            clearTerminal();
+
+            // Bảo vệ vét cạn
+            if (algo === 'brute' && (R - L) > 50) {
+                printLog(`CẢNH BÁO MÔ PHỎNG: Khoảng cách R - L = ${R-L} là quá lớn để hiển thị từng bước Vét Cạn trên trình duyệt.`, "error");
+                printLog(`Giao diện sẽ bị lag hoặc treo. Vui lòng chọn (R - L) <= 50 cho Cách 1, hoặc chuyển sang Cách 2.`, "warn");
+                toggleRunButtons(false);
+                return;
+            }
+
+            if (algo === 'brute') {
+                simGenerator = bruteForceSim(L, R, P);
+            } else {
+                simGenerator = optimalSim(L, R, P);
+            }
+
+            printLog("Khởi tạo tiến trình thành công! Bấm 'Bước tiếp' hoặc 'Chạy tự động'.", "system");
+            toggleRunButtons(true);
+        });
+
+        function doNextStep() {
+            if (!simGenerator) return false;
+            const res = simGenerator.next();
+            if (res.done) {
+                toggleRunButtons(false);
+                if (isAutoRunning) stopAuto();
+                return false; // Hết
+            }
+            printLog(res.value.msg, res.value.type);
+            return true;
+        }
+
+        btnStep.addEventListener('click', () => {
+            if (isAutoRunning) stopAuto();
+            doNextStep();
+        });
+
+        function stopAuto() {
+            isAutoRunning = false;
+            clearInterval(autoInterval);
+            btnAuto.innerHTML = "▶ Chạy Tự Động";
+            btnAuto.classList.replace('bg-red-600', 'bg-green-600');
+            btnAuto.classList.replace('hover:bg-red-700', 'hover:bg-green-700');
+        }
+
+        btnAuto.addEventListener('click', () => {
+            if (isAutoRunning) {
+                stopAuto();
+            } else {
+                isAutoRunning = true;
+                btnAuto.innerHTML = "⏸ Dừng (Pause)";
+                btnAuto.classList.replace('bg-green-600', 'bg-red-600');
+                btnAuto.classList.replace('hover:bg-green-700', 'hover:bg-red-700');
+                
+                autoInterval = setInterval(() => {
+                    if (!doNextStep()) {
+                        stopAuto();
+                    }
+                }, 100); // Tốc độ chạy 100ms / log
+            }
+        });
+
+    </script>
+</body>
+</html>
